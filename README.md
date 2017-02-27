@@ -94,7 +94,7 @@ python setup.py sdist
 twine  upload  dist/ctutlz-<VERSION>.tar.gz
 
 
-# usefull oneliners
+# useful oneliners
 rm -rf .tox/; python3.6 -m tox
 rm -rf dist/; python3.6 setup.py sdist; ls -hal dist/
 python3.6 -m twine  upload  dist/ctutlz*
