@@ -144,7 +144,7 @@ def setup_logging(loglevel):
 
 def create_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('hostname',  # nargs='+',
+    parser.add_argument('hostname', nargs='+',
                         help="host name of the server (example: 'ritter.vg')")
 
     meg = parser.add_mutually_exclusive_group()
@@ -176,7 +176,7 @@ def create_parser():
                      dest='actions',
                      action='store_const',
                      const=[scts_by_ocsp],
-                     help='only validate SCTs gathered via OCSP status request')
+                     help='only validate SCTs gathered via OCSP request')
     return parser
 
 
@@ -186,10 +186,7 @@ def main():
     logger = setup_logging(args.loglevel)
     logger.debug(args)
 
-    hosts = args.hostname
-    if type(hosts) == str:
-        hosts = [hosts]
-    for host in hosts:
+    for host in args.hostname:
         run_actions(host, actions=args.actions)
 
 
