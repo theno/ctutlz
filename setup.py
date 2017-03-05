@@ -73,6 +73,13 @@ setup(
     ]),
     install_requires=[
         'utlz',
+        'pytz', 'pyasn1', 'pyOpenSSL', 'ndg-httpsclient',  # for verify-cert
+        'asn1ate', 'certifi', 'hexdump',                   # for devel.py
+        'pyasn1-modules',
+    ],
+    dependency_links=[
+        #'https://github.com/etingof/pyasn1-modules/tarball/master#egg=pyasn1-modules-0.0.9',
+        'git+https://github.com/etingof/pyasn1-modules.git#egg=pyasn1-modules-0.0.9',
     ],
     extras_require={
         'dev': ['pypandoc'],
