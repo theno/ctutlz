@@ -17,6 +17,7 @@ from contextlib import contextmanager
 from utlz import flo
 
 from ctutlz.log import get_log_list
+from ctutlz.sct import EndEntityCert
 from ctutlz.sct.scrape import scts_by_tls
 from ctutlz.sct.validation import validate_scts
 from ctutlz.utils import to_hex
@@ -28,10 +29,11 @@ def scts_by_ocsp(*args):
     return (None, None)
 
 
-def scts_by_cert(*args):
-    lgr = logging.getLogger('ctutlz')
-    lgr.info('Not implemented (yet)\n')
-    return (None, None)
+def scts_by_cert(hostname):
+    from ctutlz import devel
+    cert_der = devel.cert_of_domain(hostname)
+    scts = devel.scts_from_cert(cert_der)
+    return EndEntityCert(cert_der), scts
 
 
 def show_signature(sct):

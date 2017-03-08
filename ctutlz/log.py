@@ -67,7 +67,8 @@ def get_log_list():
     try:
         return get_log_list.logs  # singleton function attribute
     except AttributeError:
-        filename = join(dirname(dirname(__file__)), 'log_list.json')
+        package_basedir = dirname(dirname(__file__))
+        filename = join(package_basedir, 'log_list.json')
         if isfile(filename):
             data = load_json(filename)
             get_log_list.logs = logs_with_operator_names(data)
