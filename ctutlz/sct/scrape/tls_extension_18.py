@@ -38,3 +38,25 @@ def TlsExtension18(extension_18_der):
             sct_der = struct.read(flo('!{sct_len}s'))
             sct_list.append(_SctListEntry(sct_len, sct_der))
         return _TlsExtension18(sct_list=sct_list, **data_dict)
+
+
+_SignedCertificateTimestampList = collections.namedtuple(
+    typename='SignedCertificateTimestampList',
+    field_names=[
+        'signed_certificate_timestamp_list_len',
+        'sct_list',
+    ]
+)
+
+
+def SignedCertificateTimestampList(sctlist):
+    with StructContext(sctlist) as struct:
+        data_dict = {
+            'signed_certificate_timestamp_list_len': struct.read('!H'),
+        }
+        sct_list = []
+        while struct.offset < struct.length:
+            sct_len = struct.read('!H')
+            sct_der = struct.read(flo('!{sct_len}s'))
+            sct_list.append(_SctListEntry(sct_len, sct_der))
+        return _SignedCertificateTimestampList(sct_list=sct_list, **data_dict)
