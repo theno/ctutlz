@@ -104,7 +104,8 @@ def run_actions(hostname, actions):
         assert log.id_der == digest_from_pem(log.key)
 
     for scrape_scts in actions:
-        lgr.info(flo('## {scrape_scts.__name__}\n'))
+        with loglevel(logging.INFO):
+            lgr.info(flo('## {scrape_scts.__name__}\n'))
         ee_cert, scts = scrape_scts(hostname)
 
         if ee_cert:
