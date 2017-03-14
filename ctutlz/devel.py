@@ -16,7 +16,7 @@ from OpenSSL import SSL, crypto
 from utlz import flo
 
 from ctutlz.sct import Sct
-from ctutlz.sct.scrape.tls_extension_18 import SignedCertificateTimestampList
+from ctutlz.sctlist import SignedCertificateTimestampList
 
 
 def create_context():

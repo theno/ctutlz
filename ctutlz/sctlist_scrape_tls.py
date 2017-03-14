@@ -7,7 +7,7 @@ from collections import namedtuple
 from utlz import flo
 
 from ctutlz.sct import Sct, EndEntityCert
-from ctutlz.sct.scrape.tls_extension_18 import TlsExtension18
+from ctutlz.sctlist import TlsExtension18
 from ctutlz.utils import run_cmd
 
 
