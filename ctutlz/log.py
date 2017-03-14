@@ -1,4 +1,5 @@
 import json
+import struct
 try:
     # since python 3.6
     import urllib.request as urllib_request
@@ -29,6 +30,15 @@ Log = namedtuple(
                                           text_with_newlines(text=self.key,
                                                              line_length=64),
                                           '-----END PUBLIC KEY-----']),
+        # TODO DEVEL
+        'pubkey_hash': lambda self: bytes(self.pubkey, 'ascii'),  # TODO DEVEL create hash
+        'pubkey_hash_len': lambda self: len(self.pubkey_hash),
+        'pubkey_hash_lens': lambda self: \
+        struct.unpack('!4B', struct.pack('!I', self.pubkey_hash_len)),
+        'pubkey_hash_len0': lambda self: self.pubkey_hash_lens[0],
+        'pubkey_hash_len1': lambda self: self.pubkey_hash_lens[1],
+        'pubkey_hash_len2': lambda self: self.pubkey_hash_lens[2],
+        'pubkey_hash_len3': lambda self: self.pubkey_hash_lens[3],
     }
 )
 

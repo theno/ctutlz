@@ -4,7 +4,6 @@ from tempfile import NamedTemporaryFile as tempfile
 
 from utlz import flo
 
-from ctutlz.sct.signature_input import create_signature_input
 from ctutlz.utils import run_cmd
 
 
@@ -58,11 +57,11 @@ def verify_signature_CLUNKY(signature_input, signature, pubkey):
 verify_signature = verify_signature_CLUNKY  # FIXME: use pyopenssl instead
 
 
-def validate_sct(ee_cert, sct, logs):
+def validate_sct(ee_cert, sct, logs, sign_input_func):
     log = find_log(sct, logs)
     if log:
         verified, output, cmd_res = verify_signature(
-            signature_input=create_signature_input(ee_cert, sct),
+            signature_input=sign_input_func(ee_cert, sct, log),
             signature=sct.signature,
             pubkey=log.pubkey.encode('ascii')
         )
@@ -72,7 +71,9 @@ def validate_sct(ee_cert, sct, logs):
                                verified=False, output='', cmd_res=None)
 
 
-def validate_scts(ee_cert, scts, logs):
+def validate_scts(ee_cert, scts, logs, sign_input_func):
     if scts:
-        return [validate_sct(ee_cert, sct, logs) for sct in scts]
+        return [validate_sct(ee_cert, sct, logs, sign_input_func)
+                for sct
+                in scts]
     return []

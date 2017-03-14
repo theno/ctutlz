@@ -20,16 +20,19 @@ from ctutlz.log import get_log_list
 from ctutlz.sct.ee_cert import EndEntityCert
 from ctutlz.sctlist_scrape_tls import scts_by_tls
 from ctutlz.sct.validation import validate_scts
+from ctutlz.sct.signature_input import create_signature_input_precert
 from ctutlz.utils import to_hex
 
 
 def scts_by_ocsp(*args):
+    scts_by_ocsp.sign_input_func = lambda *_: []  # TODO DEVEL implementate
     lgr = logging.getLogger('ctutlz')
     lgr.info('Not implemented (yet)\n')
     return (None, None)
 
 
 def scts_by_cert(hostname):
+    scts_by_cert.sign_input_func = create_signature_input_precert
     from ctutlz import devel
     cert_der = devel.cert_of_domain(hostname)
     scts = devel.scts_from_cert(cert_der)
@@ -111,7 +114,8 @@ def run_actions(hostname, actions):
         if ee_cert:
             lgr.debug('got certificate\n')
 
-        validations = validate_scts(ee_cert, scts, logs)
+        validations = validate_scts(ee_cert, scts, logs,
+                                    sign_input_func=scrape_scts.sign_input_func)
         if validations:
             for vdn in validations:
                 show_validation(vdn)

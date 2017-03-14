@@ -8,6 +8,7 @@ from utlz import flo
 
 from ctutlz.sct import Sct
 from ctutlz.sct.ee_cert import EndEntityCert
+from ctutlz.sct.signature_input import create_signature_input
 from ctutlz.sctlist import TlsExtension18
 from ctutlz.utils import run_cmd
 
@@ -87,6 +88,7 @@ def scrape_tls_extension_18(hostname, timeout=30, max_try=3):
 
 
 def scts_by_tls(hostname, timeout=30, max_try=3):
+    scts_by_tls.sign_input_func = create_signature_input
     res = scrape_tls_extension_18(hostname, timeout, max_try)
     assert res.extension_18 is not None
     if res.extension_18:
