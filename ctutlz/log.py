@@ -9,7 +9,7 @@ from os.path import join, isfile, dirname
 
 from utlz import namedtuple, text_with_newlines, load_json
 
-from ctutlz.utils import decode_from_pem, digest_from_pem
+from ctutlz.utils import decode_from_pem, digest_from_pem, sha256_digest
 from ctutlz.utils import digest_from_pem_encoded_to_pem
 
 
@@ -23,22 +23,15 @@ Log = namedtuple(
         'operated_by',
     ],
     lazy_vals={
-        'key_der': lambda self: decode_from_pem(self.key),         # type: bytes
-        'id_der': lambda self: digest_from_pem(self.key),          # type: bytes
-        'id_pem': lambda self: digest_from_pem_encoded_to_pem(self.key),  # str
-        'pubkey': lambda self: '\n'.join(['-----BEGIN PUBLIC KEY-----',   # str
-                                          text_with_newlines(text=self.key,
-                                                             line_length=64),
-                                          '-----END PUBLIC KEY-----']),
-        # TODO DEVEL
-        'pubkey_hash': lambda self: bytes(self.pubkey, 'ascii'),  # TODO DEVEL create hash
-        'pubkey_hash_len': lambda self: len(self.pubkey_hash),
-        'pubkey_hash_lens': lambda self: \
-        struct.unpack('!4B', struct.pack('!I', self.pubkey_hash_len)),
-        'pubkey_hash_len0': lambda self: self.pubkey_hash_lens[0],
-        'pubkey_hash_len1': lambda self: self.pubkey_hash_lens[1],
-        'pubkey_hash_len2': lambda self: self.pubkey_hash_lens[2],
-        'pubkey_hash_len3': lambda self: self.pubkey_hash_lens[3],
+        'key_der': lambda self: decode_from_pem(self.key),  # type: bytes
+        'id_der': lambda self: digest_from_pem(self.key),   # type: bytes
+        'id_pem': lambda self: encode_to_pem(self.id_der),  # type: str
+        'pubkey': lambda self: '\n'.join([                  # type: str
+                              '-----BEGIN PUBLIC KEY-----',
+                              text_with_newlines(text=self.key, line_length=64),
+                              '-----END PUBLIC KEY-----'
+        ]),
+        'pubkey_hash': lambda self: sha256_digest(self.key_der),  # TODO DEVEL
     }
 )
 

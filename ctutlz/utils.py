@@ -16,8 +16,12 @@ def decode_from_pem(arg):
     return base64.b64decode(arg)
 
 
+def sha256_digest(arg):
+    return hashlib.sha256(arg).digest()
+
+
 def digest_from_pem(arg):
-    return hashlib.sha256(decode_from_pem(arg)).digest()
+    return sha256_digest(decode_from_pem(arg))
 
 
 def digest_from_pem_encoded_to_pem(arg):

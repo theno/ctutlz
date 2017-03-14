@@ -57,11 +57,11 @@ def verify_signature_CLUNKY(signature_input, signature, pubkey):
 verify_signature = verify_signature_CLUNKY  # FIXME: use pyopenssl instead
 
 
-def validate_sct(ee_cert, sct, logs, sign_input_func):
+def validate_sct(ee_cert, sct, logs, issuer_cert, sign_input_func):
     log = find_log(sct, logs)
     if log:
         verified, output, cmd_res = verify_signature(
-            signature_input=sign_input_func(ee_cert, sct, log),
+            signature_input=sign_input_func(ee_cert, sct, issuer_cert),
             signature=sct.signature,
             pubkey=log.pubkey.encode('ascii')
         )
@@ -71,9 +71,9 @@ def validate_sct(ee_cert, sct, logs, sign_input_func):
                                verified=False, output='', cmd_res=None)
 
 
-def validate_scts(ee_cert, scts, logs, sign_input_func):
+def validate_scts(ee_cert, scts, logs, issuer_cert, sign_input_func):
     if scts:
-        return [validate_sct(ee_cert, sct, logs, sign_input_func)
+        return [validate_sct(ee_cert, sct, logs, issuer_cert, sign_input_func)
                 for sct
                 in scts]
     return []

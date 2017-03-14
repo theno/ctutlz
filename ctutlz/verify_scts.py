@@ -109,12 +109,13 @@ def run_actions(hostname, actions):
     for scrape_scts in actions:
         with loglevel(logging.INFO):
             lgr.info(flo('## {scrape_scts.__name__}\n'))
+        issuer_cert = None
         ee_cert, scts = scrape_scts(hostname)
-
         if ee_cert:
             lgr.debug('got certificate\n')
+            issuer_cert = ee_cert.issuer_cert  # FIXME: kinda hacky
 
-        validations = validate_scts(ee_cert, scts, logs,
+        validations = validate_scts(ee_cert, scts, logs, issuer_cert,
                                     sign_input_func=scrape_scts.sign_input_func)
         if validations:
             for vdn in validations:

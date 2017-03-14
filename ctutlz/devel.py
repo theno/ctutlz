@@ -8,8 +8,8 @@ import pdb  # TODO DEVEL
 import certifi
 import pyasn1_modules.rfc5280
 from hexdump import hexdump
-from pyasn1.codec.der.decoder import decode as der_decoder
 from pyasn1.codec.der.encoder import encode as der_encoder
+from pyasn1.codec.der.decoder import decode as der_decoder
 from pyasn1.type.univ import OctetString
 from OpenSSL import SSL, crypto
 
