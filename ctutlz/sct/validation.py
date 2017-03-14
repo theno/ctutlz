@@ -4,7 +4,7 @@ from tempfile import NamedTemporaryFile as tempfile
 
 from utlz import flo
 
-from ctutlz.sct import create_signature_input
+from ctutlz.sct.signature_input import create_signature_input
 from ctutlz.utils import run_cmd
 
 

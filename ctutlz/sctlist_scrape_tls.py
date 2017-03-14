@@ -6,7 +6,8 @@ from collections import namedtuple
 
 from utlz import flo
 
-from ctutlz.sct import Sct, EndEntityCert
+from ctutlz.sct import Sct
+from ctutlz.sct.ee_cert import EndEntityCert
 from ctutlz.sctlist import TlsExtension18
 from ctutlz.utils import run_cmd
 

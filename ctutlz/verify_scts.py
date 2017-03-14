@@ -17,7 +17,7 @@ from contextlib import contextmanager
 from utlz import flo
 
 from ctutlz.log import get_log_list
-from ctutlz.sct import EndEntityCert
+from ctutlz.sct.ee_cert import EndEntityCert
 from ctutlz.sctlist_scrape_tls import scts_by_tls
 from ctutlz.sct.validation import validate_scts
 from ctutlz.utils import to_hex

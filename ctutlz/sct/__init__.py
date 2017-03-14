@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import struct
-from functools import reduce
 
 from utlz import flo, namedtuple, StructContext
 from ctutlz.utils import encode_to_pem, to_hex
@@ -52,92 +51,3 @@ def Sct(sct_der):
     return _Sct(signature_len=signature_len,
                 signature=signature,
                 **data_dict)
-
-
-EndEntityCert = namedtuple(
-    typename='EndEntityCert',
-    field_names=[
-        'der',
-    ],
-    lazy_vals={
-        'len':  lambda self: len(self.der),
-        'lens': lambda self: struct.unpack('!4B', struct.pack('!I', self.len)),
-        'len1': lambda self: self.lens[1],
-        'len2': lambda self: self.lens[2],
-        'len3': lambda self: self.lens[3],
-    }
-)
-
-
-def create_signature_input(ee_cert, sct):
-    # cf. https://tools.ietf.org/html/rfc6962#section-3.2
-
-    signature_type = 0
-    entry_type = 0  # 0: ASN.1Cert, 1: PreCert
-
-    def reduce_func(accum_value, current):
-        fmt = accum_value[0] + current[0]
-        values = accum_value[1] + (current[1], )
-        return fmt, values
-
-    initializer = ('!', ())
-
-    fmt, values = reduce(reduce_func, [
-        ('B', sct.version),
-        ('B', signature_type),
-        ('Q', sct.timestamp),
-        ('h', entry_type),
-
-        # signed_entry
-        ('B', ee_cert.len1),
-        ('B', ee_cert.len2),
-        ('B', ee_cert.len3),
-        (flo('{ee_cert.len}s'), ee_cert.der),
-
-        ('h', sct.extensions_len),
-    ], initializer)
-    return struct.pack(fmt, *values)
-
-
-# TODO DEVEL
-def create_signature_input_precert(tbscert, sct, log):
-    # cf. https://tools.ietf.org/html/rfc6962#section-3.2
-
-    signature_type = 0
-    entry_type = 1  # 0: ASN.1Cert, 1: PreCert
-
-    def reduce_func(accum_value, current):
-        fmt = accum_value[0] + current[0]
-        values = accum_value[1] + (current[1], )
-        return fmt, values
-
-    initializer = ('!', ())
-
-    fmt, values = reduce(reduce_func, [
-        ('B', sct.version),
-        ('B', signature_type),
-        ('Q', sct.timestamp),
-        ('h', entry_type),
-
-        # signed_entry
-
-        # TODO DEVEL
-        # issuer_key_hash[32]
-        ('B', log.pubkey_hash_len1),
-        ('B', log.pubkey_hash_len2),
-        ('B', log.pubkey_hash_len3),
-        ('B', log.pubkey_hash_len4),
-        (flo('{log.pubkey_hash_len}s'), log.pubkey_hash),
-
-        # TODO DEVEL
-        # tbs_certificate (rfc6962, page 12)
-        #  * DER encoded TBSCertificate of the ee_cert
-        #    * without SCT extension
-        ('B', tbscert.len1),
-        ('B', tbscert.len2),
-        ('B', tbscert.len3),
-        (flo('{tbscert.len}s'), tbscert.der),
-
-        ('h', sct.extensions_len),
-    ], initializer)
-    return struct.pack(fmt, *values)
