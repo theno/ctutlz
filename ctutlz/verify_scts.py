@@ -17,7 +17,7 @@ from contextlib import contextmanager
 from utlz import flo
 
 from ctutlz.log import get_log_list
-from ctutlz.sct.ee_cert import EndEntityCert
+from ctutlz.sct.ee_cert import EndEntityCert, IssuerCert
 from ctutlz.sctlist_scrape_tls import scts_by_tls
 from ctutlz.sct.validation import validate_scts
 from ctutlz.sct.signature_input import create_signature_input_precert
@@ -34,9 +34,10 @@ def scts_by_ocsp(*args):
 def scts_by_cert(hostname):
     scts_by_cert.sign_input_func = create_signature_input_precert
     from ctutlz import devel
-    cert_der = devel.cert_of_domain(hostname)
+    cert_der, issuer_cert_der = devel.cert_of_domain(hostname)
     scts = devel.scts_from_cert(cert_der)
-    return EndEntityCert(cert_der), scts
+    return EndEntityCert(cert_der,
+                         issuer_cert=IssuerCert(issuer_cert_der)), scts
 
 
 def show_signature(sct):
@@ -113,7 +114,10 @@ def run_actions(hostname, actions):
         ee_cert, scts = scrape_scts(hostname)
         if ee_cert:
             lgr.debug('got certificate\n')
-            issuer_cert = ee_cert.issuer_cert  # FIXME: kinda hacky
+
+            # FIXME: kinda hacky, un-pythonic
+            # IssuerCert or None
+            issuer_cert = ee_cert.issuer_cert
 
         validations = validate_scts(ee_cert, scts, logs, issuer_cert,
                                     sign_input_func=scrape_scts.sign_input_func)

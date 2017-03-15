@@ -6,6 +6,8 @@ from pyasn1.codec.der.decoder import decode as der_decoder
 
 from utlz import namedtuple
 
+from ctutlz.utils import sha256_digest
+
 
 EndEntityCert = namedtuple(
     typename='EndEntityCert',
@@ -38,5 +40,9 @@ IssuerCert = namedtuple(
     ],
     lazy_vals={
         'pyasn1': lambda self: pyasn1_certificate_from_der(self.der),
+        'pubkey_pyasn1': lambda self:
+            self.pyasn1['tbsCertificate']['subjectPublicKeyInfo'],
+        'pubkey_der': lambda self: der_encoder(self.pubkey_pyasn1),
+        'pubkey_hash': lambda self: sha256_digest(self.pubkey_der),
     }
 )

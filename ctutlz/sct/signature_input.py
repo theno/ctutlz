@@ -34,11 +34,8 @@ def create_signature_input(ee_cert, sct, *_, **__):
     return struct.pack(fmt, *values)
 
 
-# TODO DEVEL
 def create_signature_input_precert(tbscert, sct, issuer_cert):
     # cf. https://tools.ietf.org/html/rfc6962#section-3.2
-
-    print(issuer_cert.pyasn1)
 
     signature_type = 0
     entry_type = 1  # 0: ASN.1Cert, 1: PreCert
@@ -58,12 +55,12 @@ def create_signature_input_precert(tbscert, sct, issuer_cert):
 
         # signed_entry
 
-        # TODO DEVEL
+        # TODO DEVEL, possibly incorrect
         # issuer_key_hash[32]
         ('B', 32),
         ('32s', issuer_cert.pubkey_hash),
 
-        # TODO DEVEL
+        # TODO DEVEL, should be correct
         # tbs_certificate (rfc6962, page 12)
         #  * DER encoded TBSCertificate of the ee_cert
         #    * without SCT extension

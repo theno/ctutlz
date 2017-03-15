@@ -10,7 +10,7 @@ from os.path import join, isfile, dirname
 from utlz import namedtuple, text_with_newlines, load_json
 
 from ctutlz.utils import decode_from_pem, digest_from_pem, sha256_digest
-from ctutlz.utils import digest_from_pem_encoded_to_pem
+from ctutlz.utils import encode_to_pem
 
 
 Log = namedtuple(

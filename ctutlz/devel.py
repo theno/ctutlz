@@ -67,15 +67,17 @@ def do_handshake(domain):
     finally:
         sock.close()  # sock.close() possible?
 
-    return certificate
+    return certificate, chain
 
 
 def devel():
     # if False:
     if True:
-        cert_x509 = do_handshake('www.google.com')
-        cert_x509 = do_handshake('www.db.com')  # Deutsche Bank (EV-Zertifikat)
+        cert_x509, chain_x509s = do_handshake('www.google.com')
+        # Deutsche Bank (EV-Zertifikat)
+        cert_x509, chain_x509s = do_handshake('www.db.com')
 
+        # print(chain_x509s) list of x509 entries
 
         # pprint(crypto.dump_certificate(type=crypto.FILETYPE_PEM, cert=cert_x509))  # as PEM
         # pprint(crypto.dump_certificate(type=crypto.FILETYPE_ASN1, cert=cert_x509)) # as DER
@@ -86,6 +88,16 @@ def devel():
         # write cert to file
         with open('www.db.com.crt', 'wb') as fh:
             fh.write(cert_der)
+
+        #with open('www.db.com.chain', 'wb') as fh:
+        #    for cert in chain_x509s:
+        #        fh.write(crypto.dump_certificate(type=crypto.FILETYPE_PEM,
+        #                                         cert=cert))
+        #for index, cert in enumerate(chain_x509s):
+        #    with open(flo('www.db.com.chain_crt_{index}'), 'wb') as fh:
+        #        fh.write(crypto.dump_certificate(type=crypto.FILETYPE_PEM,
+        #                                         cert=cert))
+
         # return
     else:
         # read cert from file
@@ -97,8 +109,14 @@ def devel():
 
 
 def cert_of_domain(domain):
-    cert_x509 = do_handshake(domain)
-    return crypto.dump_certificate(type=crypto.FILETYPE_ASN1, cert=cert_x509)
+    cert_x509, chain_x509s = do_handshake(domain)
+    cert_der = crypto.dump_certificate(type=crypto.FILETYPE_ASN1,
+                                       cert=cert_x509)
+    # https://tools.ietf.org/html/rfc5246#section-7.4.2
+    issuer_cert_x509 = chain_x509s[1]
+    issuer_cert_der = crypto.dump_certificate(type=crypto.FILETYPE_ASN1,
+                                              cert=issuer_cert_x509)
+    return cert_der, issuer_cert_der
 
 
 def scts_from_cert(cert_der):
