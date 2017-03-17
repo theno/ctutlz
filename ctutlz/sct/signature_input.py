@@ -34,11 +34,17 @@ def create_signature_input(ee_cert, sct, *_, **__):
     return struct.pack(fmt, *values)
 
 
-def create_signature_input_precert(tbscert, sct, issuer_cert):
+def create_signature_input_precert(ee_cert, sct, issuer_cert):
     # cf. https://tools.ietf.org/html/rfc6962#section-3.2
 
     signature_type = 0
     entry_type = 1  # 0: ASN.1Cert, 1: PreCert
+
+    tbscert_der = ee_cert.tbscert_without_sctlist_der
+    tbscert_len = ee_cert.tbscert_without_sctlist_len
+    tbscert_len1 = ee_cert.tbscert_without_sctlist_len1
+    tbscert_len2 = ee_cert.tbscert_without_sctlist_len2
+    tbscert_len3 = ee_cert.tbscert_without_sctlist_len3
 
     def reduce_func(accum_value, current):
         fmt = accum_value[0] + current[0]
@@ -55,19 +61,16 @@ def create_signature_input_precert(tbscert, sct, issuer_cert):
 
         # signed_entry
 
-        # TODO DEVEL, possibly incorrect
         # issuer_key_hash[32]
-        ('B', 32),
         ('32s', issuer_cert.pubkey_hash),
 
-        # TODO DEVEL, should be correct
         # tbs_certificate (rfc6962, page 12)
         #  * DER encoded TBSCertificate of the ee_cert
         #    * without SCT extension
-        ('B', tbscert.len1),
-        ('B', tbscert.len2),
-        ('B', tbscert.len3),
-        (flo('{tbscert.len}s'), tbscert.der),
+        ('B', tbscert_len1),
+        ('B', tbscert_len2),
+        ('B', tbscert_len3),
+        (flo('{tbscert_len}s'), tbscert_der),
 
         ('h', sct.extensions_len),
     ], initializer)
