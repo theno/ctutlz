@@ -9,11 +9,16 @@ https://blog.pierky.com/certificate-transparency-manually-verify-sct-with-openss
 '''
 
 import argparse
+import binascii
 import logging
 import struct
 import sys
 from contextlib import contextmanager
 
+from pyasn1.codec import ber
+from pyasn1.codec.der.decoder import decode as der_decoder
+from pyasn1.type.univ import Sequence, Any
+from pyasn1_modules import rfc2560
 from utlz import flo
 
 from ctutlz.log import get_log_list
@@ -24,17 +29,62 @@ from ctutlz.sct.signature_input import create_signature_input_precert
 from ctutlz.utils import to_hex
 
 
-def scts_by_ocsp(*args):
-    scts_by_ocsp.sign_input_func = lambda *_: []  # TODO DEVEL implementate
-    lgr = logging.getLogger('ctutlz')
-    lgr.info('Not implemented (yet)\n')
-    return (None, None)
+def scts_by_ocsp(hostname):
+#    scts_by_ocsp.sign_input_func = lambda *_: []  # TODO DEVEL implementate
+#    lgr = logging.getLogger('ctutlz')
+#    lgr.info('Not implemented (yet)\n')
+#    return (None, None)
+
+    scts_by_cert.sign_input_func = create_signature_input_precert  # TODO DEVEL
+    from ctutlz import devel
+    cert_der, issuer_cert_der, ocsp_resp_der = devel.cert_of_domain(hostname)
+#    scts = devel.scts_from_cert(cert_der)
+    ocsp_resp, _ = der_decoder(ocsp_resp_der, rfc2560.OCSPResponse())
+
+    #response_outer = ocsp_resp['responseBytes']['response']  # type: Sequence()
+    #response_hex = response_outer.prettyPrint().split('0x')[-1]  # FIXME: ugly
+    #response_der = binascii.unhexlify(response_hex)
+
+    responseBytes = ocsp_resp.getComponentByName('responseBytes')
+    response = responseBytes.getComponentByName('response')
+    basic_ocsp_response, _ = der_decoder(response, asn1Spec=rfc2560.BasicOCSPResponse())
+    print(basic_ocsp_response.prettyPrint())
+
+    # open('ocsp_resp_inner', 'wb').write(response_der)
+
+    # response, _ = der_decoder(response_der, Sequence())
+
+    # http://pyasn1.sourceforge.net/docs/tutorial.html#ignoring-unknown-types
+    # der_decoder.defaultErrorState = ber.decoder.stDumpRawValue
+    # response, _ = der_decoder(response_der, Sequence())
+    # response, _ = der_decoder(response_der, rfc2560.BasicOCSPResponse())
+    # response, _ = der_decoder(response_der, rfc2560.SingleResponse())
+
+    from pprint import pprint
+    print(response.prettyPrint())
+    # print(response_der)
+#    response, _ = der_decoder(response_der, Sequence())
+
+#    os_inner_der = extension_sctlist['extnValue']  # type: OctetString()
+#    os_inner, _ = der_decoder(os_inner_der, OctetString())
+#
+#    sctlist_hex = os_inner.prettyPrint().split('0x')[-1]  # FIXME: ugly way
+#    sctlist_der = binascii.unhexlify(sctlist_hex)
+#    sctlist = SignedCertificateTimestampList(sctlist_der)
+#    scts = [Sct(entry.sct_der) for entry in sctlist.sct_list]
+
+    from pprint import pprint
+#    print(response.prettyPrint())
+#    pprint(dir(ocsp_resp))
+
+    return EndEntityCert(cert_der,
+                         issuer_cert=IssuerCert(issuer_cert_der)), scts
 
 
 def scts_by_cert(hostname):
     scts_by_cert.sign_input_func = create_signature_input_precert
     from ctutlz import devel
-    cert_der, issuer_cert_der = devel.cert_of_domain(hostname)
+    cert_der, issuer_cert_der, ocsp_resp_der = devel.cert_of_domain(hostname)
     scts = devel.scts_from_cert(cert_der)
     return EndEntityCert(cert_der,
                          issuer_cert=IssuerCert(issuer_cert_der)), scts

@@ -34,9 +34,19 @@ def create_context():
     ctx = SSL.Context(SSL.SSLv23_METHOD)
     ctx.set_options(SSL.OP_NO_SSLv2)
     ctx.set_options(SSL.OP_NO_SSLv3)
+
     ctx.set_verify(SSL.VERIFY_PEER, verify_callback)
     ca_filename = certifi.where()
     ctx.load_verify_locations(ca_filename)
+
+    ctx.ocsp_resps = []
+
+    def ocsp_client_callback(connection, ocsp_data, data):
+        ctx.ocsp_resps.append(ocsp_data)
+        return True
+
+    ctx.set_ocsp_client_callback(ocsp_client_callback, data=None)
+
     return ctx
 
 
@@ -51,6 +61,11 @@ def do_handshake(domain):
     # TODO: get tls extension
     #       https://github.com/openssl/openssl/blob/master/apps/s_client.c#L1634
     sock = create_socket()
+
+    sock.request_ocsp()
+
+    ocsp_response = None
+
     try:
         sock.connect((domain, 443))
         res = sock.do_handshake()
@@ -58,6 +73,16 @@ def do_handshake(domain):
         certificate = sock.get_peer_certificate()
         protocol_version = sock.get_protocol_version()
         cipher = sock.get_cipher_name()
+
+#        from pprint import pprint
+#        pprint(dir(sock))  # TODO DEBUG
+        ctx = sock.get_context()
+#        pprint(ctx.ocsp_res)
+        if ctx.ocsp_resps:
+            ocsp_response = ctx.ocsp_resps[0]
+
+#        open('ocsp_res', 'wb').write(ctx.ocsp_res[0])
+
     except Exception as exc:
         import traceback
         tb = traceback.format_exc()
@@ -67,15 +92,15 @@ def do_handshake(domain):
     finally:
         sock.close()  # sock.close() possible?
 
-    return certificate, chain
+    return certificate, chain, ocsp_response
 
 
 def devel():
     # if False:
     if True:
-        cert_x509, chain_x509s = do_handshake('www.google.com')
+        cert_x509, chain_x509s, ocsp_resp_der = do_handshake('www.google.com')
         # Deutsche Bank (EV-Zertifikat)
-        cert_x509, chain_x509s = do_handshake('www.db.com')
+        cert_x509, chain_x509s, ocsp_resp_der = do_handshake('www.db.com')
 
         # print(chain_x509s) list of x509 entries
 
@@ -109,14 +134,14 @@ def devel():
 
 
 def cert_of_domain(domain):
-    cert_x509, chain_x509s = do_handshake(domain)
+    cert_x509, chain_x509s, ocsp_resp_der = do_handshake(domain)
     cert_der = crypto.dump_certificate(type=crypto.FILETYPE_ASN1,
                                        cert=cert_x509)
     # https://tools.ietf.org/html/rfc5246#section-7.4.2
     issuer_cert_x509 = chain_x509s[1]
     issuer_cert_der = crypto.dump_certificate(type=crypto.FILETYPE_ASN1,
                                               cert=issuer_cert_x509)
-    return cert_der, issuer_cert_der
+    return cert_der, issuer_cert_der, ocsp_resp_der
 
 
 def scts_from_cert(cert_der):
