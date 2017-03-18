@@ -81,7 +81,7 @@ def do_handshake(domain):
         if ctx.ocsp_resps:
             ocsp_response = ctx.ocsp_resps[0]
 
-#        open('ocsp_res', 'wb').write(ctx.ocsp_res[0])
+        # open('ocsp_res', 'wb').write(ocsp_response)
 
     except Exception as exc:
         import traceback

@@ -17,68 +17,59 @@ from contextlib import contextmanager
 
 from pyasn1.codec import ber
 from pyasn1.codec.der.decoder import decode as der_decoder
-from pyasn1.type.univ import Sequence, Any
+from pyasn1.type.univ import Sequence, Any, ObjectIdentifier, OctetString
 from pyasn1_modules import rfc2560
 from utlz import flo
 
 from ctutlz.log import get_log_list
 from ctutlz.sct.ee_cert import EndEntityCert, IssuerCert
+from ctutlz.sctlist import SignedCertificateTimestampList
 from ctutlz.sctlist_scrape_tls import scts_by_tls
+from ctutlz.sct import Sct
 from ctutlz.sct.validation import validate_scts
 from ctutlz.sct.signature_input import create_signature_input_precert
+from ctutlz.sct.signature_input import create_signature_input
 from ctutlz.utils import to_hex
+from ctutlz import devel
+
+
+def sctlist_hex_from_ocsp_pretty_print(ocsp_resp):
+    sctlist_hex = None
+    splitted = ocsp_resp.split('<no-name>=1.3.6.1.4.1.11129.2.4.5', 1)
+    if len(splitted) > 1:
+        _, after = splitted
+        _, sctlist_hex_with_rest = after.split('<no-name>=0x', 1)
+        sctlist_hex, _ = sctlist_hex_with_rest.split('\n', 1)
+    return sctlist_hex
 
 
 def scts_by_ocsp(hostname):
-#    scts_by_ocsp.sign_input_func = lambda *_: []  # TODO DEVEL implementate
-#    lgr = logging.getLogger('ctutlz')
-#    lgr.info('Not implemented (yet)\n')
-#    return (None, None)
+    scts_by_ocsp.sign_input_func = create_signature_input
 
-    scts_by_cert.sign_input_func = create_signature_input_precert  # TODO DEVEL
-    from ctutlz import devel
+    scts = []
     cert_der, issuer_cert_der, ocsp_resp_der = devel.cert_of_domain(hostname)
-#    scts = devel.scts_from_cert(cert_der)
-    ocsp_resp, _ = der_decoder(ocsp_resp_der, rfc2560.OCSPResponse())
+    if ocsp_resp_der:
+        ocsp_resp, _ = der_decoder(ocsp_resp_der, rfc2560.OCSPResponse())
 
-    #response_outer = ocsp_resp['responseBytes']['response']  # type: Sequence()
-    #response_hex = response_outer.prettyPrint().split('0x')[-1]  # FIXME: ugly
-    #response_der = binascii.unhexlify(response_hex)
+        responseBytes = ocsp_resp.getComponentByName('responseBytes')
+        response_os = responseBytes.getComponentByName('response')
 
-    responseBytes = ocsp_resp.getComponentByName('responseBytes')
-    response = responseBytes.getComponentByName('response')
-    basic_ocsp_response, _ = der_decoder(response, asn1Spec=rfc2560.BasicOCSPResponse())
-    print(basic_ocsp_response.prettyPrint())
+        der_decoder.defaultErrorState = ber.decoder.stDumpRawValue
+        response, _ = der_decoder(response_os, Sequence())
 
-    # open('ocsp_resp_inner', 'wb').write(response_der)
+        sctlist_os_hex = sctlist_hex_from_ocsp_pretty_print(response.prettyPrint())
 
-    # response, _ = der_decoder(response_der, Sequence())
+        if sctlist_os_hex:
+            sctlist_os_der = binascii.unhexlify(sctlist_os_hex)
+            # open('sctlist_by_ocsp', 'wb').write(sctlist_os_der)
+            sctlist_os, _ = der_decoder(sctlist_os_der, OctetString())
 
-    # http://pyasn1.sourceforge.net/docs/tutorial.html#ignoring-unknown-types
-    # der_decoder.defaultErrorState = ber.decoder.stDumpRawValue
-    # response, _ = der_decoder(response_der, Sequence())
-    # response, _ = der_decoder(response_der, rfc2560.BasicOCSPResponse())
-    # response, _ = der_decoder(response_der, rfc2560.SingleResponse())
+            sctlist_hex = sctlist_os.prettyPrint().split('0x')[-1]  # FIXME: ugly way
+            sctlist_der = binascii.unhexlify(sctlist_hex)
+            sctlist = SignedCertificateTimestampList(sctlist_der)
+            scts = [Sct(entry.sct_der) for entry in sctlist.sct_list]
 
-    from pprint import pprint
-    print(response.prettyPrint())
-    # print(response_der)
-#    response, _ = der_decoder(response_der, Sequence())
-
-#    os_inner_der = extension_sctlist['extnValue']  # type: OctetString()
-#    os_inner, _ = der_decoder(os_inner_der, OctetString())
-#
-#    sctlist_hex = os_inner.prettyPrint().split('0x')[-1]  # FIXME: ugly way
-#    sctlist_der = binascii.unhexlify(sctlist_hex)
-#    sctlist = SignedCertificateTimestampList(sctlist_der)
-#    scts = [Sct(entry.sct_der) for entry in sctlist.sct_list]
-
-    from pprint import pprint
-#    print(response.prettyPrint())
-#    pprint(dir(ocsp_resp))
-
-    return EndEntityCert(cert_der,
-                         issuer_cert=IssuerCert(issuer_cert_der)), scts
+    return EndEntityCert(cert_der, IssuerCert(issuer_cert_der)), scts
 
 
 def scts_by_cert(hostname):
