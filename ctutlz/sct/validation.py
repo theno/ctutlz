@@ -2,9 +2,12 @@ import collections
 import os
 from tempfile import NamedTemporaryFile as tempfile
 
+from OpenSSL.crypto import verify, X509, PKey, Error as OpenSSL_crypto_Error
+from cryptography.hazmat.backends.openssl.backend import backend
+from cryptography.hazmat.primitives import serialization
 from utlz import flo
 
-from ctutlz.utils import run_cmd
+from ctutlz.utils import run_cmd, CmdResult
 
 
 SctValidationResult = collections.namedtuple(
@@ -28,7 +31,7 @@ def find_log(sct, logs):
 
 
 def verify_signature_CLUNKY(signature_input, signature, pubkey):
-    # with-cascade requiered for python2.6 support
+    # with-cascade required for python2.6 support
     with tempfile() as signature_input_file:
         with tempfile() as signature_file:
             with tempfile() as pubkey_file:
@@ -54,7 +57,25 @@ def verify_signature_CLUNKY(signature_input, signature, pubkey):
                 return False, output, res
 
 
-verify_signature = verify_signature_CLUNKY  # FIXME: use pyopenssl instead
+def verify_signature(signature_input, signature, pubkey):
+    cryptography_key = serialization.load_pem_public_key(pubkey, backend)
+
+    pkey = PKey.from_cryptography_key(cryptography_key)
+
+    auxiliary_cert = X509()
+    auxiliary_cert.set_pubkey(pkey)
+
+    try:
+        verify(cert=auxiliary_cert,
+               signature=signature,
+               data=signature_input,
+               digest='sha256')
+    except OpenSSL_crypto_Error:
+        cmd_res = CmdResult(1, None, None, None, None, None, None)
+        return False, 'Verification Failure\n', cmd_res
+
+    cmd_res = CmdResult(0, None, None, None, None, None, None)
+    return True, 'Verified OK\n', cmd_res
 
 
 def validate_sct(ee_cert, sct, logs, issuer_cert, sign_input_func):
