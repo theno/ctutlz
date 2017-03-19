@@ -74,7 +74,6 @@ def scts_by_ocsp(hostname):
 
 def scts_by_cert(hostname):
     scts_by_cert.sign_input_func = create_signature_input_precert
-    from ctutlz import devel
     cert_der, issuer_cert_der, ocsp_resp_der = devel.cert_of_domain(hostname)
     scts = devel.scts_from_cert(cert_der)
     return EndEntityCert(cert_der,

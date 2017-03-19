@@ -50,7 +50,6 @@ def verify_signature_CLUNKY(signature_input, signature, pubkey):
                           '-signature {signature_file.name} '
                           '{signature_input_file.name}')
                 res = run_cmd(cmd, timeout=30, max_try=3)
-                # print(output)  # TODO DEBUG
                 output = res.stdout_str + res.stderr_str
                 if res.exitcode == 0:
                     return True, output, res
