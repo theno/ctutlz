@@ -11,7 +11,7 @@ As a tool:
 
 usage: verify-scts [-h] [--short | --debug]
                    [--cert-only | --tls-only | --ocsp-only]
-                   hostname
+                   hostname [hostname ...]
 
 positional arguments:
   hostname     host name of the server (example: 'ritter.vg')
@@ -28,7 +28,9 @@ optional arguments:
 Example:
 
 ```bash
-verify-scts ritter.vg
+# has scts via
+#           TLS-extension   OCSP-extension             certificate (precert)
+verify-scts  ritter.vg       sslanalyzer.comodoca.com   www.db.com
 
 verify-scts google.com --short
 
