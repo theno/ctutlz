@@ -1,4 +1,5 @@
-'''Validate SCTs using the openssl command line tool (which is "clunky").
+'''Validate Signed Certificate Timestamps (SCTs) delivered from one or several
+hosts by X.509v3 extension, TLS extension, or OCSP stapling.
 
 A lot of the functionality originally comes and have been learned from the
 script sct-verify.py written by Pier Carlo Chiodi:
@@ -12,25 +13,24 @@ import argparse
 import binascii
 import logging
 import struct
-import sys
-from contextlib import contextmanager
 
 from pyasn1.codec import ber
 from pyasn1.codec.der.decoder import decode as der_decoder
-from pyasn1.type.univ import Sequence, Any, ObjectIdentifier, OctetString
+from pyasn1.type.univ import Sequence, OctetString
 from pyasn1_modules import rfc2560
-from utlz import flo
+from utlz import flo, first_paragraph
 
-from ctutlz.log import get_log_list
+from ctutlz.tls.handshake import cert_of_domain, scts_from_cert
+from ctutlz.ctlog import get_log_list
 from ctutlz.sct.ee_cert import EndEntityCert, IssuerCert
-from ctutlz.sctlist import SignedCertificateTimestampList
-from ctutlz.sctlist_scrape_tls import scts_by_tls
-from ctutlz.sct import Sct
-from ctutlz.sct.validation import validate_scts
+from ctutlz.tls.sctlist import SignedCertificateTimestampList
+from ctutlz.tls.sctlist_grab_by_tls_extension import scts_by_tls
+from ctutlz.sct.sct import Sct
+from ctutlz.sct.verification import verify_scts
 from ctutlz.sct.signature_input import create_signature_input_precert
 from ctutlz.sct.signature_input import create_signature_input
-from ctutlz.utils import to_hex
-from ctutlz import devel
+from ctutlz.utils.string import to_hex
+from ctutlz.utils.logger import loglevel, setup_logging
 
 
 def sctlist_hex_from_ocsp_pretty_print(ocsp_resp):
@@ -47,7 +47,7 @@ def scts_by_ocsp(hostname):
     scts_by_ocsp.sign_input_func = create_signature_input
 
     scts = []
-    cert_der, issuer_cert_der, ocsp_resp_der = devel.cert_of_domain(hostname)
+    cert_der, issuer_cert_der, ocsp_resp_der = cert_of_domain(hostname)
     if ocsp_resp_der:
         ocsp_resp, _ = der_decoder(ocsp_resp_der, rfc2560.OCSPResponse())
 
@@ -74,8 +74,8 @@ def scts_by_ocsp(hostname):
 
 def scts_by_cert(hostname):
     scts_by_cert.sign_input_func = create_signature_input_precert
-    cert_der, issuer_cert_der, ocsp_resp_der = devel.cert_of_domain(hostname)
-    scts = devel.scts_from_cert(cert_der)
+    cert_der, issuer_cert_der, ocsp_resp_der = cert_of_domain(hostname)
+    scts = scts_from_cert(cert_der)
     return EndEntityCert(cert_der,
                          issuer_cert=IssuerCert(issuer_cert_der)), scts
 
@@ -144,7 +144,7 @@ def run_actions(hostname, actions):
     logs = get_log_list()  # FIXME make as argument
     # TODO DEBUG
     for log in logs:
-        from ctutlz.utils import digest_from_pem
+        from ctutlz.utils.encoding import digest_from_pem
         assert log.id_der == digest_from_pem(log.key)
 
     for scrape_scts in actions:
@@ -159,8 +159,8 @@ def run_actions(hostname, actions):
             # IssuerCert or None
             issuer_cert = ee_cert.issuer_cert
 
-        validations = validate_scts(ee_cert, scts, logs, issuer_cert,
-                                    sign_input_func=scrape_scts.sign_input_func)
+        validations = verify_scts(ee_cert, scts, logs, issuer_cert,
+                                  sign_input_func=scrape_scts.sign_input_func)
         if validations:
             for vdn in validations:
                 show_validation(vdn)
@@ -168,35 +168,10 @@ def run_actions(hostname, actions):
             lgr.info('no SCTs\n')
 
 
-@contextmanager
-def loglevel(level):
-    logger = logging.getLogger('ctutlz')
-    levels = {}
-    for handler in logger.handlers:
-        levels[handler] = handler.level
-        handler.setLevel(level)
-    yield
-    for handler in logger.handlers:
-        handler.setLevel(levels[handler])
-
-
-def setup_logging(loglevel):
-    logger = logging.getLogger('ctutlz')
-    logger.setLevel(logging.DEBUG)
-    try:
-        # python 2.6
-        handler = logging.StreamHandler(stream=sys.stdout)
-    except TypeError:
-        # since python 2.7
-        handler = logging.StreamHandler()
-    handler.setLevel(loglevel)
-    logger.addHandler(handler)
-    return logger
-
-
 def create_parser():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('hostname', nargs='+',
+    parser = argparse.ArgumentParser(description=first_paragraph(__doc__))
+    parser.add_argument('hostname',
+                        nargs='+',
                         help="host name of the server (example: 'ritter.vg')")
 
     meg = parser.add_mutually_exclusive_group()

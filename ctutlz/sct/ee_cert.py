@@ -7,7 +7,7 @@ from pyasn1.codec.der.decoder import decode as der_decoder
 
 from utlz import namedtuple
 
-from ctutlz.utils import sha256_digest
+from ctutlz.utils.encoding import sha256_digest
 
 
 def pyasn1_certificate_from_der(cert_der):

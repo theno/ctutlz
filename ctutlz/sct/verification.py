@@ -2,12 +2,12 @@ import collections
 import os
 from tempfile import NamedTemporaryFile as tempfile
 
-from OpenSSL.crypto import verify, X509, PKey, Error as OpenSSL_crypto_Error
 from cryptography.hazmat.backends.openssl.backend import backend
 from cryptography.hazmat.primitives import serialization
+from OpenSSL.crypto import verify, X509, PKey, Error as OpenSSL_crypto_Error
 from utlz import flo
 
-from ctutlz.utils import run_cmd, CmdResult
+from ctutlz.utils.cmd import run_cmd, CmdResult
 
 
 SctValidationResult = collections.namedtuple(
@@ -70,14 +70,14 @@ def verify_signature(signature_input, signature, pubkey):
                data=signature_input,
                digest='sha256')
     except OpenSSL_crypto_Error:
-        cmd_res = CmdResult(1, None, None, None, None, None, None)
+        cmd_res = CmdResult(1, None, None, None, None)
         return False, 'Verification Failure\n', cmd_res
 
-    cmd_res = CmdResult(0, None, None, None, None, None, None)
+    cmd_res = CmdResult(0, None, None, None, None)
     return True, 'Verified OK\n', cmd_res
 
 
-def validate_sct(ee_cert, sct, logs, issuer_cert, sign_input_func):
+def verify_sct(ee_cert, sct, logs, issuer_cert, sign_input_func):
     log = find_log(sct, logs)
     if log:
         verified, output, cmd_res = verify_signature(
@@ -91,9 +91,9 @@ def validate_sct(ee_cert, sct, logs, issuer_cert, sign_input_func):
                                verified=False, output='', cmd_res=None)
 
 
-def validate_scts(ee_cert, scts, logs, issuer_cert, sign_input_func):
+def verify_scts(ee_cert, scts, logs, issuer_cert, sign_input_func):
     if scts:
-        return [validate_sct(ee_cert, sct, logs, issuer_cert, sign_input_func)
+        return [verify_sct(ee_cert, sct, logs, issuer_cert, sign_input_func)
                 for sct
                 in scts]
     return []

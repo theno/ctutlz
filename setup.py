@@ -9,6 +9,7 @@ import shutil
 from setuptools import setup, find_packages
 from codecs import open
 
+
 def create_readme_with_long_description():
     this_dir = os.path.abspath(os.path.dirname(__file__))
     readme_md = os.path.join(this_dir, 'README.md')
@@ -38,7 +39,7 @@ long_description = create_readme_with_long_description()
 
 setup(
     name='ctutlz',
-    version='0.4.0',
+    version='0.5.0',
     description=description,
     long_description=long_description,
     url='https://github.com/theno/ctutlz',
@@ -47,7 +48,7 @@ setup(
     license='MIT',
     entry_points={
         'console_scripts': [
-            'verify-scts = ctutlz.verify_scts:main',
+            'verify-scts = ctutlz.scripts.verify_scts:main',
         ],
     },
     classifiers=[
@@ -73,15 +74,15 @@ setup(
     ]),
     install_requires=[
         'utlz',
-        'pytz', 'pyasn1', 'ndg-httpsclient',  # for verify-cert
-        'pyOpenSSL',
-        'asn1ate', 'certifi', 'hexdump',                   # for devel.py
-        'pyasn1-modules',
+        'pyasn1',
+        'pyasn1-modules>=0.0.9',
+        'pyOpenSSL>=16.3.0',
+
+        'asn1ate', 'certifi', 'hexdump',  # for devel.py
     ],
     dependency_links=[
-        #'https://github.com/etingof/pyasn1-modules/tarball/master#egg=pyasn1-modules-0.0.9',
         'git+https://github.com/etingof/pyasn1-modules.git#egg=pyasn1-modules-0.0.9',
-        # 16.2.0 has no ocsp support
+        # pyOpenSSL-16.2.0 has no OCSP support
         # 'git+https://github.com/pyca/pyopenssl.git#egg=pyOpenSSL-16.3.0',
         'git+https://github.com/theno/pyopenssl.git#egg=pyOpenSSL-16.3.0',
     ],

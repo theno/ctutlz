@@ -8,10 +8,7 @@ def test_run_cmd():
                             'cmd, timeout=30, max_try=3, num_try=1')
 
     def Expected(exitcode, stdout, stderr):
-        return ctutlz.utils.CmdResult(exitcode,
-                                      stdout, stdout.decode('utf-8'),
-                                      stderr, stderr.decode('utf-8'),
-                                      None, None)
+        return ctutlz.utils.cmd.CmdResult(exitcode, stdout, stderr, None, None)
 
     TestCase = utlz.namedtuple('TestDatum', 'comment, input, expected')
 
@@ -43,7 +40,7 @@ def test_run_cmd():
         ),
     ]
     for test in test_data:
-        res = ctutlz.utils.run_cmd(**test.input._asdict())
+        res = ctutlz.utils.cmd.run_cmd(**test.input._asdict())
         assert res.stdout == test.expected.stdout
         assert res.stderr == test.expected.stderr
         assert res.exitcode == test.expected.exitcode

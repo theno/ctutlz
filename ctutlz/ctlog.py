@@ -1,5 +1,4 @@
 import json
-import struct
 try:
     # since python 3.6
     import urllib.request as urllib_request
@@ -7,10 +6,10 @@ except ImportError:
     import urllib as urllib_request
 from os.path import join, isfile, dirname
 
-from utlz import namedtuple, text_with_newlines, load_json
+from utlz import load_json, namedtuple, text_with_newlines
 
-from ctutlz.utils import decode_from_pem, digest_from_pem, sha256_digest
-from ctutlz.utils import encode_to_pem
+from ctutlz.utils.encoding import decode_from_pem, encode_to_pem
+from ctutlz.utils.encoding import digest_from_pem, sha256_digest
 
 
 Log = namedtuple(

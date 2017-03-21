@@ -6,11 +6,11 @@ from collections import namedtuple
 
 from utlz import flo
 
-from ctutlz.sct import Sct
 from ctutlz.sct.ee_cert import EndEntityCert
+from ctutlz.sct.sct import Sct
 from ctutlz.sct.signature_input import create_signature_input
-from ctutlz.sctlist import TlsExtension18
-from ctutlz.utils import run_cmd
+from ctutlz.utils.cmd import run_cmd
+from ctutlz.tls.sctlist import TlsExtension18
 
 
 Extension18Result = namedtuple(
@@ -80,6 +80,16 @@ def scrape_tls_extension_18_CLUNKY(hostname, timeout=30, max_try=3):
     return Extension18Result(ee_cert, extsn_18, hostname,
                              res.stdout_str + res.stderr_str, res.exitcode,
                              func_name, timeout, max_try, num_try=1)
+
+
+def scrape_tls_extension_18_pyopenssl(hostname, timeout, max_try=3):
+    # idea:
+    #  * "manuell" über _lib: SSL_CTX_add_client_custom_ext
+    #     etwa so wie:
+    #      _lib.SSL_CTX_set_info_callback(self._context, self._info_callback)
+    #  * resultat abholen per:
+    #    Context.set_info_callback()
+    pass
 
 
 def scrape_tls_extension_18(hostname, timeout=30, max_try=3):
