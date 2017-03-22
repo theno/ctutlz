@@ -51,7 +51,7 @@ Install the latest version of the pypi python package
 [ctutlz](https://pypi.python.org/pypi/ctutlz):
 
 ```bash
-pip install ctutlz
+pip install --process-dependency-links  ctutlz
 ```
 
 ## Development
