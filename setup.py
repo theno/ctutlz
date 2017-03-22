@@ -1,4 +1,4 @@
-"""A python utils library
+"""Certificate Transparency utils library and scripts.
 
 * https://github.com/theno/ctutlz
 * https://pypi.python.org/pypi/ctutlz
@@ -34,12 +34,12 @@ def create_readme_with_long_description():
     return long_description
 
 
-description = 'A python utils library'
+description = __doc__.split('\n')[0]
 long_description = create_readme_with_long_description()
 
 setup(
     name='ctutlz',
-    version='0.5.0',
+    version='0.5.1',
     description=description,
     long_description=long_description,
     url='https://github.com/theno/ctutlz',
