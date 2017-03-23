@@ -22,7 +22,8 @@ def create_context():
           0 if okay  (like "zero error")
           != 0, else
         '''
-        return bool(ok == 1)
+        # return bool(ok == 1)
+        return True
 
     ctx = SSL.Context(SSL.SSLv23_METHOD)
     ctx.set_options(SSL.OP_NO_SSLv2)

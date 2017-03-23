@@ -40,11 +40,7 @@ def create_signature_input_precert(ee_cert, sct, issuer_cert):
     signature_type = 0
     entry_type = 1  # 0: ASN.1Cert, 1: PreCert
 
-    tbscert_der = ee_cert.tbscert_without_sctlist_der
-    tbscert_len = ee_cert.tbscert_without_sctlist_len
-    tbscert_len1 = ee_cert.tbscert_without_sctlist_len1
-    tbscert_len2 = ee_cert.tbscert_without_sctlist_len2
-    tbscert_len3 = ee_cert.tbscert_without_sctlist_len3
+    tbscert = ee_cert.tbscert.without_ct_extensions
 
     def reduce_func(accum_value, current):
         fmt = accum_value[0] + current[0]
@@ -67,10 +63,10 @@ def create_signature_input_precert(ee_cert, sct, issuer_cert):
         # tbs_certificate (rfc6962, page 12)
         #  * DER encoded TBSCertificate of the ee_cert
         #    * without SCT extension
-        ('B', tbscert_len1),
-        ('B', tbscert_len2),
-        ('B', tbscert_len3),
-        (flo('{tbscert_len}s'), tbscert_der),
+        ('B', tbscert.len1),
+        ('B', tbscert.len2),
+        ('B', tbscert.len3),
+        (flo('{tbscert.len}s'), tbscert.der),
 
         ('h', sct.extensions_len),
     ], initializer)

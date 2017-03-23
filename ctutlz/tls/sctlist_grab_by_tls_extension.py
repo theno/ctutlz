@@ -34,11 +34,11 @@ def tls_output_2_eecert_and_extension_18(tls_handshake_output):
     extension 18 (SCT) from `tls_handshake_output` and return them as a tuple.
     '''
 
-    '''lines of the pem encoded ee-cert'''
+    '''lines of the b64 encoded ee-cert'''
     ee_cert = []  # end entity certificate
     ee_cert_append = False
 
-    '''lines of the pem encoded server extension 18 (SCT)'''
+    '''lines of the b64 encoded server extension 18 (SCT)'''
     extension_18 = []
     extension_18_append = False
 
@@ -56,8 +56,11 @@ def tls_output_2_eecert_and_extension_18(tls_handshake_output):
         elif extension_18_append:
             extension_18.append(line)
 
-    ee_cert_der = base64.b64decode('\n'.join(ee_cert))
-    extension_18_der = base64.b64decode('\n'.join(extension_18))
+    ee_cert_b64 = ''.join(ee_cert)
+    extension_18_b64 = ''.join(extension_18)
+
+    ee_cert_der = base64.b64decode(ee_cert_b64)
+    extension_18_der = base64.b64decode(extension_18_b64)
 
     return ee_cert_der, extension_18_der
 

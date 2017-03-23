@@ -8,8 +8,8 @@ from os.path import join, isfile, dirname
 
 from utlz import load_json, namedtuple, text_with_newlines
 
-from ctutlz.utils.encoding import decode_from_pem, encode_to_pem
-from ctutlz.utils.encoding import digest_from_pem, sha256_digest
+from ctutlz.utils.encoding import decode_from_b64, encode_to_b64
+from ctutlz.utils.encoding import digest_from_b64, sha256_digest
 
 
 Log = namedtuple(
@@ -22,9 +22,9 @@ Log = namedtuple(
         'operated_by',
     ],
     lazy_vals={
-        'key_der': lambda self: decode_from_pem(self.key),  # type: bytes
-        'id_der': lambda self: digest_from_pem(self.key),   # type: bytes
-        'id_pem': lambda self: encode_to_pem(self.id_der),  # type: str
+        'key_der': lambda self: decode_from_b64(self.key),  # type: bytes
+        'id_der': lambda self: digest_from_b64(self.key),   # type: bytes
+        'id_b64': lambda self: encode_to_b64(self.id_der),  # type: str
         'pubkey': lambda self: '\n'.join([                  # type: str
                               '-----BEGIN PUBLIC KEY-----',
                               text_with_newlines(text=self.key, line_length=64),

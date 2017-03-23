@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from utlz import flo, namedtuple, StructContext
 
-from ctutlz.utils.encoding import encode_to_pem
+from ctutlz.utils.encoding import encode_to_b64
 from ctutlz.utils.string import to_hex
 
 
@@ -23,7 +23,7 @@ _Sct = namedtuple(
         'signature',
     ],
     lazy_vals={
-        'log_id_pem': lambda self: encode_to_pem(self.log_id),  # type: str
+        'log_id_b64': lambda self: encode_to_b64(self.log_id),  # type: str
         'version_hex': lambda self: to_hex(self.version),
         'timestamp_hex': lambda self: to_hex(self.timestamp),
         'extensions_len_hex': lambda self: to_hex(self.extensions_len),

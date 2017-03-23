@@ -110,7 +110,7 @@ def show_validation(vdn):
     lgr.info(flo('LogID     : {sct_log_id1}'))
     lgr.info(flo('            {sct_log_id2}'))
     with loglevel(logging.INFO):
-        lgr.info(flo('LogID b64 : {sct.log_id_pem}'))
+        lgr.info(flo('LogID b64 : {sct.log_id_b64}'))
     lgr.info(flo('Timestamp : {sct.timestamp} ({sct.timestamp_hex})'))
     lgr.info(flo('Extensions: {sct.extensions_len} ({sct.extensions_len_hex})'))
     lgr.info(flo('Algorithms: {sct.signature_alg_hash_hex}/'
@@ -144,8 +144,8 @@ def run_actions(hostname, actions):
     logs = get_log_list()  # FIXME make as argument
     # TODO DEBUG
     for log in logs:
-        from ctutlz.utils.encoding import digest_from_pem
-        assert log.id_der == digest_from_pem(log.key)
+        from ctutlz.utils.encoding import digest_from_b64
+        assert log.id_der == digest_from_b64(log.key)
 
     for scrape_scts in actions:
         with loglevel(logging.INFO):

@@ -49,6 +49,7 @@ setup(
     entry_points={
         'console_scripts': [
             'verify-scts = ctutlz.scripts.verify_scts:main',
+            'ctlog-get-entries = ctutlz.scripts.ctlog_get_entries:main',
         ],
     },
     classifiers=[
@@ -73,10 +74,11 @@ setup(
         'tests',
     ]),
     install_requires=[
-        'utlz',
         'pyasn1',
         'pyasn1-modules>=0.0.9',
         'pyOpenSSL>=16.3.0',
+        'requests',
+        'utlz',
 
         'asn1ate', 'certifi', 'hexdump',  # for devel.py
     ],
