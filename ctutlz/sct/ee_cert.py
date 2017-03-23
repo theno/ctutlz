@@ -38,6 +38,45 @@ def tbscert_without_sctlist(tbscert):
     return copy
 
 
+def tbscert_without_ct_extensions(tbscert):
+    '''Return pyasn1_modules.rfc2580.TBSCertificate instance `cert_pyasn1`
+    without sctlist extension (OID 1.3.6.1.4.1.11129.2.4.2) and
+    poison extension (OID 1.3.6.1.4.1.11129.2.4.2), if any.
+    '''
+    sctlist_oid = ObjectIdentifier(value='1.3.6.1.4.1.11129.2.4.2')
+    poison_oid = ObjectIdentifier(value='1.3.6.1.4.1.11129.2.4.3')
+    ct_oids = [sctlist_oid, poison_oid]
+
+    extensions = tbscert['extensions']
+    without_ct_extensions = extensions.subtype()
+    for extension in extensions:
+        if extension['extnID'] not in ct_oids:
+            without_ct_extensions.append(extension)
+    copy = copy_pyasn1_instance(tbscert)
+    copy['extensions'] = without_ct_extensions
+    return copy
+
+
+TbsCert = namedtuple(
+    typename='TbsCert',
+    field_names=[
+        'pyasn1',
+    ],
+    lazy_vals={
+        'der': lambda self: der_encoder(self.pyasn1),
+        'len': lambda self: len(self.der),
+        'lens': lambda self: struct.unpack('!4B', struct.pack('!I', self.len)),
+        # cf. https://tools.ietf.org/html/rfc6962#section-3.2      <1..2^24-1>
+        'len1': lambda self: self.lens[1],
+        'len2': lambda self: self.lens[2],
+        'len3': lambda self: self.lens[3],
+
+        'without_ct_extensions':
+            lambda self: TbsCert(tbscert_without_ct_extensions(self.pyasn1)),
+    }
+)
+
+
 EndEntityCert = namedtuple(
     typename='EndEntityCert',
     field_names=[
@@ -53,21 +92,7 @@ EndEntityCert = namedtuple(
         'len3': lambda self: self.lens[3],
 
         'pyasn1': lambda self: pyasn1_certificate_from_der(self.der),
-        'tbscert_pyasn1': lambda self: self.pyasn1['tbsCertificate'],
-        'tbscert_without_sctlist_pyasn1': lambda self:
-            tbscert_without_sctlist(self.tbscert_pyasn1),
-
-        'tbscert_without_sctlist_der': lambda self: der_encoder(self.tbscert_without_sctlist_pyasn1),
-
-        'tbscert_without_sctlist_len': lambda self: len(self.tbscert_without_sctlist_der),
-
-        'tbscert_without_sctlist_lens': lambda self:
-            struct.unpack('!4B', struct.pack('!I', self.tbscert_without_sctlist_len)),
-
-        # cf. https://tools.ietf.org/html/rfc6962#section-3.2      <1..2^24-1>
-        'tbscert_without_sctlist_len1': lambda self: self.tbscert_without_sctlist_lens[1],
-        'tbscert_without_sctlist_len2': lambda self: self.tbscert_without_sctlist_lens[2],
-        'tbscert_without_sctlist_len3': lambda self: self.tbscert_without_sctlist_lens[3],
+        'tbscert': lambda self: TbsCert(self.pyasn1['tbsCertificate']),
     }
 )
 
