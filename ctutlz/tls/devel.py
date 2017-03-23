@@ -73,13 +73,17 @@ def create_context():
     # pprint(dir(OpenSSL._util.lib))
     # pprint(dir(OpenSSL._util.lib._original_lib))
 
-#    res = OpenSSL._util.lib.SSL_CTX_add_client_custom_ext(ctx, 18,
-#                                                          None, None, None,
-#                                                          tls_ext_callback,
-#                                                          None)
-#    print('\nres:')
-#    print(res)
-#    print('\n----\n')
+    # from cryptography.hazmat.backends.openssl import backend
+    # print(backend.openssl_version_text())
+    # pprint(dir(backend._lib))
+
+    # res = OpenSSL._util.lib.SSL_CTX_add_client_custom_ext(ctx, 18,
+    #                                                       None, None, None,
+    #                                                       tls_ext_callback,
+    #                                                       None)
+    # print('\nres:')
+    # print(res)
+    # print('\n----\n')
 
     return ctx
 
@@ -116,8 +120,8 @@ def do_handshake(domain):
         if ctx.ocsp_resps:
             ocsp_response = ctx.ocsp_resps[0]
 
-        # if ctx.tls_extension_18s:
-        #     tls_extension_18 = ctx.tls_extension_18s  # [0]
+        if ctx.tls_extension_18s:
+            tls_extension_18 = ctx.tls_extension_18s  # [0]
 
         # open('ocsp_res', 'wb').write(ocsp_response)
 
@@ -130,8 +134,8 @@ def do_handshake(domain):
     finally:
         sock.close()  # sock.close() possible?
 
-    return certificate, chain, ocsp_response
-    # return certificate, chain, ocsp_response, tls_extension_18
+    # return certificate, chain, ocsp_response
+    return certificate, chain, ocsp_response, tls_extension_18
 
 
 def devel_ocsp():
@@ -216,7 +220,7 @@ def scts_from_cert(cert_der):
 
 def show_scts(scts):
     for sct in scts:
-        print(flo('log_id (PEM): {sct.log_id_pem}'))
+        print(flo('log_id (B64): {sct.log_id_b64}'))
         print(flo('version: {sct.version}'))
         print(flo('timestamp: {sct.timestamp}'))
         print(flo('extensions length: {sct.extensions_len_hex}'))
@@ -228,7 +232,7 @@ def show_scts(scts):
     logs = get_log_list()
     for log in logs:
         print(flo('description: {log.description}'))
-        print(flo('log_id (PEM): {log.id_pem}\n'))
+        print(flo('log_id (B64): {log.id_b64}\n'))
 
 
 if __name__ == '__main__':
