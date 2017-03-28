@@ -29,6 +29,7 @@ _Sct = namedtuple(
         'extensions_len_hex': lambda self: to_hex(self.extensions_len),
         'signature_alg_hash_hex': lambda self: to_hex(self.signature_alg_hash),
         'signature_alg_sign_hex': lambda self: to_hex(self.signature_alg_sign),
+        'signature_b64': lambda self: encode_to_b64(self.signature),  # str
     }
 )
 

@@ -98,6 +98,11 @@ def show_signature(sct):
         sig_offset = sig_offset + bytes_to_read
 
 
+def show_signature_b64(sct):
+    lgr = logging.getLogger('ctutlz')
+    lgr.info(flo('Sign. b64 : {sct.signature_b64}'))
+
+
 def show_validation(vdn):
     sct = vdn.sct
 
@@ -117,6 +122,7 @@ def show_validation(vdn):
                  '{sct.signature_alg_sign} (hash/sign)'))
 
     show_signature(sct)
+    show_signature_b64(sct)
 
     log = vdn.log
     with loglevel(logging.INFO):
