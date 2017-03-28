@@ -16,7 +16,7 @@ Log = namedtuple(
     typename='Log',
     field_names=[  # each of type: str
         'description',
-        'key',     # PEM encoded, type: str
+        'key',     # base-64 encoded, type: str
         'url',
         'maximum_merge_delay',
         'operated_by',
