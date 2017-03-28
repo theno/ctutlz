@@ -56,8 +56,8 @@ def verify_signature_CLUNKY(signature_input, signature, pubkey):
                 return False, output, res
 
 
-def verify_signature(signature_input, signature, pubkey):
-    cryptography_key = serialization.load_pem_public_key(pubkey, backend)
+def verify_signature(signature_input, signature, pubkey_pem):
+    cryptography_key = serialization.load_pem_public_key(pubkey_pem, backend)
 
     pkey = PKey.from_cryptography_key(cryptography_key)
 
