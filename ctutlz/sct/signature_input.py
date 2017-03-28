@@ -37,7 +37,7 @@ def create_signature_input(ee_cert, sct, *_, **__):
 def create_signature_input_precert(ee_cert, sct, issuer_cert):
     # cf. https://tools.ietf.org/html/rfc6962#section-3.2
 
-    signature_type = 0
+    signature_type = 0  # 0 means certificate_timestamp
     entry_type = 1  # 0: ASN.1Cert, 1: PreCert
 
     tbscert = ee_cert.tbscert.without_ct_extensions
