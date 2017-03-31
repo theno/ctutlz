@@ -64,8 +64,7 @@ git clone https://github.com/theno/ctutlz.git
 
 ### Fabfile
 
-The devel-commands of the next section can be automatically executed with
-[Fabric](http://docs.fabfile.org):
+Run devel-tasks executed with [Fabric](http://docs.fabfile.org):
 
 ```bash
 > fab -l
@@ -77,11 +76,8 @@ Available commands:
     pythons  Install latest pythons with pyenv.
     test     Run unit tests.
     tox      Run tox.
-```
 
-Show task details, e.g. for task `test`:
-
-```bash
+# Show task details, e.g. for task `test`:
 > fab -d test
 
 Run unit tests.
@@ -95,49 +91,36 @@ Run unit tests.
         fab test:args=-s,py=py27
 ```
 
+Setup python versions and virtualenvs for development:
+```
+fab pythons
+fab tox
+```
+
 ### Devel-Commands
 
-Run unit tests with pytest
+Run unit tests against several pythons with tox (needs pythons defined
+in envlist of `tox.ini` to be installed with pyenv):
 
 ```bash
-pip install --user  pytest  utlz
-PYTHONPATH="."  python -m pytest
+python3.6 -m tox
+
+# only against one python version:
+python3.6 -m tox -e py27
+
+# rebuild virtual environments:
+python3.6 -m tox -r
 ```
 
-Run unit tests against several pythons with tox:
+Run unit tests with pytest (uses tox virtualenv, replace `py36` by e.g.
+`py27` where applicable):
 
 ```bash
-# install tox
-pip install tox
-
-# install and activate different python versions
-fab setup.pyenv -H localhost
-pyenv install  2.6.9
-pyenv install  2.7.13
-pyenv install  3.3.6
-pyenv install  3.4.6
-pyenv install  3.5.3
-pyenv install  3.6.1
-pyenv local  system  2.6.9  2.7.13  3.3.6  3.4.6  3.5.3  3.6.1
-
-# build and run tests
-python -m tox
+PYTHONPATH='.' .tox/py36/bin/python -m pytest
 ```
 
-Build and publish package:
+Run tool `verify-scts` from source:
+
 ```bash
-# install pypandoc and twine
-pip install  pypandoc  twine
-
-# build package
-python setup.py sdist
-
-# upload to pypi.org
-twine  upload  dist/ctutlz-<VERSION>.tar.gz
-
-
-# useful oneliners
-rm -rf .tox/; python3.6 -m tox
-rm -rf dist/; python3.6 setup.py sdist; ls -hal dist/
-python3.6 -m twine  upload  dist/ctutlz*
+PYTHONPATH='.' .tox/py36/bin/python  ctutlz/scripts/verify_scts -h
 ```
