@@ -8,8 +8,9 @@ from utlz import flo, cyan
 def clean():
     '''Delete temporary files not under version control.'''
 
-    print(cyan('delete temp files and dirs for packaging'))
     basedir = dirname(__file__)
+
+    print(cyan('delete temp files and dirs for packaging'))
     local(flo(
         'rm -rf  '
         '{basedir}/ctutlz.egg-info/  '
@@ -18,7 +19,7 @@ def clean():
         '{basedir}/build/  '
     ))
 
-    print(cyan('delete temp files and dirs for editing'))
+    print(cyan('\ndelete temp files and dirs for editing'))
     local(flo(
         'rm -rf  '
         '{basedir}/.cache  '
