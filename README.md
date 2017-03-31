@@ -62,11 +62,46 @@ Clone the source code [repository](https://github.com/theno/ctutlz):
 git clone https://github.com/theno/ctutlz.git
 ```
 
+### fabfile
+
+The devel-commands of the next section can be automatically executed with
+[Fabric](docs.fabfile.org):
+
+```bash
+> fab -l
+
+Available commands:
+
+    clean    Delete temporary files not under version control.
+    pypi     Build package and upload to pypi.
+    pythons  Install latest pythons with pyenv.
+    test     Run unit tests.
+    tox      Run tox.
+```
+
+Show task details, e.g. for task `test`:
+
+```bash
+> fab -d test
+
+Run unit tests.
+
+    Args:
+        args: Optional arguments passed to pytest
+        py: python version to run the tests against
+
+    Example:
+
+        fab test:args=-s,py=py27
+```
+
+### Devel-Commands
+
 Run unit tests with pytest
 
 ```bash
 pip install --user  pytest  utlz
-PYTHONPATH=".:$PYTHONPATH"  python -m pytest
+PYTHONPATH="."  python -m pytest
 ```
 
 Run unit tests against several pythons with tox:
