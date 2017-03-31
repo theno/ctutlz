@@ -117,6 +117,9 @@ Run unit tests with pytest (uses tox virtualenv, replace `py36` by e.g.
 
 ```bash
 PYTHONPATH='.' .tox/py36/bin/python -m pytest
+
+# show output
+PYTHONPATH='.' .tox/py36/bin/python -m pytest -s
 ```
 
 Run tool `verify-scts` from source:
