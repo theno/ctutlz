@@ -62,10 +62,10 @@ Clone the source code [repository](https://github.com/theno/ctutlz):
 git clone https://github.com/theno/ctutlz.git
 ```
 
-### fabfile
+### Fabfile
 
 The devel-commands of the next section can be automatically executed with
-[Fabric](docs.fabfile.org):
+[Fabric](http://docs.fabfile.org):
 
 ```bash
 > fab -l
