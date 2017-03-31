@@ -39,10 +39,10 @@ python -m ctutlz
 python -m ctutlz.verify_scts
 ```
 
-Import module in your python code:
+Import module in your python code, for example:
 
 ```python
-import ctutlz
+from ctutlz.rfc6962 import SignedCertificateTimestamp, MerkleTreeLeaf
 ```
 
 ## Installation
