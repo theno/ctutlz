@@ -77,8 +77,13 @@ pip install tox
 
 # install and activate different python versions
 fab setup.pyenv -H localhost
-pyenv install  2.6.9  2.7.13  3.3.6  3.4.6  3.5.3  3.6.0
-pyenv local  system  2.6.9  2.7.13  3.3.6  3.4.6  3.5.3  3.6.0
+pyenv install  2.6.9
+pyenv install  2.7.13
+pyenv install  3.3.6
+pyenv install  3.4.6
+pyenv install  3.5.3
+pyenv install  3.6.1
+pyenv local  system  2.6.9  2.7.13  3.3.6  3.4.6  3.5.3  3.6.1
 
 # build and run tests
 python -m tox
