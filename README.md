@@ -60,6 +60,7 @@ Clone the source code [repository](https://github.com/theno/ctutlz):
 
 ```bash
 git clone https://github.com/theno/ctutlz.git
+cd ctutlz
 ```
 
 ### Fabfile
