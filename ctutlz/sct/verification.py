@@ -83,7 +83,7 @@ def verify_sct(ee_cert, sct, logs, issuer_cert, sign_input_func):
         verified, output, cmd_res = verify_signature(
             signature_input=sign_input_func(ee_cert, sct, issuer_cert),
             signature=sct.signature,
-            pubkey=log.pubkey.encode('ascii')
+            pubkey_pem=log.pubkey.encode('ascii')
         )
         return SctValidationResult(ee_cert, sct, log,
                                    verified, output, cmd_res)
