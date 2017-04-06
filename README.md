@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/theno/ctutlz.svg?branch=master)](https://travis-ci.org/theno/ctutlz)
+
 # ctutlz
 
 Python utils library and tools for certificate transparency.
