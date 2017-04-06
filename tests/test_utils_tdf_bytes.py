@@ -18,15 +18,29 @@ def test_tdf_bytes():
 
             return parser.result()
 
-    NamTup = namedtuple(
-        typename='NamTup',
-        lazy_vals={
-            '_parse_func': lambda _: _parse_nam_tup,
+    try:
+        str(b'this line raises a TypeError on Python-2.x', 'utf-8')
+        # Python-3.x
+        NamTup = namedtuple(
+            typename='NamTup',
+            lazy_vals={
+                '_parse_func': lambda _: _parse_nam_tup,
 
-            'lv1': lambda self: str(self._parse['lv1'], 'utf-8'),
-            'lv2': lambda self: str(self._parse['lv2'], 'utf-8'),
-        }
-    )
+                'lv1': lambda self: str(self._parse['lv1'], 'utf-8'),
+                'lv2': lambda self: str(self._parse['lv2'], 'utf-8'),
+            }
+        )
+    except TypeError:
+        # Python-2.x
+        NamTup = namedtuple(
+            typename='NamTup',
+            lazy_vals={
+                '_parse_func': lambda _: _parse_nam_tup,
+
+                'lv1': lambda self: str(self._parse['lv1']),
+                'lv2': lambda self: str(self._parse['lv2']),
+            }
+        )
 
     ntup = NamTup(arg=b'ARGUMENT')
 
