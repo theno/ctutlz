@@ -32,15 +32,30 @@ optional arguments:
 Example:
 
 ```bash
-# has scts via
-#           TLS-extension   OCSP-extension             certificate (precert)
-verify-scts  ritter.vg       sslanalyzer.comodoca.com   www.db.com
+> verify-scts google.com --short
 
-verify-scts google.com --short
+# google.com
 
-# Module entry points:
-python -m ctutlz
-python -m ctutlz.verify_scts
+## scts_by_cert
+
+## scts_by_tls
+
+LogID b64 : 7ku9t3XOYLrhQmkfq+GeZqMPfl+wctiDAMR7iXqo/cs=
+Log found : Google 'Rocketeer' log
+Result    : Verified OK
+
+LogID b64 : 3esdK3oNT6Ygi4GtgWhwfi6OnQHVXIiNPRHEzbbsvsw=
+Log found : Symantec log
+Result    : Verified OK
+
+## scts_by_ocsp
+
+```
+
+```bash
+> verify-scts  ritter.vg  sslanalyzer.comodoca.com  www.db.com
+#   has           ⇧                ⇧                  ⇧
+# scts by:   TLS-extension   OCSP-extension   certificate (precert)
 ```
 
 Import module in your python code, for example:
