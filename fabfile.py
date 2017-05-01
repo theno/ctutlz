@@ -72,9 +72,11 @@ def pythons():
     Will skip already installed latest python versions.
     '''
     if not _pyenv_exists():
-        print('\npyenv not installed. install it with fabsetup '
+        print('\npyenv is not installed. You can install it with fabsetup '
               '(https://github.com/theno/fabsetup):\n\n    ' +
-              cyan('fab setup.pyenv -H localhost'))
+              cyan('mkdir ~/repos && cd ~/repos\n    '
+                   'git clone  https://github.com/theno/fabsetup.git\n    '
+                   'cd fabsetup  &&  fab setup.pyenv -H localhost'))
         return 1
 
     latest_pythons = _determine_latest_pythons()

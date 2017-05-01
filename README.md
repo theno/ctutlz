@@ -84,7 +84,9 @@ cd ctutlz
 
 ### Fabfile
 
-Run devel-tasks executed with [Fabric](http://docs.fabfile.org):
+Run devel-tasks executed with
+[Fabric](http://www.fabfile.org/) (you need to
+[install](http://www.fabfile.org/installing.html) it):
 
 ```bash
 > fab -l
@@ -111,7 +113,9 @@ Run unit tests.
         fab test:args=-s,py=py27
 ```
 
-Setup python versions and virtualenvs for development:
+Setup python versions and virtualenvs for development with
+[pyenv](https://github.com/pyenv/pyenv) and
+[tox](https://tox.readthedocs.io/en/latest/):
 ```
 fab pythons
 fab tox
