@@ -117,6 +117,13 @@ fab pythons
 fab tox
 ```
 
+On Ubuntu 16.04 you must install `libpython3-dev` in order to make the tests
+passing for Python-3.5:
+
+```bash
+sudo apt-get install  libpython3-dev
+```
+
 ### Devel-Commands
 
 Run unit tests against several pythons with tox (needs pythons defined
