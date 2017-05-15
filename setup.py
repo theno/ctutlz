@@ -77,7 +77,7 @@ setup(
         'pyasn1',
         'pyasn1-modules>=0.0.9',
         # 'cryptography>=1.9.0',
-        'pyOpenSSL>=16.3.0',
+        'pyOpenSSL>=999.0.0',
         'requests',
         'utlz',
 
@@ -87,7 +87,7 @@ setup(
         'git+https://github.com/etingof/pyasn1-modules.git#egg=pyasn1-modules-0.0.9',
         # pyOpenSSL-16.2.0 has no OCSP support
         # 'git+https://github.com/pyca/pyopenssl.git#egg=pyOpenSSL-16.3.0',
-        'git+https://github.com/theno/pyopenssl.git#egg=pyOpenSSL-16.3.0',
+        'git+https://github.com/theno/pyopenssl.git#egg=pyOpenSSL-999.0.0',
         # 'git+https://github.com/theno/cryptography.git#egg=cryptography-1.9.0',
     ],
     extras_require={
