@@ -20,7 +20,8 @@ from pyasn1.type.univ import Sequence, OctetString
 from pyasn1_modules import rfc2560
 from utlz import flo, first_paragraph
 
-from ctutlz.tls.handshake import cert_of_domain, scts_from_cert
+# from ctutlz.tls.handshake import cert_of_domain, scts_from_cert
+from ctutlz.tls.handshake_devel import cert_of_domain, scts_from_cert  # TODO DEBUG
 from ctutlz.ctlog import get_log_list
 from ctutlz.sct.ee_cert import EndEntityCert, IssuerCert
 from ctutlz.tls.sctlist import SignedCertificateTimestampList

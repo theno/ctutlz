@@ -11,7 +11,7 @@ def clean(deltox=False):
     '''Delete temporary files not under version control.
 
     Args:
-        deltox: If True, delete virutal environments used by tox
+        deltox: If True, delete virtual environments used by tox
     '''
 
     basedir = dirname(__file__)

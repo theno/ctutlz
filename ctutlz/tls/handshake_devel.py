@@ -32,6 +32,7 @@ def create_context():
 
     ctx.set_verify(SSL.VERIFY_PEER, verify_callback)
     ca_filename = certifi.where()
+    print(ca_filename)
     ctx.load_verify_locations(ca_filename)
 
     # OCSP
@@ -88,15 +89,19 @@ def create_context():
     return ctx
 
 
-def create_socket():
+def init_openssl():
     # init openssl, cf. https://en.wikibooks.org/wiki/OpenSSL/Initialization
     OpenSSL._util.lib.SSL_load_error_strings()
-    OpenSSL._util.lib.SSL_library_init()
+    # OpenSSL._util.lib.SSL_library_init()
     OpenSSL._util.lib.OpenSSL_add_all_algorithms()
-    OpenSSL._util.lib.OPENSSL_config(OpenSSL._util.ffi.NULL)
+    # OpenSSL._util.lib.OPENSSL_config(OpenSSL._util.ffi.NULL)
 
+
+def create_socket():
+    init_openssl()
     ctx = create_context()
-    raw_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # raw_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    raw_sock = None
     return SSL.Connection(ctx, raw_sock)
 
 
