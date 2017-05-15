@@ -1,0 +1,26 @@
+# http://editorconfig.org
+
+root = true
+
+[*]
+end_of_line = lf
+tab_width   = 8
+indent_size = 2
+indent_style = space
+
+[*.[ch]]
+indent_size = 4
+
+[Makefile]
+indent_style = tab
+
+[*.py]
+charset = utf-8
+
+[*.py]
+indent_style = space
+indent_size = 4
+
+[.travis.yml]
+indent_style = space
+indent_size = 2
