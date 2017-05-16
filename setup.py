@@ -80,6 +80,7 @@ setup(
         'pyOpenSSL>=999.0.0',
         'requests',
         'utlz',
+        'cffi>=1.0.0',
 
         'asn1ate', 'certifi', 'hexdump',  # for devel.py
     ],
@@ -93,4 +94,10 @@ setup(
     extras_require={
         'dev': ['pypandoc'],
     },
+    setup_requires=[
+        'cffi>=1.0.0'
+    ],
+    cffi_modules=[
+        'ctutlz/tls/handshake_build.py:ffibuilder'
+    ],
 )
