@@ -19,6 +19,7 @@ def clean(deltox=False):
     print(cyan('delete temp files and dirs for packaging'))
     local(flo(
         'rm -rf  '
+        '{basedir}/.eggs/  '
         '{basedir}/ctutlz.egg-info/  '
         '{basedir}/dist  '
         '{basedir}/README  '
