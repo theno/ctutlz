@@ -1,5 +1,8 @@
 # https://cffi.readthedocs.io/en/latest/overview.html#real-example-api-level-out-of-line
 
+# ffi means foreign function interface, cf.
+# https://enwikipedia.org/wiki/Foreign_function_interface
+
 from cffi import FFI
 
 
