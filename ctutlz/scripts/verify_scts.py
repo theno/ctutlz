@@ -20,8 +20,8 @@ from pyasn1.type.univ import Sequence, OctetString
 from pyasn1_modules import rfc2560
 from utlz import flo, first_paragraph
 
-# from ctutlz.tls.handshake import cert_of_domain, scts_from_cert
-from ctutlz.tls.handshake_devel import cert_of_domain, scts_from_cert  # TODO DEBUG
+from ctutlz.tls.handshake import cert_of_domain, scts_from_cert
+# from ctutlz.tls.handshake_devel import cert_of_domain, scts_from_cert  # TODO DEBUG
 from ctutlz.ctlog import get_log_list
 from ctutlz.sct.ee_cert import EndEntityCert, IssuerCert
 from ctutlz.tls.sctlist import SignedCertificateTimestampList
@@ -215,6 +215,13 @@ def create_parser():
 
 
 def main():
+
+    # https://cffi.readthedocs.io/en/latest/overview.html#real-example-api-level-out-of-line
+    from ctutlz.tls.tls_handshake import ffi, lib
+    p = lib.getpwuid(0)
+    assert ffi.string(p.pw_name) == b'root'
+    print('\n***********************  HIHI  ***********************\n')
+
     parser = create_parser()
     args = parser.parse_args()
     logger = setup_logging(args.loglevel)
@@ -225,10 +232,4 @@ def main():
 
 
 if __name__ == '__main__':
-
-    # https://cffi.readthedocs.io/en/latest/overview.html#real-example-api-level-out-of-line
-    from _example import ffi, lib
-    p = lib.getpwuid(0)
-    assert ffi.string(p.pw_name) == b'root'
-
     main()

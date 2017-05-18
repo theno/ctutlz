@@ -5,18 +5,13 @@
 
 from cffi import FFI
 
+from ffi.tls_handshake_c_source import c_source
+
 
 def create_ffibuilder():
     ffibuilder = FFI()
 
     module_name = 'ctutlz.tls.tls_handshake'
-
-    # c-source code (like *.c files)
-    c_source = r'''\
-        // passed to the real C compiler
-        # include <sys/types.h>
-        # include <pwd.h>
-    '''
 
     ffibuilder.set_source(module_name, c_source, libraries=[])
 
@@ -41,5 +36,5 @@ def create_ffibuilder():
 # hook for the kwarg 'cffi_modules' of the setup() call in setup.py
 ffibuilder = create_ffibuilder()
 
-if __name__ == '__main__':
-    ffibuilder.compile(verbose=True)
+# if __name__ == '__main__':
+#     ffibuilder.compile(verbose=True)

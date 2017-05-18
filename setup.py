@@ -98,6 +98,6 @@ setup(
         'cffi>=1.0.0'
     ],
     cffi_modules=[
-        'ctutlz/tls/handshake_build.py:ffibuilder'
+        'ffi/tls_handshake_build.py:ffibuilder'
     ],
 )

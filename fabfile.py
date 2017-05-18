@@ -35,7 +35,7 @@ def clean(deltox=False):
 
     print(cyan('\ndelete bytecode compiled versions of the python src'))
     # cf. http://stackoverflow.com/a/30659970
-    local(flo('find  {basedir}/ctutlz  {basedir}/tests  ') +
+    local(flo('find  {basedir}/ctutlz  {basedir}/tests  {basedir}/ffi  ') +
           '\( -name \*pyc -o -name \*.pyo -o -name __pycache__ \) '
           '-prune '
           '-exec rm -rf {} +')
