@@ -46,7 +46,7 @@ def clean(deltox=False):
 
 def _pyenv_exists():
     with quiet():
-        res = local('pyenv', capture=True)
+        res = local('pyenv')
         if res.return_code == 127:
             return False
     return True
@@ -90,8 +90,9 @@ def pythons():
     latest_pythons_str = '  '.join(latest_pythons)
     local(flo('cd {basedir}  &&  pyenv local  system  {latest_pythons_str}'))
 
-    print(cyan('\n## prepare for testing and packaging'))
     highest_python = latest_pythons[-1]
+    print(cyan(flo(
+        '\n## prepare Python-{highest_python} for testing and packaging')))
     packages_for_testing = 'pytest  tox'
     packages_for_packaging = 'pypandoc  twine'
     local(flo('~/.pyenv/versions/{highest_python}/bin/pip  install --upgrade  '
@@ -128,15 +129,14 @@ def tox(args=''):
     highest_minor_python = _highest_minor(latest_pythons)
 
     _local_needs_pythons(flo('cd {basedir}  &&  '
-                             'python{highest_minor_python} -m tox {args}'),
-                         capture=True)
+                             'python{highest_minor_python} -m tox {args}'))
 
 
 @task
 def test(args='', py=None):
     '''Run unit tests.
 
-    Args:
+    Keyword-Args:
         args: Optional arguments passed to pytest
         py: python version to run the tests against
 
@@ -154,8 +154,7 @@ def test(args='', py=None):
 
     with warn_only():
         res = local(flo('cd {basedir}  &&  '
-                        "PYTHONPATH='.' .tox/{py}/bin/python -m pytest {args}"),
-                    capture=True)
+                        "PYTHONPATH='.' .tox/{py}/bin/python -m pytest {args}"))
         print(res)
         if res.return_code == 127:
             print(cyan('missing tox virtualenv, '
