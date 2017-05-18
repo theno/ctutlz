@@ -1,8 +1,8 @@
+# ctutlz
+
 [![Build Status](https://travis-ci.org/theno/ctutlz.svg?branch=master)](https://travis-ci.org/theno/ctutlz)
 [![Supported Python Versions](https://img.shields.io/pypi/pyversions/ctutlz.svg)](https://pypi.python.org/pypi/ctutlz)
 [![PyPI Version](https://img.shields.io/pypi/v/ctutlz.svg)](https://pypi.python.org/pypi/ctutlz)
-
-# ctutlz
 
 Python utils library and tools for certificate transparency.
 
@@ -84,8 +84,8 @@ cd ctutlz
 
 ### Fabfile
 
-Run devel-tasks executed with
-[Fabric](http://www.fabfile.org/) (you need to
+The `fabfile.py` contains devel-tasks to be executed with
+[Fabric](http://www.fabfile.org/) (maybe you need to
 [install](http://www.fabfile.org/installing.html) it):
 
 ```bash
@@ -104,7 +104,7 @@ Available commands:
 
 Run unit tests.
 
-    Args:
+    Keyword-Args:
         args: Optional arguments passed to pytest
         py: python version to run the tests against
 
@@ -113,19 +113,24 @@ Run unit tests.
         fab test:args=-s,py=py27
 ```
 
-Setup python versions and virtualenvs for development with
-[pyenv](https://github.com/pyenv/pyenv) and
+At first, set up python versions with [pyenv](https://github.com/pyenv/pyenv)
+and virtualenvs for development with
 [tox](https://tox.readthedocs.io/en/latest/):
 ```
 fab pythons
 fab tox
 ```
+Tox creates virtualenvs of different Python versions (if they not exist
+already) and runs the unit tests against each virtualenv.
 
 On Ubuntu 16.04 you must install `libpython3-dev` in order to make the tests
 passing for Python-3.5:
 
 ```bash
 sudo apt-get install  libpython3-dev
+
+# Then, rebuild the non-working Python-3.5 virtualenv and run the unit tests:
+fab tox:'-e py35 --recreate'
 ```
 
 ### Devel-Commands
