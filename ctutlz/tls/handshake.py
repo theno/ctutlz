@@ -33,6 +33,36 @@ def create_context():
     ca_filename = certifi.where()
     ctx.load_verify_locations(ca_filename)
 
+    # TLS extension 18
+
+    from ctutlz.tls.handshake_openssl import ffi, lib
+
+    @ffi.def_extern()
+    def serverinfo_cli_parse_cb(ssl, ext_type, _in, inlen, al, arg):
+        print('\nserverinfo_cli_parse_cb(')
+        import sys
+        sys.stdout.write('  ext_type=')
+        sys.stdout.write(str(ext_type))
+        sys.stdout.write(',\n  ')
+        sys.stdout.write('inlen=')
+        sys.stdout.write(str(inlen))
+        sys.stdout.write(',\n  ')
+        sys.stdout.write('_in=')
+        sys.stdout.write(str(bytes(ffi.buffer(_in, inlen))))
+        print('\n  ...)')
+        return 1  # True
+
+    if not lib.SSL_CTX_add_client_custom_ext(ffi.cast('struct ssl_ctx_st *',
+                                                      ctx._context),
+                                             18,
+                                             ffi.NULL, ffi.NULL, ffi.NULL,
+                                             lib.serverinfo_cli_parse_cb,
+                                             ffi.NULL):
+        import sys
+        sys.stderr.write('Unable to add custom extension 18\n')
+        lib.ERR_print_errors_fp(sys.stderr)
+        sys.exit(1)
+
     # OCSP
 
     ctx.ocsp_resps = []

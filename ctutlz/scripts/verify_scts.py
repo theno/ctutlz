@@ -215,13 +215,6 @@ def create_parser():
 
 
 def main():
-
-    # https://cffi.readthedocs.io/en/latest/overview.html#real-example-api-level-out-of-line
-    from ctutlz.tls.tls_handshake import ffi, lib
-    p = lib.getpwuid(0)
-    assert ffi.string(p.pw_name) == b'root'
-    print('\n***********************  HIHI  ***********************\n')
-
     parser = create_parser()
     args = parser.parse_args()
     logger = setup_logging(args.loglevel)
@@ -232,4 +225,10 @@ def main():
 
 
 if __name__ == '__main__':
+    # when calling `verify-scts` directly from source as pointed out in the
+    # README.md (section Devel-Commands) the c-code part needs to be compiled,
+    # else the import of the c-module `ctutlz.tls.handshake_openssl` would fail.
+    import ctutlz.tls.handshake_openssl_build
+    ctutlz.tls.handshake_openssl_build.compile()
+
     main()

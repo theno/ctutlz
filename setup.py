@@ -95,9 +95,9 @@ setup(
         'dev': ['pypandoc'],
     },
     setup_requires=[
-        'cffi>=1.0.0'
+        'cffi>=1.4.0'
     ],
     cffi_modules=[
-        'ffi/tls_handshake_build.py:ffibuilder'
+        'ctutlz/tls/handshake_openssl_build.py:ffibuilder'
     ],
 )
