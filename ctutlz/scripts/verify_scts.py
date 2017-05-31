@@ -58,14 +58,15 @@ def scts_by_ocsp(hostname):
         der_decoder.defaultErrorState = ber.decoder.stDumpRawValue
         response, _ = der_decoder(response_os, Sequence())
 
-        sctlist_os_hex = sctlist_hex_from_ocsp_pretty_print(response.prettyPrint())
+        sctlist_os_hex = sctlist_hex_from_ocsp_pretty_print(
+            response.prettyPrint())
 
         if sctlist_os_hex:
             sctlist_os_der = binascii.unhexlify(sctlist_os_hex)
             # open('sctlist_by_ocsp', 'wb').write(sctlist_os_der)
             sctlist_os, _ = der_decoder(sctlist_os_der, OctetString())
 
-            sctlist_hex = sctlist_os.prettyPrint().split('0x')[-1]  # FIXME: ugly way
+            sctlist_hex = sctlist_os.prettyPrint().split('0x')[-1]
             sctlist_der = binascii.unhexlify(sctlist_hex)
             sctlist = SignedCertificateTimestampList(sctlist_der)
             scts = [Sct(entry.sct_der) for entry in sctlist.sct_list]
