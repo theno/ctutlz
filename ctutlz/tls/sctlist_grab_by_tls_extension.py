@@ -110,7 +110,6 @@ def scrape_tls_extension_18(hostname, timeout=30, max_try=3):
 def scts_by_tls(hostname, timeout=30, max_try=3):
     scts_by_tls.sign_input_func = create_signature_input
     res = scrape_tls_extension_18(hostname, timeout, max_try)
-    assert res.extension_18_tdf is not None
     if res.extension_18_tdf:
         tls_extension_18 = TlsExtension18(res.extension_18_tdf)
         sct_list = tls_extension_18.sct_list
