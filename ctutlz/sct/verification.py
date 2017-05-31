@@ -1,13 +1,9 @@
 import collections
-import os
-from tempfile import NamedTemporaryFile as tempfile
-
 from cryptography.hazmat.backends.openssl.backend import backend
 from cryptography.hazmat.primitives import serialization
 from OpenSSL.crypto import verify, X509, PKey, Error as OpenSSL_crypto_Error
-from utlz import flo
 
-from ctutlz.utils.cmd import run_cmd, CmdResult
+from ctutlz.utils.cmd import CmdResult
 
 
 SctValidationResult = collections.namedtuple(
@@ -28,32 +24,6 @@ def find_log(sct, logs):
         if log.id_der == sct.log_id:
             return log
     return None
-
-
-def verify_signature_CLUNKY(signature_input, signature, pubkey):
-    # with-cascade required for python2.6 support
-    with tempfile() as signature_input_file:
-        with tempfile() as signature_file:
-            with tempfile() as pubkey_file:
-
-                signature_input_file.write(signature_input)
-                signature_input_file.seek(0)
-
-                signature_file.write(signature)
-                signature_file.seek(0)
-
-                pubkey_file.write(pubkey)
-                pubkey_file.seek(0)
-
-                openssl = os.environ.get('OPENSSL_CMD', 'openssl')
-                cmd = flo('{openssl}  dgst -sha256 -verify {pubkey_file.name} '
-                          '-signature {signature_file.name} '
-                          '{signature_input_file.name}')
-                res = run_cmd(cmd, timeout=30, max_try=3)
-                output = res.stdout_str + res.stderr_str
-                if res.exitcode == 0:
-                    return True, output, res
-                return False, output, res
 
 
 def verify_signature(signature_input, signature, pubkey_pem):
