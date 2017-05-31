@@ -19,11 +19,7 @@ from ctutlz.tls.sctlist import SignedCertificateTimestampList
 def create_context():
 
     def verify_callback(conn, cert, errnum, depth, ok):
-        '''
-        Return:
-          1 if okay (like "True")
-          0 if not okay  (like "False")
-        '''
+        '''Dummy callback.'''
         return 1  # True
 
     ctx = SSL.Context(SSL.SSLv23_METHOD)
