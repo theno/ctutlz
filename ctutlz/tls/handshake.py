@@ -19,11 +19,10 @@ def create_context():
     def verify_callback(conn, cert, errnum, depth, ok):
         '''
         Return:
-          0 if okay  (like "zero error")
-          != 0, else
+          1 if okay (like "True")
+          0 if not okay  (like "False")
         '''
-        # return bool(ok == 1)
-        return True
+        return 1  # True
 
     ctx = SSL.Context(SSL.SSLv23_METHOD)
     ctx.set_options(SSL.OP_NO_SSLv2)
