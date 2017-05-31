@@ -17,7 +17,7 @@ Extension18Result = namedtuple(
     typename='Extension18Result',
     field_names=[
         'ee_cert',
-        'extension_18',
+        'extension_18_tdf',
         'hostname',
         'output',
         'exitcode',
@@ -60,9 +60,9 @@ def tls_output_2_eecert_and_extension_18(tls_handshake_output):
     extension_18_b64 = ''.join(extension_18)
 
     ee_cert_der = base64.b64decode(ee_cert_b64)
-    extension_18_der = base64.b64decode(extension_18_b64)
+    extension_18_tdf = base64.b64decode(extension_18_b64)
 
-    return ee_cert_der, extension_18_der
+    return ee_cert_der, extension_18_tdf
 
 
 def scrape_tls_extension_18_CLUNKY(hostname, timeout=30, max_try=3):
@@ -103,9 +103,9 @@ def scrape_tls_extension_18(hostname, timeout=30, max_try=3):
 def scts_by_tls(hostname, timeout=30, max_try=3):
     scts_by_tls.sign_input_func = create_signature_input
     res = scrape_tls_extension_18(hostname, timeout, max_try)
-    assert res.extension_18 is not None
-    if res.extension_18:
-        tls_extension_18 = TlsExtension18(res.extension_18)
+    assert res.extension_18_tdf is not None
+    if res.extension_18_tdf:
+        tls_extension_18 = TlsExtension18(res.extension_18_tdf)
         sct_list = tls_extension_18.sct_list
         scts = [Sct(entry.sct_der) for entry in sct_list]
         return EndEntityCert(res.ee_cert), scts

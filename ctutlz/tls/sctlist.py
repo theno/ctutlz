@@ -25,8 +25,8 @@ _TlsExtension18 = collections.namedtuple(
 )
 
 
-def TlsExtension18(extension_18_der):
-    with StructContext(extension_18_der) as struct:
+def TlsExtension18(extension_18_tdf):
+    with StructContext(extension_18_tdf) as struct:
         data_dict = {
             'tls_extension_type':                    struct.read('!H'),
             'tls_extension_len':                     struct.read('!H'),
