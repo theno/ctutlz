@@ -1,7 +1,16 @@
-# https://cffi.readthedocs.io/en/latest/overview.html#real-example-api-level-out-of-line
+'''Compile cffi loader in order to use OpenSSL c-code functionality to register
+a callback for TLS extension 18 results in the SSL context object created
+with PyOpenSSL.
 
-# ffi means foreign function interface, cf.
-# https://enwikipedia.org/wiki/Foreign_function_interface
+CFFI will be used in API level:
+https://cffi.readthedocs.io/en/latest/overview.html#real-example-api-level-out-of-line
+
+The callback is written in Python:
+https://cffi.readthedocs.io/en/latest/using.html#extern-python-new-style-callbacks
+
+FFI means foreign function interface:
+https://enwikipedia.org/wiki/Foreign_function_interface
+'''
 
 from cffi import FFI
 
@@ -20,10 +29,10 @@ def create_ffibuilder():
     '''
 
     cdefinitions_lib = r'''
+        // for TLS extension 18
+
         typedef struct ssl_ctx_st SSL_CTX;
         typedef struct ssl_st SSL;
-
-        // for TLS extension 18
 
         typedef int (*custom_ext_add_cb) (SSL *s, unsigned int ext_type,
                                           const unsigned char **out,
@@ -60,5 +69,6 @@ def create_ffibuilder():
 ffibuilder = create_ffibuilder()
 
 
+# hook for '__main__' clause in verify_scts.py
 def compile():
     ffibuilder.compile(verbose=False)

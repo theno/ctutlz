@@ -37,6 +37,9 @@ def create_context():
 
     from ctutlz.tls.handshake_openssl import ffi, lib
 
+    # this annotation makes the function available at
+    # lib.serverinfo_cli_parse_cb as of type cdef so it can be used as argument
+    # for the call of lib.SSL_CTX_add_client_custom_ext()
     @ffi.def_extern()
     def serverinfo_cli_parse_cb(ssl, ext_type, _in, inlen, al, arg):
         print('\nserverinfo_cli_parse_cb(')
@@ -52,6 +55,8 @@ def create_context():
         print('\n  ...)')
         return 1  # True
 
+    # register callback for TLS extension result into the SSL context created
+    # with PyOpenSSL, using OpenSSL "directly"
     if not lib.SSL_CTX_add_client_custom_ext(ffi.cast('struct ssl_ctx_st *',
                                                       ctx._context),
                                              18,
