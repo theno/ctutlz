@@ -142,7 +142,6 @@ def scts_from_cert(cert_der):
                           asn1Spec=pyasn1_modules.rfc5280.Certificate())
     scts = []
 
-    # FIXME: use pyopenssl access method
     exts = [extension
             for extension
             in cert['tbsCertificate']['extensions']
@@ -154,7 +153,7 @@ def scts_from_cert(cert_der):
         os_inner_der = extension_sctlist['extnValue']  # type: OctetString()
         os_inner, _ = der_decoder(os_inner_der, OctetString())
 
-        sctlist_hex = os_inner.prettyPrint().split('0x')[-1]  # FIXME: ugly way
+        sctlist_hex = os_inner.prettyPrint().split('0x')[-1]
         sctlist_der = binascii.unhexlify(sctlist_hex)
         sctlist = SignedCertificateTimestampList(sctlist_der)
         scts = [Sct(entry.sct_der) for entry in sctlist.sct_list]
