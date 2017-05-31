@@ -21,7 +21,6 @@ from pyasn1_modules import rfc2560
 from utlz import flo, first_paragraph
 
 from ctutlz.tls.handshake import cert_of_domain, scts_from_cert
-# from ctutlz.tls.handshake_devel import cert_of_domain, scts_from_cert  # TODO DEBUG
 from ctutlz.ctlog import get_log_list
 from ctutlz.sct.ee_cert import EndEntityCert, IssuerCert
 from ctutlz.tls.sctlist import SignedCertificateTimestampList
@@ -48,7 +47,8 @@ def scts_by_ocsp(hostname):
     scts_by_ocsp.sign_input_func = create_signature_input
 
     scts = []
-    cert_der, issuer_cert_der, ocsp_resp_der = cert_of_domain(hostname)
+    cert_der, issuer_cert_der, ocsp_resp_der, tls_ext_18_der = \
+        cert_of_domain(hostname)
     if ocsp_resp_der:
         ocsp_resp, _ = der_decoder(ocsp_resp_der, rfc2560.OCSPResponse())
 
@@ -75,7 +75,8 @@ def scts_by_ocsp(hostname):
 
 def scts_by_cert(hostname):
     scts_by_cert.sign_input_func = create_signature_input_precert
-    cert_der, issuer_cert_der, ocsp_resp_der = cert_of_domain(hostname)
+    cert_der, issuer_cert_der, ocsp_resp_der, tls_ext_18_tdf = \
+        cert_of_domain(hostname)
     scts = scts_from_cert(cert_der)
     return EndEntityCert(cert_der,
                          issuer_cert=IssuerCert(issuer_cert_der)), scts

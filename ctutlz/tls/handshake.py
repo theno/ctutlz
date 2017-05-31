@@ -2,6 +2,8 @@
 
 import binascii
 import socket
+import struct
+from functools import reduce
 
 import certifi
 import pyasn1_modules.rfc5280
@@ -34,24 +36,29 @@ def create_context():
 
     # TLS extension 18
 
+    ctx.tls_extension_18_tdf = None
+
     from ctutlz.tls.handshake_openssl import ffi, lib
 
-    # this annotation makes the function available at
-    # lib.serverinfo_cli_parse_cb as of type cdef so it can be used as argument
+    # this annotation makes the callback function available at
+    # lib.serverinfo_cli_parse_cb() of type cdef so it can be used as argument
     # for the call of lib.SSL_CTX_add_client_custom_ext()
     @ffi.def_extern()
     def serverinfo_cli_parse_cb(ssl, ext_type, _in, inlen, al, arg):
-        print('\nserverinfo_cli_parse_cb(')
-        import sys
-        sys.stdout.write('  ext_type=')
-        sys.stdout.write(str(ext_type))
-        sys.stdout.write(',\n  ')
-        sys.stdout.write('inlen=')
-        sys.stdout.write(str(inlen))
-        sys.stdout.write(',\n  ')
-        sys.stdout.write('_in=')
-        sys.stdout.write(str(bytes(ffi.buffer(_in, inlen))))
-        print('\n  ...)')
+        if ext_type == 18:
+
+            def reduce_func(accum_value, current):
+                fmt = accum_value[0] + current[0]
+                values = accum_value[1] + (current[1], )
+                return fmt, values
+
+            initializer = ('!', ())
+            fmt, values = reduce(reduce_func, [
+                ('H', ext_type),
+                ('H', inlen),
+                (flo('{inlen}s'), bytes(ffi.buffer(_in, inlen))),
+            ], initializer)
+            ctx.tls_extension_18_tdf = struct.pack(fmt, *values)
         return 1  # True
 
     # register callback for TLS extension result into the SSL context created
@@ -92,6 +99,7 @@ def do_handshake(domain):
     sock.request_ocsp()
 
     ocsp_response = None
+    tls_extension_18_tdf = None
 
     try:
         sock.connect((domain, 443))
@@ -103,6 +111,9 @@ def do_handshake(domain):
         if ctx.ocsp_resps:
             ocsp_response = ctx.ocsp_resps[0]
 
+        if ctx.tls_extension_18_tdf:
+            tls_extension_18_tdf = ctx.tls_extension_18_tdf
+
     except Exception as exc:
         import traceback
         tb = traceback.format_exc()
@@ -112,18 +123,18 @@ def do_handshake(domain):
     finally:
         sock.close()  # sock.close() possible?
 
-    return certificate, chain, ocsp_response
+    return certificate, chain, ocsp_response, tls_extension_18_tdf
 
 
 def cert_of_domain(domain):
-    cert_x509, chain_x509s, ocsp_resp_der = do_handshake(domain)
+    cert_x509, chain_x509s, ocsp_resp_der, tls_ext_18_tdf = do_handshake(domain)
     cert_der = crypto.dump_certificate(type=crypto.FILETYPE_ASN1,
                                        cert=cert_x509)
     # https://tools.ietf.org/html/rfc5246#section-7.4.2
     issuer_cert_x509 = chain_x509s[1]
     issuer_cert_der = crypto.dump_certificate(type=crypto.FILETYPE_ASN1,
                                               cert=issuer_cert_x509)
-    return cert_der, issuer_cert_der, ocsp_resp_der
+    return cert_der, issuer_cert_der, ocsp_resp_der, tls_ext_18_tdf
 
 
 def scts_from_cert(cert_der):
