@@ -74,13 +74,13 @@ setup(
         'tests',
     ]),
     install_requires=[
+        'cffi>=1.4.0',
         'pyasn1',
         'pyasn1-modules>=0.0.9',
         # 'cryptography>=1.9.0',
         'pyOpenSSL>=999.0.0',
         'requests',
         'utlz',
-        'cffi>=1.0.0',
 
         'asn1ate', 'certifi', 'hexdump',  # for devel.py
     ],
