@@ -20,7 +20,7 @@ from pyasn1.type.univ import Sequence, OctetString
 from pyasn1_modules import rfc2560
 from utlz import flo, first_paragraph
 
-from ctutlz.tls.handshake import cert_of_domain, scts_from_cert
+from ctutlz.tls.handshake import do_handshake, scts_from_cert
 from ctutlz.ctlog import get_log_list
 from ctutlz.sct.ee_cert import EndEntityCert, IssuerCert
 from ctutlz.tls.sctlist import SignedCertificateTimestampList
@@ -47,10 +47,9 @@ def scts_by_ocsp(hostname):
     scts_by_ocsp.sign_input_func = create_signature_input
 
     scts = []
-    cert_der, issuer_cert_der, ocsp_resp_der, tls_ext_18_der = \
-        cert_of_domain(hostname)
-    if ocsp_resp_der:
-        ocsp_resp, _ = der_decoder(ocsp_resp_der, rfc2560.OCSPResponse())
+    res = do_handshake(hostname)
+    if res.ocsp_resp_der:
+        ocsp_resp, _ = der_decoder(res.ocsp_resp_der, rfc2560.OCSPResponse())
 
         responseBytes = ocsp_resp.getComponentByName('responseBytes')
         response_os = responseBytes.getComponentByName('response')
@@ -71,16 +70,16 @@ def scts_by_ocsp(hostname):
             sctlist = SignedCertificateTimestampList(sctlist_der)
             scts = [Sct(entry.sct_der) for entry in sctlist.sct_list]
 
-    return EndEntityCert(cert_der, IssuerCert(issuer_cert_der)), scts
+    return EndEntityCert(res.ee_cert_der, IssuerCert(res.issuer_cert_der)), scts
 
 
 def scts_by_cert(hostname):
     scts_by_cert.sign_input_func = create_signature_input_precert
-    cert_der, issuer_cert_der, ocsp_resp_der, tls_ext_18_tdf = \
-        cert_of_domain(hostname)
-    scts = scts_from_cert(cert_der)
-    return EndEntityCert(cert_der,
-                         issuer_cert=IssuerCert(issuer_cert_der)), scts
+    res = do_handshake(hostname)
+    scts = scts_from_cert(res.ee_cert_der)
+    ee_cert = EndEntityCert(res.ee_cert_der,
+                            issuer_cert=IssuerCert(res.issuer_cert_der))
+    return ee_cert, scts
 
 
 def show_signature(sct):
