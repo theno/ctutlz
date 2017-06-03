@@ -30,7 +30,7 @@ from ctutlz.sct.verification import verify_scts
 from ctutlz.sct.signature_input import create_signature_input_precert
 from ctutlz.sct.signature_input import create_signature_input
 from ctutlz.utils.string import to_hex
-from ctutlz.utils.logger import loglevel, setup_logging, logger
+from ctutlz.utils.logger import VERBOSE, init_logger, setup_logging, logger
 
 
 def sctlist_hex_from_ocsp_pretty_print(ocsp_resp):
@@ -93,9 +93,9 @@ def show_signature(sct):
                                        sct.signature,
                                        sig_offset)[0]
         if sig_offset == 0:
-            logger.info('Signature : %s' % to_hex(sig_bytes))
+            logger.verbose('Signature : %s' % to_hex(sig_bytes))
         else:
-            logger.info('            %s' % to_hex(sig_bytes))
+            logger.verbose('            %s' % to_hex(sig_bytes))
         sig_offset = sig_offset + bytes_to_read
 
 
@@ -109,33 +109,29 @@ def show_validation(vdn):
     sct_log_id1, sct_log_id2 = [to_hex(val)
                                 for val
                                 in struct.unpack("!16s16s", sct.log_id)]
-    logger.info('=' * 59)
-    logger.info(flo('Version   : {sct.version_hex}'))
-    logger.info(flo('LogID     : {sct_log_id1}'))
-    logger.info(flo('            {sct_log_id2}'))
-    with loglevel(logging.INFO):
-        logger.info(flo('LogID b64 : {sct.log_id_b64}'))
-    logger.info(flo('Timestamp : {sct.timestamp} ({sct.timestamp_hex})'))
-    logger.info(flo(
+    logger.verbose('=' * 59)
+    logger.verbose(flo('Version   : {sct.version_hex}'))
+    logger.verbose(flo('LogID     : {sct_log_id1}'))
+    logger.verbose(flo('            {sct_log_id2}'))
+    logger.info(flo('LogID b64 : {sct.log_id_b64}'))
+    logger.verbose(flo('Timestamp : {sct.timestamp} ({sct.timestamp_hex})'))
+    logger.verbose(flo(
         'Extensions: {sct.extensions_len} ({sct.extensions_len_hex})'))
-    logger.info(flo('Algorithms: {sct.signature_alg_hash_hex}/'
-                    '{sct.signature_alg_sign} (hash/sign)'))
+    logger.verbose(flo('Algorithms: {sct.signature_alg_hash_hex}/'
+                       '{sct.signature_alg_sign} (hash/sign)'))
 
     show_signature(sct)
     show_signature_b64(sct)
 
     log = vdn.log
-    with loglevel(logging.INFO):
-        if log is None:
-            logger.info('Log not found\n')
-        else:
-            logger.info(flo('Log found : {log.description}'))
-    if log is not None:
-        logger.info('Operator  : ' + ', '.join(log.operated_by))
+    if log is None:
+        logger.info('Log not found\n')
+    else:
+        logger.info(flo('Log found : {log.description}'))
+        logger.verbose('Operator  : ' + ', '.join(log.operated_by))
 
-    with loglevel(logging.INFO):
-        if vdn.output:
-            logger.info(flo('Result    : {vdn.output}'))
+    if vdn.output:
+        logger.info(flo('Result    : {vdn.output}'))
 
     # FIXME: show openssl return value on error
     if vdn.cmd_res is not None:
@@ -143,8 +139,7 @@ def show_validation(vdn):
 
 
 def run_actions(hostname, actions):
-    with loglevel(logging.INFO):
-        logger.info(flo('# {hostname}\n'))
+    logger.info(flo('# {hostname}\n'))
 
     logs = get_log_list()  # FIXME make as argument
     # TODO DEBUG
@@ -153,8 +148,7 @@ def run_actions(hostname, actions):
         assert log.id_der == digest_from_b64(log.key)
 
     for scrape_scts in actions:
-        with loglevel(logging.INFO):
-            logger.info(flo('## {scrape_scts.__name__}\n'))
+        logger.info(flo('## {scrape_scts.__name__}\n'))
         issuer_cert = None
         ee_cert, scts = scrape_scts(hostname)
         if ee_cert:
@@ -183,8 +177,8 @@ def create_parser():
     meg.add_argument('--short',
                      dest='loglevel',
                      action='store_const',
-                     const=logging.WARNING,
-                     default=logging.INFO,  # default loglevel if nothing set
+                     const=logging.INFO,
+                     default=VERBOSE,  # default loglevel if nothing set
                      help='show short result and warnings/errors only')
     meg.add_argument('--debug',
                      dest='loglevel',
@@ -213,6 +207,7 @@ def create_parser():
 
 
 def main():
+    init_logger()
     parser = create_parser()
     args = parser.parse_args()
     setup_logging(args.loglevel)

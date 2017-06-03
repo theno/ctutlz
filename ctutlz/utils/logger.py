@@ -1,21 +1,18 @@
 import logging
 import sys
-from contextlib import contextmanager
-
 
 logger = logging.getLogger('ctutlz')
 
+VERBOSE = 15
 
-@contextmanager
-def loglevel(level):
-    logger = logging.getLogger('ctutlz')
-    levels = {}
-    for handler in logger.handlers:
-        levels[handler] = handler.level
-        handler.setLevel(level)
-    yield
-    for handler in logger.handlers:
-        handler.setLevel(levels[handler])
+
+def init_logger():
+    logging.addLevelName(VERBOSE, "VERBOSE")
+
+    def info_verbose(self, message, *args, **kws):
+        self.log(VERBOSE, message, *args, **kws)
+
+    logging.Logger.verbose = info_verbose
 
 
 def setup_logging(loglevel):
