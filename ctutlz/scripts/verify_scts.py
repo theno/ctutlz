@@ -1,11 +1,11 @@
-'''Validate Signed Certificate Timestamps (SCTs) delivered from one or several
+'''Verify Signed Certificate Timestamps (SCTs) delivered from one or several
 hosts by X.509v3 extension, TLS extension, or OCSP stapling.
 
 A lot of the functionality originally comes and have been learned from the
 script sct-verify.py written by Pier Carlo Chiodi:
 https://github.com/pierky/sct-verify/blob/master/sct-verify.py (under GPL)
 
-He also described the SCT validation steps very well in his blog:
+He also described the SCT verification steps very well in his blog:
 https://blog.pierky.com/certificate-transparency-manually-verify-sct-with-openssl/
 '''
 
@@ -58,7 +58,7 @@ def show_signature_b64(sct):
     logger.info(flo('Sign. b64 : {sct.signature_b64}'))
 
 
-def show_validation(vdn):
+def show_verifications(vdn):
     sct = vdn.sct
 
     sct_log_id1, sct_log_id2 = [to_hex(val)
@@ -111,26 +111,26 @@ def scrape_and_verify_scts(hostname, actions):
     for action in actions:
         logger.info(flo('## {action.__name__}\n'))
         if action is scts_by_cert:
-            validations = verify_scts(EndEntityCert(res.ee_cert_der),
-                                      res.scts_by_cert,
-                                      ctlogs,
-                                      IssuerCert(res.issuer_cert_der),
-                                      create_signature_input_precert)
+            verifications = verify_scts(EndEntityCert(res.ee_cert_der),
+                                        res.scts_by_cert,
+                                        ctlogs,
+                                        IssuerCert(res.issuer_cert_der),
+                                        create_signature_input_precert)
         if action is scts_by_tls:
-            validations = verify_scts(EndEntityCert(res.ee_cert_der),
-                                      res.scts_by_tls,
-                                      ctlogs,
-                                      IssuerCert(res.issuer_cert_der),
-                                      create_signature_input)
+            verifications = verify_scts(EndEntityCert(res.ee_cert_der),
+                                        res.scts_by_tls,
+                                        ctlogs,
+                                        IssuerCert(res.issuer_cert_der),
+                                        create_signature_input)
         if action is scts_by_ocsp:
-            validations = verify_scts(EndEntityCert(res.ee_cert_der),
-                                      res.scts_by_ocsp,
-                                      ctlogs,
-                                      IssuerCert(res.issuer_cert_der),
-                                      create_signature_input)
-        if validations:
-            for vdn in validations:
-                show_validation(vdn)
+            verifications = verify_scts(EndEntityCert(res.ee_cert_der),
+                                        res.scts_by_ocsp,
+                                        ctlogs,
+                                        IssuerCert(res.issuer_cert_der),
+                                        create_signature_input)
+        if verifications:
+            for vdn in verifications:
+                show_verifications(vdn)
         elif res.ee_cert_der is not None:
             logger.info('no SCTs\n')
 
@@ -160,17 +160,17 @@ def create_parser():
                      action='store_const',
                      const=[scts_by_cert],
                      default=[scts_by_cert, scts_by_tls, scts_by_ocsp],
-                     help='only validate SCTs included in the certificate')
+                     help='only verify SCTs included in the certificate')
     meg.add_argument('--tls-only',
                      dest='actions',
                      action='store_const',
                      const=[scts_by_tls],
-                     help='only validate SCTs gathered from TLS handshake')
+                     help='only verify SCTs gathered from TLS handshake')
     meg.add_argument('--ocsp-only',
                      dest='actions',
                      action='store_const',
                      const=[scts_by_ocsp],
-                     help='only validate SCTs gathered via OCSP request')
+                     help='only verify SCTs gathered via OCSP request')
     return parser
 
 

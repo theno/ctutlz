@@ -24,9 +24,9 @@ optional arguments:
   -h, --help   show this help message and exit
   --short      show short result and warnings/errors only
   --debug      show more for diagnostic purposes
-  --cert-only  only validate SCTs included in the certificate
-  --tls-only   only validate SCTs gathered from TLS handshake
-  --ocsp-only  only validate SCTs gathered via OCSP status request
+  --cert-only  only verify SCTs included in the certificate
+  --tls-only   only verify SCTs gathered from TLS handshake
+  --ocsp-only  only verify SCTs gathered via OCSP status request
 ```
 
 Example:
