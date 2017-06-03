@@ -30,7 +30,7 @@ from ctutlz.sct.verification import verify_scts
 from ctutlz.sct.signature_input import create_signature_input_precert
 from ctutlz.sct.signature_input import create_signature_input
 from ctutlz.utils.string import to_hex
-from ctutlz.utils.logger import loglevel, setup_logging
+from ctutlz.utils.logger import loglevel, setup_logging, logger
 
 
 def sctlist_hex_from_ocsp_pretty_print(ocsp_resp):
@@ -83,7 +83,6 @@ def scts_by_cert(hostname):
 
 
 def show_signature(sct):
-    lgr = logging.getLogger('ctutlz')
     sig_offset = 0
     while sig_offset < len(sct.signature):
         if len(sct.signature) - sig_offset > 16:
@@ -94,34 +93,33 @@ def show_signature(sct):
                                        sct.signature,
                                        sig_offset)[0]
         if sig_offset == 0:
-            lgr.info('Signature : %s' % to_hex(sig_bytes))
+            logger.info('Signature : %s' % to_hex(sig_bytes))
         else:
-            lgr.info('            %s' % to_hex(sig_bytes))
+            logger.info('            %s' % to_hex(sig_bytes))
         sig_offset = sig_offset + bytes_to_read
 
 
 def show_signature_b64(sct):
-    lgr = logging.getLogger('ctutlz')
-    lgr.info(flo('Sign. b64 : {sct.signature_b64}'))
+    logger.info(flo('Sign. b64 : {sct.signature_b64}'))
 
 
 def show_validation(vdn):
     sct = vdn.sct
 
-    lgr = logging.getLogger('ctutlz')
     sct_log_id1, sct_log_id2 = [to_hex(val)
                                 for val
                                 in struct.unpack("!16s16s", sct.log_id)]
-    lgr.info('=' * 59)
-    lgr.info(flo('Version   : {sct.version_hex}'))
-    lgr.info(flo('LogID     : {sct_log_id1}'))
-    lgr.info(flo('            {sct_log_id2}'))
+    logger.info('=' * 59)
+    logger.info(flo('Version   : {sct.version_hex}'))
+    logger.info(flo('LogID     : {sct_log_id1}'))
+    logger.info(flo('            {sct_log_id2}'))
     with loglevel(logging.INFO):
-        lgr.info(flo('LogID b64 : {sct.log_id_b64}'))
-    lgr.info(flo('Timestamp : {sct.timestamp} ({sct.timestamp_hex})'))
-    lgr.info(flo('Extensions: {sct.extensions_len} ({sct.extensions_len_hex})'))
-    lgr.info(flo('Algorithms: {sct.signature_alg_hash_hex}/'
-                 '{sct.signature_alg_sign} (hash/sign)'))
+        logger.info(flo('LogID b64 : {sct.log_id_b64}'))
+    logger.info(flo('Timestamp : {sct.timestamp} ({sct.timestamp_hex})'))
+    logger.info(flo(
+        'Extensions: {sct.extensions_len} ({sct.extensions_len_hex})'))
+    logger.info(flo('Algorithms: {sct.signature_alg_hash_hex}/'
+                    '{sct.signature_alg_sign} (hash/sign)'))
 
     show_signature(sct)
     show_signature_b64(sct)
@@ -129,25 +127,24 @@ def show_validation(vdn):
     log = vdn.log
     with loglevel(logging.INFO):
         if log is None:
-            lgr.info('Log not found\n')
+            logger.info('Log not found\n')
         else:
-            lgr.info(flo('Log found : {log.description}'))
+            logger.info(flo('Log found : {log.description}'))
     if log is not None:
-        lgr.info('Operator  : ' + ', '.join(log.operated_by))
+        logger.info('Operator  : ' + ', '.join(log.operated_by))
 
     with loglevel(logging.INFO):
         if vdn.output:
-            lgr.info(flo('Result    : {vdn.output}'))
+            logger.info(flo('Result    : {vdn.output}'))
 
     # FIXME: show openssl return value on error
     if vdn.cmd_res is not None:
-        lgr.debug(str(vdn.cmd_res._asdict().get('cmd', '')) + '\n')
+        logger.debug(str(vdn.cmd_res._asdict().get('cmd', '')) + '\n')
 
 
 def run_actions(hostname, actions):
-    lgr = logging.getLogger('ctutlz')
     with loglevel(logging.INFO):
-        lgr.info(flo('# {hostname}\n'))
+        logger.info(flo('# {hostname}\n'))
 
     logs = get_log_list()  # FIXME make as argument
     # TODO DEBUG
@@ -157,11 +154,11 @@ def run_actions(hostname, actions):
 
     for scrape_scts in actions:
         with loglevel(logging.INFO):
-            lgr.info(flo('## {scrape_scts.__name__}\n'))
+            logger.info(flo('## {scrape_scts.__name__}\n'))
         issuer_cert = None
         ee_cert, scts = scrape_scts(hostname)
         if ee_cert:
-            lgr.debug('got certificate\n')
+            logger.debug('got certificate\n')
 
             # FIXME: kinda hacky, un-pythonic
             # IssuerCert or None
@@ -173,7 +170,7 @@ def run_actions(hostname, actions):
             for vdn in validations:
                 show_validation(vdn)
         elif ee_cert is not None:
-            lgr.info('no SCTs\n')
+            logger.info('no SCTs\n')
 
 
 def create_parser():
@@ -218,11 +215,12 @@ def create_parser():
 def main():
     parser = create_parser()
     args = parser.parse_args()
-    logger = setup_logging(args.loglevel)
+    setup_logging(args.loglevel)
     logger.debug(args)
 
     for host in args.hostname:
         run_actions(host, actions=args.actions)
+        # scrape_and_verify_scts(host, actions=args.actions)
 
 
 if __name__ == '__main__':

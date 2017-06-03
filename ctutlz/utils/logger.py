@@ -3,6 +3,9 @@ import sys
 from contextlib import contextmanager
 
 
+logger = logging.getLogger('ctutlz')
+
+
 @contextmanager
 def loglevel(level):
     logger = logging.getLogger('ctutlz')
@@ -16,7 +19,6 @@ def loglevel(level):
 
 
 def setup_logging(loglevel):
-    logger = logging.getLogger('ctutlz')
     logger.setLevel(logging.DEBUG)
     try:
         # python 2.6
