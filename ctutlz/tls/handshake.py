@@ -5,35 +5,89 @@ from functools import reduce
 
 import certifi
 import OpenSSL
+import pyasn1_modules.rfc2560
 import pyasn1_modules.rfc5280
+from pyasn1.codec import ber
 from pyasn1.codec.der.decoder import decode as der_decoder
-from pyasn1.type.univ import OctetString
+from pyasn1.type.univ import OctetString, Sequence
 from utlz import flo, namedtuple
 
+# FIXME: use rfc6962.py instead
 from ctutlz.sct.sct import Sct
-from ctutlz.tls.sctlist import SignedCertificateTimestampList
+from ctutlz.tls.sctlist import SignedCertificateTimestampList, TlsExtension18
 
 
 def scts_from_cert(cert_der):
-    cert, _ = der_decoder(cert_der,
-                          asn1Spec=pyasn1_modules.rfc5280.Certificate())
+    cert, _ = der_decoder(
+        cert_der, asn1Spec=pyasn1_modules.rfc5280.Certificate())
     scts = []
 
     exts = [extension
             for extension
             in cert['tbsCertificate']['extensions']
+            # FIXME: use OID()
             if str(extension['extnID']) == '1.3.6.1.4.1.11129.2.4.2']
 
     if len(exts) != 0:
         extension_sctlist = exts[0]
-
         os_inner_der = extension_sctlist['extnValue']  # type: OctetString()
         os_inner, _ = der_decoder(os_inner_der, OctetString())
-
         sctlist_hex = os_inner.prettyPrint().split('0x')[-1]
         sctlist_der = binascii.unhexlify(sctlist_hex)
+
         sctlist = SignedCertificateTimestampList(sctlist_der)
         scts = [Sct(entry.sct_der) for entry in sctlist.sct_list]
+
+    return scts
+
+
+def sctlist_hex_from_ocsp_pretty_print(ocsp_resp):
+    sctlist_hex = None
+    splitted = ocsp_resp.split('<no-name>=1.3.6.1.4.1.11129.2.4.5', 1)
+    if len(splitted) > 1:
+        _, after = splitted
+        _, sctlist_hex_with_rest = after.split('<no-name>=0x', 1)
+        sctlist_hex, _ = sctlist_hex_with_rest.split('\n', 1)
+    return sctlist_hex
+
+
+def scts_from_ocsp_resp(ocsp_resp_der):
+    scts = []
+
+    if ocsp_resp_der:
+        ocsp_resp, _ = der_decoder(
+            ocsp_resp_der, asn1Spec=pyasn1_modules.rfc2560.OCSPResponse())
+
+        response_bytes = ocsp_resp.getComponentByName('responseBytes')
+        # os: octet string
+        response_os = response_bytes.getComponentByName('response')
+
+        der_decoder.defaultErrorState = ber.decoder.stDumpRawValue
+        response, _ = der_decoder(response_os, Sequence())
+
+        sctlist_os_hex = sctlist_hex_from_ocsp_pretty_print(
+            response.prettyPrint())
+
+        if sctlist_os_hex:
+            sctlist_os_der = binascii.unhexlify(sctlist_os_hex)
+            sctlist_os, _ = der_decoder(sctlist_os_der, OctetString())
+            sctlist_hex = sctlist_os.prettyPrint().split('0x')[-1]
+            sctlist_der = binascii.unhexlify(sctlist_hex)
+
+            sctlist = SignedCertificateTimestampList(sctlist_der)
+            scts = [Sct(entry.sct_der) for entry in sctlist.sct_list]
+
+    return scts
+
+
+def scts_from_tls_ext_18(tls_ext_18_tdf):
+    scts = []
+
+    if tls_ext_18_tdf:
+        tls_extension_18 = TlsExtension18(tls_ext_18_tdf)
+        sct_list = tls_extension_18.sct_list
+
+        scts = [Sct(entry.sct_der) for entry in sct_list]
 
     return scts
 
@@ -47,7 +101,9 @@ TlsHandshakeResult = namedtuple(
         'tls_ext_18_tdf',
     ],
     lazy_vals={
-        'scts_from_cert': lambda self: scts_from_cert(self.ee_cert_der),
+        'scts_by_cert': lambda self: scts_from_cert(self.ee_cert_der),
+        'scts_by_ocsp': lambda self: scts_from_ocsp_resp(self.ocsp_resp_der),
+        'scts_by_tls': lambda self: scts_from_tls_ext_18(self.tls_ext_18_tdf),
     }
 )
 
