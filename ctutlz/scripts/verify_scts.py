@@ -10,22 +10,14 @@ https://blog.pierky.com/certificate-transparency-manually-verify-sct-with-openss
 '''
 
 import argparse
-import binascii
 import logging
 import struct
 
-from pyasn1.codec import ber
-from pyasn1.codec.der.decoder import decode as der_decoder
-from pyasn1.type.univ import Sequence, OctetString
-from pyasn1_modules import rfc2560
 from utlz import flo, first_paragraph
 
-from ctutlz.tls.handshake import do_handshake, scts_from_cert
+from ctutlz.tls.handshake import do_handshake
 from ctutlz.ctlog import get_log_list
 from ctutlz.sct.ee_cert import EndEntityCert, IssuerCert
-from ctutlz.tls.sctlist import SignedCertificateTimestampList
-from ctutlz.tls.sctlist_grab_by_tls_extension import scts_by_tls
-from ctutlz.sct.sct import Sct
 from ctutlz.sct.verification import verify_scts
 from ctutlz.sct.signature_input import create_signature_input_precert
 from ctutlz.sct.signature_input import create_signature_input
@@ -33,53 +25,16 @@ from ctutlz.utils.string import to_hex
 from ctutlz.utils.logger import VERBOSE, init_logger, setup_logging, logger
 
 
-def sctlist_hex_from_ocsp_pretty_print(ocsp_resp):
-    sctlist_hex = None
-    splitted = ocsp_resp.split('<no-name>=1.3.6.1.4.1.11129.2.4.5', 1)
-    if len(splitted) > 1:
-        _, after = splitted
-        _, sctlist_hex_with_rest = after.split('<no-name>=0x', 1)
-        sctlist_hex, _ = sctlist_hex_with_rest.split('\n', 1)
-    return sctlist_hex
+def scts_by_tls():
+    pass  # enum
 
 
-def scts_by_ocsp(hostname):
-    scts_by_ocsp.sign_input_func = create_signature_input
-
-    scts = []
-    res = do_handshake(hostname)
-    if res.ocsp_resp_der:
-        ocsp_resp, _ = der_decoder(res.ocsp_resp_der, rfc2560.OCSPResponse())
-
-        responseBytes = ocsp_resp.getComponentByName('responseBytes')
-        response_os = responseBytes.getComponentByName('response')
-
-        der_decoder.defaultErrorState = ber.decoder.stDumpRawValue
-        response, _ = der_decoder(response_os, Sequence())
-
-        sctlist_os_hex = sctlist_hex_from_ocsp_pretty_print(
-            response.prettyPrint())
-
-        if sctlist_os_hex:
-            sctlist_os_der = binascii.unhexlify(sctlist_os_hex)
-            # open('sctlist_by_ocsp', 'wb').write(sctlist_os_der)
-            sctlist_os, _ = der_decoder(sctlist_os_der, OctetString())
-
-            sctlist_hex = sctlist_os.prettyPrint().split('0x')[-1]
-            sctlist_der = binascii.unhexlify(sctlist_hex)
-            sctlist = SignedCertificateTimestampList(sctlist_der)
-            scts = [Sct(entry.sct_der) for entry in sctlist.sct_list]
-
-    return EndEntityCert(res.ee_cert_der, IssuerCert(res.issuer_cert_der)), scts
+def scts_by_ocsp():
+    pass  # enum
 
 
-def scts_by_cert(hostname):
-    scts_by_cert.sign_input_func = create_signature_input_precert
-    res = do_handshake(hostname)
-    scts = scts_from_cert(res.ee_cert_der)
-    ee_cert = EndEntityCert(res.ee_cert_der,
-                            issuer_cert=IssuerCert(res.issuer_cert_der))
-    return ee_cert, scts
+def scts_by_cert():
+    pass  # enum
 
 
 def show_signature(sct):
@@ -138,32 +93,45 @@ def show_validation(vdn):
         logger.debug(str(vdn.cmd_res._asdict().get('cmd', '')) + '\n')
 
 
-def run_actions(hostname, actions):
+def scrape_and_verify_scts(hostname, actions):
     logger.info(flo('# {hostname}\n'))
 
-    logs = get_log_list()  # FIXME make as argument
-    # TODO DEBUG
-    for log in logs:
+    ctlogs = get_log_list()  # FIXME make as argument
+    # FIXME: belongs into ctlog.py
+    for log in ctlogs:
         from ctutlz.utils.encoding import digest_from_b64
         assert log.id_der == digest_from_b64(log.key)
 
-    for scrape_scts in actions:
-        logger.info(flo('## {scrape_scts.__name__}\n'))
-        issuer_cert = None
-        ee_cert, scts = scrape_scts(hostname)
-        if ee_cert:
-            logger.debug('got certificate\n')
+    res = do_handshake(hostname,
+                       scts_tls=(scts_by_tls in actions),
+                       scts_ocsp=(scts_by_ocsp in actions))
+    if res.ee_cert_der:
+        logger.debug('got certificate\n')
 
-            # FIXME: kinda hacky, un-pythonic
-            # IssuerCert or None
-            issuer_cert = ee_cert.issuer_cert
-
-        validations = verify_scts(ee_cert, scts, logs, issuer_cert,
-                                  sign_input_func=scrape_scts.sign_input_func)
+    for action in actions:
+        logger.info(flo('## {action.__name__}\n'))
+        if action is scts_by_cert:
+            validations = verify_scts(EndEntityCert(res.ee_cert_der),
+                                      res.scts_by_cert,
+                                      ctlogs,
+                                      IssuerCert(res.issuer_cert_der),
+                                      create_signature_input_precert)
+        if action is scts_by_tls:
+            validations = verify_scts(EndEntityCert(res.ee_cert_der),
+                                      res.scts_by_tls,
+                                      ctlogs,
+                                      IssuerCert(res.issuer_cert_der),
+                                      create_signature_input)
+        if action is scts_by_ocsp:
+            validations = verify_scts(EndEntityCert(res.ee_cert_der),
+                                      res.scts_by_ocsp,
+                                      ctlogs,
+                                      IssuerCert(res.issuer_cert_der),
+                                      create_signature_input)
         if validations:
             for vdn in validations:
                 show_validation(vdn)
-        elif ee_cert is not None:
+        elif res.ee_cert_der is not None:
             logger.info('no SCTs\n')
 
 
@@ -214,8 +182,7 @@ def main():
     logger.debug(args)
 
     for host in args.hostname:
-        run_actions(host, actions=args.actions)
-        # scrape_and_verify_scts(host, actions=args.actions)
+        scrape_and_verify_scts(host, actions=args.actions)
 
 
 if __name__ == '__main__':
