@@ -1,10 +1,10 @@
 # ctutlz
 
+Python utils library and tools for certificate transparency.
+
 [![Build Status](https://travis-ci.org/theno/ctutlz.svg?branch=master)](https://travis-ci.org/theno/ctutlz)
 [![Supported Python Versions](https://img.shields.io/pypi/pyversions/ctutlz.svg)](https://pypi.python.org/pypi/ctutlz)
 [![PyPI Version](https://img.shields.io/pypi/v/ctutlz.svg)](https://pypi.python.org/pypi/ctutlz)
-
-Python utils library and tools for certificate transparency.
 
 ## Usage
 
