@@ -7,7 +7,7 @@ from utlz import flo
 def create_signature_input(ee_cert, sct, *_, **__):
     # cf. https://tools.ietf.org/html/rfc6962#section-3.2
 
-    signature_type = 0
+    signature_type = 0  # 0 means certificate_timestamp
     entry_type = 0  # 0: ASN.1Cert, 1: PreCert
 
     def reduce_func(accum_value, current):
@@ -17,6 +17,7 @@ def create_signature_input(ee_cert, sct, *_, **__):
 
     initializer = ('!', ())
 
+    # fmt = '!BBQh...', values = [<sct.version>, <signature_type>, ...]
     fmt, values = reduce(reduce_func, [
         ('B', sct.version),
         ('B', signature_type),
@@ -49,6 +50,7 @@ def create_signature_input_precert(ee_cert, sct, issuer_cert):
 
     initializer = ('!', ())
 
+    # fmt = '!BBQh...', values = [<sct.version>, <signature_type>, ...]
     fmt, values = reduce(reduce_func, [
         ('B', sct.version),
         ('B', signature_type),
