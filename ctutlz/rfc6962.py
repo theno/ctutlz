@@ -295,7 +295,8 @@ TBSCertificate = namedtuple(
         'len3': lambda self: self.lens[3],
 
         'without_ct_extensions': lambda self:
-        der_encoder(TBSCertificate(tbscert_without_ct_extensions(self.pyasn1))),
+            der_encoder(
+                TBSCertificate(tbscert_without_ct_extensions(self.pyasn1))),
     }
 )
 
