@@ -6,8 +6,8 @@ from OpenSSL.crypto import verify, X509, PKey, Error as OpenSSL_crypto_Error
 from ctutlz.utils.cmd import CmdResult
 
 
-SctValidationResult = collections.namedtuple(
-    typename='SctValidationResult',
+SctVerificationResult = collections.namedtuple(
+    typename='SctVerificationResult',
     field_names=[
         'ee_cert',   # DER format
         'sct',       # type: Sct
@@ -55,10 +55,10 @@ def verify_sct(ee_cert, sct, logs, issuer_cert, sign_input_func):
             signature=sct.signature,
             pubkey_pem=log.pubkey.encode('ascii')
         )
-        return SctValidationResult(ee_cert, sct, log,
-                                   verified, output, cmd_res)
-    return SctValidationResult(ee_cert, sct, log,
-                               verified=False, output='', cmd_res=None)
+        return SctVerificationResult(ee_cert, sct, log,
+                                     verified, output, cmd_res)
+    return SctVerificationResult(ee_cert, sct, log,
+                                 verified=False, output='', cmd_res=None)
 
 
 def verify_scts(ee_cert, scts, logs, issuer_cert, sign_input_func):
