@@ -13,7 +13,6 @@ from pyasn1.type.univ import OctetString, Sequence
 from utlz import flo, namedtuple
 
 from ctutlz.rfc6962 import SignedCertificateTimestamp
-# FIXME: use rfc6962.py instead
 from ctutlz.tls.sctlist import SignedCertificateTimestampList, TlsExtension18
 
 
