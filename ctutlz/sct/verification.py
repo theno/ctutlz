@@ -21,7 +21,7 @@ SctVerificationResult = collections.namedtuple(
 
 def find_log(sct, logs):
     for log in logs:
-        if log.id_der == sct.log_id:
+        if log.id_der == sct.log_id.tdf:
             return log
     return None
 

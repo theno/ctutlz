@@ -19,7 +19,7 @@ def create_signature_input(ee_cert, sct, *_, **__):
 
     # fmt = '!BBQh...', values = [<sct.version>, <signature_type>, ...]
     fmt, values = reduce(reduce_func, [
-        ('B', sct.version),
+        ('B', sct.version.val),
         ('B', signature_type),
         ('Q', sct.timestamp),
         ('h', entry_type),
@@ -52,7 +52,7 @@ def create_signature_input_precert(ee_cert, sct, issuer_cert):
 
     # fmt = '!BBQh...', values = [<sct.version>, <signature_type>, ...]
     fmt, values = reduce(reduce_func, [
-        ('B', sct.version),
+        ('B', sct.version.val),
         ('B', signature_type),
         ('Q', sct.timestamp),
         ('h', entry_type),
