@@ -12,8 +12,8 @@ from pyasn1.codec.der.decoder import decode as der_decoder
 from pyasn1.type.univ import OctetString, Sequence
 from utlz import flo, namedtuple
 
+from ctutlz.rfc6962 import SignedCertificateTimestamp
 # FIXME: use rfc6962.py instead
-from ctutlz.sct.sct import Sct
 from ctutlz.tls.sctlist import SignedCertificateTimestampList, TlsExtension18
 
 
@@ -36,7 +36,9 @@ def scts_from_cert(cert_der):
         sctlist_der = binascii.unhexlify(sctlist_hex)
 
         sctlist = SignedCertificateTimestampList(sctlist_der)
-        scts = [Sct(entry.sct_der) for entry in sctlist.sct_list]
+        scts = [SignedCertificateTimestamp(entry.sct_der)
+                for entry
+                in sctlist.sct_list]
 
     return scts
 
@@ -75,7 +77,9 @@ def scts_from_ocsp_resp(ocsp_resp_der):
             sctlist_der = binascii.unhexlify(sctlist_hex)
 
             sctlist = SignedCertificateTimestampList(sctlist_der)
-            scts = [Sct(entry.sct_der) for entry in sctlist.sct_list]
+            scts = [SignedCertificateTimestamp(entry.sct_der)
+                    for entry
+                    in sctlist.sct_list]
 
     return scts
 
@@ -87,7 +91,9 @@ def scts_from_tls_ext_18(tls_ext_18_tdf):
         tls_extension_18 = TlsExtension18(tls_ext_18_tdf)
         sct_list = tls_extension_18.sct_list
 
-        scts = [Sct(entry.sct_der) for entry in sct_list]
+        scts = [SignedCertificateTimestamp(entry.sct_der)
+                for entry
+                in sct_list]
 
     return scts
 

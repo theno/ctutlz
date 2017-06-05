@@ -10,7 +10,8 @@ from pyasn1_modules import rfc5280
 from utlz import flo, namedtuple as namedtuple_utlz
 
 from ctutlz.utils.tdf_bytes import TdfBytesParser, namedtuple
-from ctutlz.utils.encoding import decode_from_b64
+from ctutlz.utils.encoding import decode_from_b64, encode_to_b64
+from ctutlz.utils.string import to_hex
 from ctutlz.sct.ee_cert import tbscert_without_ct_extensions
 
 
@@ -246,7 +247,7 @@ Version = namedtuple(
 def _parse_log_id(tdf):
     with TdfBytesParser(tdf) as parser:
         parser.read('val', '!32s')
-        parser.result()
+        return parser.result()
 
 
 LogID = namedtuple(
@@ -333,6 +334,9 @@ CtExtensions = namedtuple(
     field_names='arg',
     lazy_vals={
         '_parse_func': lambda _: _parse_ct_extensions,
+
+        'len': lambda self: self._parse['len'],
+        'val': lambda self: self._parse['val'],
     }
 )
 
@@ -360,10 +364,10 @@ SignedCertificateTimestamp = namedtuple(
     lazy_vals={
         '_parse_func': lambda _: _parse_signed_certificate_timestamp,
 
-        'sct_version': lambda self: Version(self._parse['sct_version']),
+        'version': lambda self: Version(self._parse['version']),
         'id': lambda self: LogID(self._parse['id']),
         'timestamp': lambda self: int(self._parse['timestamp']),
-        'extensions': lambda self: CtExtensions(self._parse['extensions']),
+        'extensions': lambda self: CtExtensions(self._parse['ct_extensions']),
 
         # digitally-signed struct
         # https://tools.ietf.org/html/rfc5246#section-4.7
@@ -373,6 +377,18 @@ SignedCertificateTimestamp = namedtuple(
             int(self._parse['signature_alg_sign']),
         'signature_len': lambda self: int(self._parse['signature_len']),
         'signature': lambda self: bytes(self._parse['signature']),
+
+        'log_id': lambda self: self.id,
+        'log_id_b64': lambda self: encode_to_b64(self.log_id.tdf),  # type: str
+        'version_hex': lambda self: to_hex(self.version.tdf),
+        'timestamp_hex': lambda self: to_hex(self.timestamp),
+        'extensions_len': lambda self: self.extensions.len,
+        'extensions_len_hex': lambda self: to_hex(self.extensions_len),
+        'signature_alg_hash_hex': lambda self:
+            to_hex(self.signature_algorithm_hash),
+        'signature_alg_sign_hex': lambda self:
+            to_hex(self.signature_algorithm_sign),
+        'signature_b64': lambda self: encode_to_b64(self.signature),  # str
     }
 )
 

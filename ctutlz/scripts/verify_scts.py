@@ -63,7 +63,7 @@ def show_verifications(vdn):
 
     sct_log_id1, sct_log_id2 = [to_hex(val)
                                 for val
-                                in struct.unpack("!16s16s", sct.log_id)]
+                                in struct.unpack("!16s16s", sct.log_id.tdf)]
     logger.verbose('=' * 59)
     logger.verbose(flo('Version   : {sct.version_hex}'))
     logger.verbose(flo('LogID     : {sct_log_id1}'))
@@ -73,7 +73,7 @@ def show_verifications(vdn):
     logger.verbose(flo(
         'Extensions: {sct.extensions_len} ({sct.extensions_len_hex})'))
     logger.verbose(flo('Algorithms: {sct.signature_alg_hash_hex}/'
-                       '{sct.signature_alg_sign} (hash/sign)'))
+                       '{sct.signature_algorithm_signature} (hash/sign)'))
 
     show_signature(sct)
     show_signature_b64(sct)
