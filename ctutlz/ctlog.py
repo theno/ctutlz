@@ -76,4 +76,6 @@ def get_log_list():
             get_log_list.logs = logs_with_operator_names(data)
         else:
             get_log_list.logs = download_log_list_accepted_by_chrome()
+        for log in get_log_list.logs:
+            assert log.id_der == digest_from_b64(log.key)
     return get_log_list.logs

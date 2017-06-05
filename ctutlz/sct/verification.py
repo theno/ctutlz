@@ -13,7 +13,7 @@ SctVerificationResult = collections.namedtuple(
         'sct',       # type: Sct
         'log',       # type: Log
         'verified',  # True or False
-        'output',    # type: str
+        'output',    # type: str  # FIXME remove
         'cmd_res',   # CmdResult (for debugging) # FIXME remove
     ]
 )

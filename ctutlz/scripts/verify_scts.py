@@ -17,7 +17,6 @@ from utlz import flo, first_paragraph
 
 from ctutlz.tls.handshake import do_handshake
 from ctutlz.ctlog import get_log_list
-from ctutlz.sct.ee_cert import EndEntityCert, IssuerCert
 from ctutlz.sct.verification import verify_scts
 from ctutlz.sct.signature_input import create_signature_input_precert
 from ctutlz.sct.signature_input import create_signature_input
@@ -25,27 +24,74 @@ from ctutlz.utils.string import to_hex
 from ctutlz.utils.logger import VERBOSE, init_logger, setup_logging, logger
 
 
-def scts_by_tls():
-    pass  # enum
+def verify_scts_by_cert(res, ctlogs):
+    '''
+    Args:
+        res(ctutlz.tls.TlsHandshakeResult)
+        ctlogs([<ctutlz.ctlog.Log>, ...])
+
+    Return:
+        [<ctutlz.sct.verification.SctVerificationResult>, ...]
+    '''
+    return verify_scts(res.ee_cert,
+                       res.scts_by_cert,
+                       ctlogs,
+                       res.issuer_cert,
+                       create_signature_input_precert)
 
 
-def scts_by_ocsp():
-    pass  # enum
+def verify_scts_by_tls(res, ctlogs):
+    '''
+    Args:
+        res(ctutlz.tls.TlsHandshakeResult)
+        ctlogs([<ctutlz.ctlog.Log>, ...])
+
+    Return:
+        [<ctutlz.sct.verification.SctVerificationResult>, ...]
+    '''
+    return verify_scts(res.ee_cert,
+                       res.scts_by_tls,
+                       ctlogs,
+                       res.issuer_cert,
+                       create_signature_input)
 
 
-def scts_by_cert():
-    pass  # enum
+def verify_scts_by_ocsp(res, ctlogs):
+    '''
+    Args:
+        res(ctutlz.tls.TlsHandshakeResult)
+        ctlogs([<ctutlz.ctlog.Log>, ...])
+
+    Return:
+        [<ctutlz.sct.verification.SctVerificationResult>, ...]
+    '''
+    return verify_scts(res.ee_cert,
+                       res.scts_by_ocsp,
+                       ctlogs,
+                       res.issuer_cert,
+                       create_signature_input)
 
 
-def show_signature(sct):
+# for more convenient command output
+verify_scts_by_cert.__name__ = 'SCTs by Certificate'
+verify_scts_by_tls.__name__ = 'SCTs by TLS'
+verify_scts_by_ocsp.__name__ = 'SCTs by OCSP'
+
+
+def show_signature_verbose(signature):
+    '''Print out signature as hex string to logger.verbose.
+
+    Args:
+        signature(bytes)
+    '''
     sig_offset = 0
-    while sig_offset < len(sct.signature):
-        if len(sct.signature) - sig_offset > 16:
+    while sig_offset < len(signature):
+        if len(signature) - sig_offset > 16:
             bytes_to_read = 16
         else:
-            bytes_to_read = len(sct.signature) - sig_offset
+            bytes_to_read = len(signature) - sig_offset
         sig_bytes = struct.unpack_from(flo('!{bytes_to_read}s'),
-                                       sct.signature,
+                                       signature,
                                        sig_offset)[0]
         if sig_offset == 0:
             logger.verbose('Signature : %s' % to_hex(sig_bytes))
@@ -54,12 +100,12 @@ def show_signature(sct):
         sig_offset = sig_offset + bytes_to_read
 
 
-def show_signature_b64(sct):
-    logger.info(flo('Sign. b64 : {sct.signature_b64}'))
-
-
-def show_verifications(vdn):
-    sct = vdn.sct
+def show_verification(verification):
+    '''
+    Args:
+        verification(ctutlz.sct.verification.SctVerificationResult)
+    '''
+    sct = verification.sct
 
     sct_log_id1, sct_log_id2 = [to_hex(val)
                                 for val
@@ -75,62 +121,39 @@ def show_verifications(vdn):
     logger.verbose(flo('Algorithms: {sct.signature_alg_hash_hex}/'
                        '{sct.signature_algorithm_signature} (hash/sign)'))
 
-    show_signature(sct)
-    show_signature_b64(sct)
+    show_signature_verbose(sct.signature)
+    logger.info(flo('Sign. b64 : {sct.signature_b64}'))
 
-    log = vdn.log
+    log = verification.log
     if log is None:
         logger.info('Log not found\n')
     else:
         logger.info(flo('Log found : {log.description}'))
         logger.verbose('Operator  : ' + ', '.join(log.operated_by))
 
-    if vdn.output:
-        logger.info(flo('Result    : {vdn.output}'))
+    if verification.output:
+        logger.info(flo('Result    : {verification.output}'))
 
     # FIXME: show openssl return value on error
-    if vdn.cmd_res is not None:
-        logger.debug(str(vdn.cmd_res._asdict().get('cmd', '')) + '\n')
+    if verification.cmd_res is not None:
+        logger.debug(str(verification.cmd_res._asdict().get('cmd', '')) + '\n')
 
 
-def scrape_and_verify_scts(hostname, actions):
+def scrape_and_verify_scts(hostname, verification_tasks, ctlogs):
     logger.info(flo('# {hostname}\n'))
 
-    ctlogs = get_log_list()  # FIXME make as argument
-    # FIXME: belongs into ctlog.py
-    for log in ctlogs:
-        from ctutlz.utils.encoding import digest_from_b64
-        assert log.id_der == digest_from_b64(log.key)
-
     res = do_handshake(hostname,
-                       scts_tls=(scts_by_tls in actions),
-                       scts_ocsp=(scts_by_ocsp in actions))
+                       scts_tls=(verify_scts_by_tls in verification_tasks),
+                       scts_ocsp=(verify_scts_by_ocsp in verification_tasks))
     if res.ee_cert_der:
         logger.debug('got certificate\n')
 
-    for action in actions:
-        logger.info(flo('## {action.__name__}\n'))
-        if action is scts_by_cert:
-            verifications = verify_scts(EndEntityCert(res.ee_cert_der),
-                                        res.scts_by_cert,
-                                        ctlogs,
-                                        IssuerCert(res.issuer_cert_der),
-                                        create_signature_input_precert)
-        if action is scts_by_tls:
-            verifications = verify_scts(EndEntityCert(res.ee_cert_der),
-                                        res.scts_by_tls,
-                                        ctlogs,
-                                        IssuerCert(res.issuer_cert_der),
-                                        create_signature_input)
-        if action is scts_by_ocsp:
-            verifications = verify_scts(EndEntityCert(res.ee_cert_der),
-                                        res.scts_by_ocsp,
-                                        ctlogs,
-                                        IssuerCert(res.issuer_cert_der),
-                                        create_signature_input)
+    for verification_task in verification_tasks:
+        logger.info(flo('## {verification_task.__name__}\n'))
+        verifications = verification_task(res, ctlogs)
         if verifications:
-            for vdn in verifications:
-                show_verifications(vdn)
+            for verification in verifications:
+                show_verification(verification)
         elif res.ee_cert_der is not None:
             logger.info('no SCTs\n')
 
@@ -156,20 +179,22 @@ def create_parser():
 
     meg = parser.add_mutually_exclusive_group()
     meg.add_argument('--cert-only',
-                     dest='actions',
+                     dest='verification_tasks',
                      action='store_const',
-                     const=[scts_by_cert],
-                     default=[scts_by_cert, scts_by_tls, scts_by_ocsp],
+                     const=[verify_scts_by_cert],
+                     default=[verify_scts_by_cert,
+                              verify_scts_by_tls,
+                              verify_scts_by_ocsp],
                      help='only verify SCTs included in the certificate')
     meg.add_argument('--tls-only',
-                     dest='actions',
+                     dest='verification_tasks',
                      action='store_const',
-                     const=[scts_by_tls],
+                     const=[verify_scts_by_tls],
                      help='only verify SCTs gathered from TLS handshake')
     meg.add_argument('--ocsp-only',
-                     dest='actions',
+                     dest='verification_tasks',
                      action='store_const',
-                     const=[scts_by_ocsp],
+                     const=[verify_scts_by_ocsp],
                      help='only verify SCTs gathered via OCSP request')
     return parser
 
@@ -181,8 +206,10 @@ def main():
     setup_logging(args.loglevel)
     logger.debug(args)
 
+    ctlogs = get_log_list()  # FIXME make as argument
+
     for host in args.hostname:
-        scrape_and_verify_scts(host, actions=args.actions)
+        scrape_and_verify_scts(host, args.verification_tasks, ctlogs)
 
 
 if __name__ == '__main__':

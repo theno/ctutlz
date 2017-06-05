@@ -9,23 +9,30 @@ import pyasn1_modules.rfc2560
 import pyasn1_modules.rfc5280
 from pyasn1.codec import ber
 from pyasn1.codec.der.decoder import decode as der_decoder
-from pyasn1.type.univ import OctetString, Sequence
+from pyasn1.type.univ import ObjectIdentifier, OctetString, Sequence
 from utlz import flo, namedtuple
 
 from ctutlz.rfc6962 import SignedCertificateTimestamp
+from ctutlz.sct.ee_cert import EndEntityCert, IssuerCert
 from ctutlz.tls.sctlist import SignedCertificateTimestampList, TlsExtension18
 
 
 def scts_from_cert(cert_der):
+    '''Return list of SCTs of the SCTList SAN extension of the certificate.
+
+    Args:
+        cert_der(bytes): DER encoded ASN.1 Certificate
+
+    Return:
+        [<ctutlz.rfc6962.SignedCertificateTimestamp>, ...]
+    '''
     cert, _ = der_decoder(
         cert_der, asn1Spec=pyasn1_modules.rfc5280.Certificate())
-    scts = []
-
+    sctlist_oid = ObjectIdentifier(value='1.3.6.1.4.1.11129.2.4.2')
     exts = [extension
             for extension
             in cert['tbsCertificate']['extensions']
-            # FIXME: use OID()
-            if str(extension['extnID']) == '1.3.6.1.4.1.11129.2.4.2']
+            if extension['extnID'] == sctlist_oid]
 
     if len(exts) != 0:
         extension_sctlist = exts[0]
@@ -35,11 +42,10 @@ def scts_from_cert(cert_der):
         sctlist_der = binascii.unhexlify(sctlist_hex)
 
         sctlist = SignedCertificateTimestampList(sctlist_der)
-        scts = [SignedCertificateTimestamp(entry.sct_der)
+        return [SignedCertificateTimestamp(entry.sct_der)
                 for entry
                 in sctlist.sct_list]
-
-    return scts
+    return []
 
 
 def sctlist_hex_from_ocsp_pretty_print(ocsp_resp):
@@ -53,8 +59,14 @@ def sctlist_hex_from_ocsp_pretty_print(ocsp_resp):
 
 
 def scts_from_ocsp_resp(ocsp_resp_der):
-    scts = []
+    '''Return list of SCTs of the OCSP status response.
 
+    Args:
+        ocsp_resp_der(bytes): DER encoded OCSP status response
+
+    Return:
+        [<ctutlz.rfc6962.SignedCertificateTimestamp>, ...]
+    '''
     if ocsp_resp_der:
         ocsp_resp, _ = der_decoder(
             ocsp_resp_der, asn1Spec=pyasn1_modules.rfc2560.OCSPResponse())
@@ -76,14 +88,21 @@ def scts_from_ocsp_resp(ocsp_resp_der):
             sctlist_der = binascii.unhexlify(sctlist_hex)
 
             sctlist = SignedCertificateTimestampList(sctlist_der)
-            scts = [SignedCertificateTimestamp(entry.sct_der)
+            return [SignedCertificateTimestamp(entry.sct_der)
                     for entry
                     in sctlist.sct_list]
-
-    return scts
+    return []
 
 
 def scts_from_tls_ext_18(tls_ext_18_tdf):
+    '''Return list of SCTs of the TLS extension 18 server reply.
+
+    Args:
+        tls_ext_18_tdf(bytes): TDF encoded TLS extension 18 server reply.
+
+    Return:
+        [<ctutlz.rfc6962.SignedCertificateTimestamp>, ...]
+    '''
     scts = []
 
     if tls_ext_18_tdf:
@@ -106,6 +125,9 @@ TlsHandshakeResult = namedtuple(
         'tls_ext_18_tdf',
     ],
     lazy_vals={
+        'ee_cert': lambda self: EndEntityCert(self.ee_cert_der),
+        'issuer_cert': lambda self: IssuerCert(self.issuer_cert_der),
+
         'scts_by_cert': lambda self: scts_from_cert(self.ee_cert_der),
         'scts_by_ocsp': lambda self: scts_from_ocsp_resp(self.ocsp_resp_der),
         'scts_by_tls': lambda self: scts_from_tls_ext_18(self.tls_ext_18_tdf),
