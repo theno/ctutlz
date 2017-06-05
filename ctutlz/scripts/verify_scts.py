@@ -16,7 +16,7 @@ import struct
 from utlz import flo, first_paragraph
 
 from ctutlz.tls.handshake import do_handshake
-from ctutlz.ctlog import get_log_list
+from ctutlz.ctlog import download_log_list, get_log_list, read_log_list
 from ctutlz.sct.verification import verify_scts
 from ctutlz.sct.signature_input import create_signature_input_precert
 from ctutlz.sct.signature_input import create_signature_input
@@ -170,32 +170,50 @@ def create_parser():
                      action='store_const',
                      const=logging.INFO,
                      default=VERBOSE,  # default loglevel if nothing set
-                     help='show short result and warnings/errors only')
+                     help='show short results and warnings/errors only')
     meg.add_argument('--debug',
                      dest='loglevel',
                      action='store_const',
                      const=logging.DEBUG,
                      help='show more for diagnostic purposes')
 
-    meg = parser.add_mutually_exclusive_group()
-    meg.add_argument('--cert-only',
-                     dest='verification_tasks',
-                     action='store_const',
-                     const=[verify_scts_by_cert],
-                     default=[verify_scts_by_cert,
-                              verify_scts_by_tls,
-                              verify_scts_by_ocsp],
-                     help='only verify SCTs included in the certificate')
-    meg.add_argument('--tls-only',
-                     dest='verification_tasks',
-                     action='store_const',
-                     const=[verify_scts_by_tls],
-                     help='only verify SCTs gathered from TLS handshake')
-    meg.add_argument('--ocsp-only',
-                     dest='verification_tasks',
-                     action='store_const',
-                     const=[verify_scts_by_ocsp],
-                     help='only verify SCTs gathered via OCSP request')
+    meg1 = parser.add_mutually_exclusive_group()
+    meg1.add_argument('--cert-only',
+                      dest='verification_tasks',
+                      action='store_const',
+                      const=[verify_scts_by_cert],
+                      default=[verify_scts_by_cert,
+                               verify_scts_by_tls,
+                               verify_scts_by_ocsp],
+                      help='only verify SCTs included in the certificate')
+    meg1.add_argument('--tls-only',
+                      dest='verification_tasks',
+                      action='store_const',
+                      const=[verify_scts_by_tls],
+                      help='only verify SCTs gathered from TLS handshake')
+    meg1.add_argument('--ocsp-only',
+                      dest='verification_tasks',
+                      action='store_const',
+                      const=[verify_scts_by_ocsp],
+                      help='only verify SCTs gathered via OCSP request')
+
+    meg2 = parser.add_mutually_exclusive_group()
+    meg2.add_argument('--log-list',
+                      dest='log_list_filename',
+                      metavar='<filename>',
+                      help='filename of a log list in JSON format')
+    meg2.add_argument('--latest-logs',
+                      dest='fetch_ctlogs',
+                      action='store_const',
+                      const=download_log_list,
+                      default=get_log_list,
+                      help='for SCT verification against known CT Logs '
+                           "(compliant with Chome's CT policy) "
+                           'download latest version of '
+                           'https://www.certificate-transparency.org/'
+                           'known-logs/all_logs_list.json '
+                           '-- use built-in log list from 2017-06-05 '
+                           'if --latest-logs or --log-list are not set')
     return parser
 
 
@@ -206,7 +224,9 @@ def main():
     setup_logging(args.loglevel)
     logger.debug(args)
 
-    ctlogs = get_log_list()  # FIXME make as argument
+    ctlogs = args.fetch_ctlogs()
+    if args.log_list_filename:
+        ctlogs = read_log_list(args.log_list_filename)
 
     for host in args.hostname:
         scrape_and_verify_scts(host, args.verification_tasks, ctlogs)

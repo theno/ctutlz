@@ -4,7 +4,7 @@ try:
     import urllib.request as urllib_request
 except ImportError:
     import urllib as urllib_request
-from os.path import join, isfile, dirname
+from os.path import abspath, expanduser, join, isfile, dirname
 
 from utlz import load_json, namedtuple, text_with_newlines
 
@@ -35,6 +35,7 @@ Log = namedtuple(
 )
 
 
+# plurale tantum constructor
 def Logs(log_dicts):
     return [Log(**kwargs) for kwargs in log_dicts]
 
@@ -50,11 +51,12 @@ def logs_with_operator_names(logs_dict):
     return Logs(logs_dict['logs'])
 
 
-def download_log_list_accepted_by_chrome():
+def download_log_list():
     '''Download json file with known logs accepted by chrome and return the
     logs as a list of `Log` items.
     '''
-    url = 'https://www.certificate-transparency.org/known-logs/all_logs_list.json'
+    url = 'https://www.certificate-transparency.org/known-logs/' \
+          'all_logs_list.json'
     response = urllib_request.urlopen(url)
     response_str = response.read()
     try:
@@ -66,16 +68,19 @@ def download_log_list_accepted_by_chrome():
 
 
 def get_log_list():
-    try:
-        return get_log_list.logs  # singleton function attribute
-    except AttributeError:
-        package_basedir = dirname(dirname(__file__))
-        filename = join(package_basedir, 'log_list.json')
-        if isfile(filename):
-            data = load_json(filename)
-            get_log_list.logs = logs_with_operator_names(data)
-        else:
-            get_log_list.logs = download_log_list_accepted_by_chrome()
-        for log in get_log_list.logs:
-            assert log.id_der == digest_from_b64(log.key)
-    return get_log_list.logs
+    thisdir = dirname(__file__)
+    filename = join(thisdir, 'all_logs_list.json')
+    if isfile(filename):
+        data = load_json(filename)
+        logs = logs_with_operator_names(data)
+    else:
+        logs = download_log_list()
+    for log in logs:
+        assert log.id_der == digest_from_b64(log.key)
+    return logs
+
+
+def read_log_list(filename):
+    filename = abspath(expanduser(filename))
+    data = load_json(filename)
+    return logs_with_operator_names(data)
