@@ -78,15 +78,14 @@ setup(
         'cffi>=1.4.0',
         'pyasn1',
         'pyasn1-modules>=0.0.9',
-        # 'cryptography>=1.9.0',
         'pyOpenSSL>=999.0.0',
         'requests',
         'utlz',
     ],
     dependency_links=[
         # pyOpenSSL-16.2.0 has no OCSP support
+        # nor elliptic curve support for digest verification
         'git+https://github.com/theno/pyopenssl.git#egg=pyOpenSSL-999.0.0',
-        # 'git+https://github.com/theno/cryptography.git#egg=cryptography-1.9.0',
     ],
     extras_require={
         'dev': ['pypandoc'],
