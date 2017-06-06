@@ -185,3 +185,13 @@ def pypi():
 
         print(cyan('\n## upload package'))
         local(flo('cd {basedir}  &&  {python} -m twine upload  dist/*'))
+
+
+@task
+def uplogs():
+    '''Download latest version for `ctutlz/all_logs_list.json`'''
+    basedir = dirname(__file__)
+    filename = 'all_logs_list.json'
+    url = flo('https://www.certificate-transparency.org/known-logs/{filename}')
+    local(flo('wget {url} -O {basedir}/ctutlz/{filename}'))
+    local(flo('cd {basedir}  &&  git diff ctutlz/{filename}'))
