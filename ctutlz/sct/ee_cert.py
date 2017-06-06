@@ -40,7 +40,7 @@ def tbscert_without_sctlist(tbscert):
 
 def tbscert_without_ct_extensions(tbscert):
     '''Return pyasn1_modules.rfc5280.TBSCertificate instance `cert_pyasn1`
-    without sctlist extension (OID 1.3.6.1.4.1.11129.2.4.2) and
+    without sctlist extension (OID 1.3.6.1.4.1.11129.2.4.3) and
     poison extension (OID 1.3.6.1.4.1.11129.2.4.2), if any.
     '''
     sctlist_oid = ObjectIdentifier(value='1.3.6.1.4.1.11129.2.4.2')
