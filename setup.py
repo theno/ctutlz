@@ -86,8 +86,6 @@ setup(
         'asn1ate', 'certifi', 'hexdump',  # for devel.py
     ],
     dependency_links=[
-        ''.join(['git+https://github.com/etingof/pyasn1-modules.git#'
-                 'egg=pyasn1-modules-0.0.9']),
         # pyOpenSSL-16.2.0 has no OCSP support
         'git+https://github.com/theno/pyopenssl.git#egg=pyOpenSSL-999.0.0',
         # 'git+https://github.com/theno/cryptography.git#egg=cryptography-1.9.0',
