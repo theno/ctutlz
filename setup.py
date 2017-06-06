@@ -82,8 +82,6 @@ setup(
         'pyOpenSSL>=999.0.0',
         'requests',
         'utlz',
-
-        'asn1ate', 'certifi', 'hexdump',  # for devel.py
     ],
     dependency_links=[
         # pyOpenSSL-16.2.0 has no OCSP support
