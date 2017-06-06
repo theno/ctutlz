@@ -73,6 +73,7 @@ setup(
         'docs',
         'tests',
     ]),
+    package_data={'ctutlz': ['all_logs_list.json'], },
     install_requires=[
         'cffi>=1.4.0',
         'pyasn1',
