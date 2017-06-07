@@ -154,14 +154,15 @@ fab tox
 Tox creates virtualenvs of different Python versions (if they not exist
 already) and runs the unit tests against each virtualenv.
 
-On Ubuntu 16.04 you must install `libpython3-dev` in order to make the tests
-passing for Python-3.5:
+On Ubuntu 16.04 you must install `libpython-dev` and `libpython3-dev` in order
+to make the tests passing for Python-2.7 and Python-3.5:
 
 ```bash
-sudo apt-get install  libpython3-dev
+sudo apt-get install  libpython-dev  libpython3-dev
 
-# Then, rebuild the non-working Python-3.5 virtualenv and run the unit tests:
-fab tox:'-e py35 --recreate'
+# Then, rebuild the non-working Python-2.7 and Python-3.5 virtualenv and
+# run the unit tests:
+fab tox:'-e py27 -e py35 --recreate'
 ```
 
 ### Devel-Commands
