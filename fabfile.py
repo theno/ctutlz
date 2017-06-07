@@ -1,9 +1,75 @@
+import inspect
 import sys
 from os.path import dirname
 
 from fabric.api import execute, local, task
 from fabric.context_managers import warn_only, quiet
-from utlz import flo, cyan, query_yes_no
+
+
+# inspired by: http://stackoverflow.com/a/6618825
+def flo(string):
+    '''Return the string given by param formatted with the callers locals.'''
+    callers_locals = {}
+    frame = inspect.currentframe()
+    try:
+        outerframe = frame.f_back
+        callers_locals = outerframe.f_locals
+    finally:
+        del frame
+    return string.format(**callers_locals)
+
+
+def _wrap_with(color_code):
+    '''Color wrapper.
+
+    Example:
+        >>> blue = _wrap_with('34')
+        >>> print(blue('text'))
+        \033[34mtext\033[0m
+    '''
+    def inner(text, bold=False):
+        '''Inner color function.'''
+        code = color_code
+        if bold:
+            code = flo("1;{code}")
+        return flo('\033[{code}m{text}\033[0m')
+    return inner
+
+
+cyan = _wrap_with('36')
+
+
+def query_yes_no(question, default="yes"):
+    """Ask a yes/no question via raw_input() and return their answer.
+
+    "question" is a string that is presented to the user.
+    "default" is the presumed answer if the user just hits <Enter>.
+    It must be "yes" (the default), "no", or None (which means an answer
+    of the user is required).
+
+    The "answer" return value is True for "yes" or False for "no".
+    """
+    valid = {"yes": True, "y": True, "ye": True, '1': True,
+             "no": False, "n": False, '0': False, }
+    if default is None:
+        prompt = " [y/n] "
+    elif default == "yes":
+        prompt = " [Y/n] "
+    elif default == "no":
+        prompt = " [y/N] "
+    else:
+        raise ValueError("invalid default answer: '%s'" % default)
+
+    while True:
+        sys.stdout.write(question + prompt)
+        choice = raw_input().lower()
+        if default is not None and choice == '':
+            return valid[default]
+        elif choice in valid:
+            return valid[choice]
+        else:
+            sys.stdout.write("Please respond with 'yes' or 'no' "
+                             "(or 'y' or 'n').\n")
 
 
 @task
