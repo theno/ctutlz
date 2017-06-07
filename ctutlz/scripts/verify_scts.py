@@ -159,15 +159,7 @@ def scrape_and_verify_scts(hostname, verification_tasks, ctlogs):
 
 
 def create_parser():
-    self_praise = '''\
-    This is the first implementation in Python which scrapes the SCTs at the TLS
-    handshake by certificate extension, by TLS extension, and by OCSP stapling
-    directly using the OpenSSL C-API (without forking subprocesses to call any
-    OpenSSL commands).
-    '''
-
-    parser = argparse.ArgumentParser(description=first_paragraph(__doc__),
-                                     epilog=self_praise)
+    parser = argparse.ArgumentParser(description=first_paragraph(__doc__))
     parser.add_argument('hostname',
                         nargs='+',
                         help="host name of the server (example: 'ritter.vg')")

@@ -6,6 +6,11 @@ Python utils library and tools for certificate transparency.
 [![Supported Python Versions](https://img.shields.io/pypi/pyversions/ctutlz.svg)](https://pypi.python.org/pypi/ctutlz)
 [![PyPI Version](https://img.shields.io/pypi/v/ctutlz.svg)](https://pypi.python.org/pypi/ctutlz)
 
+This is the first implementation in Python which scrapes the SCTs at the TLS
+handshake by certificate extension, by TLS extension, and by OCSP stapling
+directly using the OpenSSL C-API (without forking subprocesses to call any
+OpenSSL commands).
+
 ## Usage
 
 As a tool:
@@ -38,11 +43,6 @@ optional arguments:
                         https://www.certificate-transparency.org/known-
                         logs/all_logs_list.json -- use built-in log list from
                         2017-06-05 if --latest-logs or --log-list are not set
-
-This is the first implementation in Python which scrapes the SCTs at the TLS
-handshake by certificate extension, by TLS extension, and by OCSP stapling
-directly using the OpenSSL C-API (without forking subprocesses to call any
-OpenSSL commands).
 ```
 
 Example:
