@@ -10,7 +10,7 @@ Python utils library and tools for certificate transparency.
 
 As a tool:
 
-```bash
+```
 > verify-scts --help
 
 usage: verify-scts [-h] [--short | --debug]
@@ -47,7 +47,7 @@ OpenSSL commands).
 
 Example:
 
-```bash
+```
 > verify-scts google.com --short
 
 # google.com
@@ -93,7 +93,7 @@ pip install --process-dependency-links  ctutlz
 
 Clone the source code [repository](https://github.com/theno/ctutlz):
 
-```bash
+```
 git clone https://github.com/theno/ctutlz.git
 cd ctutlz
 ```
@@ -104,7 +104,7 @@ The `fabfile.py` contains devel-tasks to be executed with
 [Fabric](http://www.fabfile.org/) (maybe you need to
 [install](http://www.fabfile.org/installing.html) it):
 
-```bash
+```
 > fab -l
 
 Available commands:
