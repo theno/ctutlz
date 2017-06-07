@@ -77,7 +77,22 @@ Result    : Verified OK
 Import module in your python code, for example:
 
 ```python
-from ctutlz.rfc6962 import SignedCertificateTimestamp, MerkleTreeLeaf
+> python3.6
+
+>>> from ctutlz.ctlog import download_log_list
+>>> from ctutlz.scripts.verify_scts import verify_scts_by_tls
+>>> from ctutlz.tls.handshake import do_handshake
+>>>
+>>> ctlogs = download_log_list()
+>>> handshake_res = do_handshake('google.com')
+>>> verifications = verify_scts_by_tls(handshake_res, ctlogs)
+>>> for ver in verifications:
+...   print(f'{ver.verified}: {ver.log.description}')
+...
+True: Google 'Pilot' log
+True: Symantec log
+>>>
+>>> from ctutlz.rfc6962 import SignedCertificateTimestamp, MerkleTreeLeaf
 ```
 
 ## Installation
