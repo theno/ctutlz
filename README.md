@@ -15,18 +15,34 @@ As a tool:
 
 usage: verify-scts [-h] [--short | --debug]
                    [--cert-only | --tls-only | --ocsp-only]
+                   [--log-list <filename> | --latest-logs]
                    hostname [hostname ...]
 
+Verify Signed Certificate Timestamps (SCTs) delivered from one or several
+hosts by X.509v3 extension, TLS extension, or OCSP stapling
+
 positional arguments:
-  hostname     host name of the server (example: 'ritter.vg')
+  hostname              host name of the server (example: 'ritter.vg')
 
 optional arguments:
-  -h, --help   show this help message and exit
-  --short      show short result and warnings/errors only
-  --debug      show more for diagnostic purposes
-  --cert-only  only verify SCTs included in the certificate
-  --tls-only   only verify SCTs gathered from TLS handshake
-  --ocsp-only  only verify SCTs gathered via OCSP status request
+  -h, --help            show this help message and exit
+  --short               show short results and warnings/errors only
+  --debug               show more for diagnostic purposes
+  --cert-only           only verify SCTs included in the certificate
+  --tls-only            only verify SCTs gathered from TLS handshake
+  --ocsp-only           only verify SCTs gathered via OCSP request
+  --log-list <filename>
+                        filename of a log list in JSON format
+  --latest-logs         for SCT verification against known CT Logs (compliant
+                        with Chome's CT policy) download latest version of
+                        https://www.certificate-transparency.org/known-
+                        logs/all_logs_list.json -- use built-in log list from
+                        2017-06-05 if --latest-logs or --log-list are not set
+
+This is the first implementation in Python which scrapes the SCTs at the TLS
+handshake by certificate extension, by TLS extension, and by OCSP stapling
+directly using the OpenSSL C-API (without forking subprocesses to call any
+OpenSSL commands).
 ```
 
 Example:
