@@ -1,15 +1,20 @@
 # ctutlz
 
-Python utils library and tools for certificate transparency.
+Python utils library and tools for
+[Certificate Transparency](https://www.certificate-transparency.org/).
 
 [![Build Status](https://travis-ci.org/theno/ctutlz.svg?branch=master)](https://travis-ci.org/theno/ctutlz)
 [![Supported Python Versions](https://img.shields.io/pypi/pyversions/ctutlz.svg)](https://pypi.python.org/pypi/ctutlz)
 [![PyPI Version](https://img.shields.io/pypi/v/ctutlz.svg)](https://pypi.python.org/pypi/ctutlz)
 
 This is the first implementation in Python which scrapes the SCTs at the TLS
-handshake by certificate extension, by TLS extension, and by OCSP stapling
-directly using the OpenSSL C-API (without forking subprocesses to call any
-OpenSSL commands).
+handshake by [certificate extension][1], by [TLS extension][2], and
+by [OCSP stapling][3] directly using the OpenSSL C-API (without forking
+subprocesses to call any OpenSSL commands).
+
+[1]: https://www.certificate-transparency.org/how-ct-works#TOC-X.509v3-Extension
+[2]: https://www.certificate-transparency.org/how-ct-works#TOC-TLS-Extension
+[3]: https://www.certificate-transparency.org/how-ct-works#TOC-OCSP-Stapling
 
 ## Usage
 
