@@ -39,7 +39,7 @@ long_description = create_readme_with_long_description()
 
 setup(
     name='ctutlz',
-    version='0.6.0',
+    version='0.7.0',
     description=description,
     long_description=long_description,
     url='https://github.com/theno/ctutlz',
