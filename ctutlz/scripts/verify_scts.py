@@ -110,6 +110,7 @@ def show_verification(verification):
     sct_log_id1, sct_log_id2 = [to_hex(val)
                                 for val
                                 in struct.unpack("!16s16s", sct.log_id.tdf)]
+    logger.info('```')
     logger.verbose('=' * 59)
     logger.verbose(flo('Version   : {sct.version_hex}'))
     logger.verbose(flo('LogID     : {sct_log_id1}'))
@@ -133,6 +134,8 @@ def show_verification(verification):
 
     if verification.output:
         logger.info(flo('Result    : {verification.output}'))
+
+    logger.info('```\n')
 
     # FIXME: show openssl return value on error
     if verification.cmd_res is not None:
