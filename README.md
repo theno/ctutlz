@@ -50,33 +50,48 @@ optional arguments:
                         2017-06-05 if --latest-logs or --log-list are not set
 ```
 
-Example:
+Examples:
 
-```
-> verify-scts google.com --short
+    > verify-scts google.com --short
 
-# google.com
+    # google.com
 
-## scts_by_cert
+    ## SCTs by Certificate
 
-## scts_by_tls
+    no SCTs
 
-LogID b64 : 7ku9t3XOYLrhQmkfq+GeZqMPfl+wctiDAMR7iXqo/cs=
-Log found : Google 'Rocketeer' log
-Result    : Verified OK
+    ## SCTs by TLS
 
-LogID b64 : 3esdK3oNT6Ygi4GtgWhwfi6OnQHVXIiNPRHEzbbsvsw=
-Log found : Symantec log
-Result    : Verified OK
+    ```
+    LogID b64 : pLkJkLQYWBSHuxOizGdwCjw1mAT5G9+443fNDsgN3BA=
+    Sign. b64 : MEUCIGUHno90gGUepkOAkIWf0js56ce7FVnq1sXRM+cW8xdzAiEAzTRcHqxnBTTBceBlniPpc8OmyxJQLK6nQY8VW3bUsZk=
+    Log found : Google 'Pilot' log
+    Result    : Verified OK
+    ```
 
-## scts_by_ocsp
+    ```
+    LogID b64 : 3esdK3oNT6Ygi4GtgWhwfi6OnQHVXIiNPRHEzbbsvsw=
+    Sign. b64 : MEYCIQDpSgD3XhIQfqmO0IpHIJma/lchgYbT5yLjlVUYDBOspAIhAOjiHIhceJn0zxrfaT36HMDyY55IntNJ0Ur394NJnU8B
+    Log found : Symantec log
+    Result    : Verified OK
+    ```
 
-```
+    ## SCTs by OCSP
+
+    no SCTs
+
 
 ```bash
 > verify-scts  ritter.vg  sslanalyzer.comodoca.com  www.db.com
 #   has           ⇧                ⇧                  ⇧
 # scts by:   TLS-extension   OCSP-extension   certificate (precert)
+```
+
+```bash
+# nice: convert the markdown formatted output into other formats with pandoc
+domain=ritter.vg
+fmt=pdf  # {pdf,html,rst,...}
+verify-scts $domain 2>&1 | pandoc --from=markdown -o $domain-scts.$fmt
 ```
 
 Import module in your python code, for example:
