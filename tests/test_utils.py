@@ -1,6 +1,6 @@
 import utlz
 
-import ctutlz.utils
+import ctutlz.utils.cmd
 
 
 def test_run_cmd():
