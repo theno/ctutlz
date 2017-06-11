@@ -13,7 +13,7 @@ import argparse
 import logging
 import struct
 
-from utlz import flo, first_paragraph
+from utlz import flo, first_paragraph, text_with_newlines
 
 from ctutlz.tls.handshake import do_handshake
 from ctutlz.ctlog import download_log_list, get_log_list, read_log_list
@@ -123,7 +123,11 @@ def show_verification(verification):
                        '{sct.signature_algorithm_signature} (hash/sign)'))
 
     show_signature_verbose(sct.signature)
-    logger.info(flo('Sign. b64 : {sct.signature_b64}'))
+    prefix = 'Sign. b64 : '
+    logger.info(prefix + text_with_newlines(sct.signature_b64, line_length=16*3,
+                                            newline='\n' + ' ' * len(prefix)))
+
+    logger.verbose('--')  # new "paragraph" for verification result
 
     log = verification.log
     if log is None:
@@ -132,14 +136,12 @@ def show_verification(verification):
         logger.info(flo('Log found : {log.description}'))
         logger.verbose('Operator  : ' + ', '.join(log.operated_by))
 
-    if verification.output:
-        logger.info(flo('Result    : {verification.output}'))
+    if verification.verified:
+        logger.info(flo('Result    : Verified OK'))
+    else:
+        logger.info(flo('Result    : Verification Failure'))
 
     logger.info('```\n')
-
-    # FIXME: show openssl return value on error
-    if verification.cmd_res is not None:
-        logger.debug(str(verification.cmd_res._asdict().get('cmd', '')) + '\n')
 
 
 def scrape_and_verify_scts(hostname, verification_tasks, ctlogs):

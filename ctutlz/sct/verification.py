@@ -15,8 +15,6 @@ SctVerificationResult = collections.namedtuple(
         'sct',       # type: Sct
         'log',       # type: Log
         'verified',  # True or False
-        'output',    # type: str  # FIXME remove
-        'cmd_res',   # CmdResult (for debugging) # FIXME remove
     ]
 )
 
@@ -49,17 +47,23 @@ def pkey_from_cryptography_key(crypto_key):
     return pkey
 
 
-def verify_signature(signature_input, signature, pubkey_pem):
-    '''
+def verify_signature(signature_input, signature,
+                     pubkey_pem, digest_algo='sha256'):
+    '''Verify if `signature` over `signature_input` was created using
+    `digest_algo` by the private key of the `pubkey_pem`.
+
+    A signature is the private key encrypted hash over the signature input data.
+
     Args:
         signature_input(bytes): signed data
         signature(bytes):
         pubkey_pem(str): PEM formatted pubkey
-        digest_algo(str): name of the used digest algorithm, e.g. 'sha256'
+        digest_algo(str): name of the used digest hash algorithm
+                          (default: 'sha256')
 
     Return:
-        (True, 'Verified OK\n', CmdResult(0, None, None, None) on success, else
-        (False, 'Verification Failure\n', CmdResult(1, None, None, None)
+        True, if signature could be verified
+        False
     '''
     cryptography_key = serialization.load_pem_public_key(pubkey_pem, backend)
     pkey = pkey_from_cryptography_key(cryptography_key)
@@ -68,30 +72,26 @@ def verify_signature(signature_input, signature, pubkey_pem):
     auxiliary_cert.set_pubkey(pkey)
 
     try:
-        verify(cert=auxiliary_cert,
-               signature=signature,
-               data=signature_input,
-               digest='sha256')
+        verify(cert=auxiliary_cert, signature=signature,
+               data=signature_input, digest=digest_algo)
     except OpenSSL_crypto_Error:
-        cmd_res = CmdResult(1, None, None, None, None)
-        return False, 'Verification Failure\n', cmd_res
+        # return False, 'Verification Failure\n', cmd_res
+        return False
 
-    cmd_res = CmdResult(0, None, None, None, None)
-    return True, 'Verified OK\n', cmd_res
+    # return True, 'Verified OK\n', cmd_res
+    return True
 
 
 def verify_sct(ee_cert, sct, logs, issuer_cert, sign_input_func):
     log = find_log(sct, logs)
     if log:
-        verified, output, cmd_res = verify_signature(
+        verified = verify_signature(
             signature_input=sign_input_func(ee_cert, sct, issuer_cert),
             signature=sct.signature,
             pubkey_pem=log.pubkey.encode('ascii')
         )
-        return SctVerificationResult(ee_cert, sct, log,
-                                     verified, output, cmd_res)
-    return SctVerificationResult(ee_cert, sct, log,
-                                 verified=False, output='', cmd_res=None)
+        return SctVerificationResult(ee_cert, sct, log, verified)
+    return SctVerificationResult(ee_cert, sct, log=None, verified=False)
 
 
 def verify_scts(ee_cert, scts, logs, issuer_cert, sign_input_func):
