@@ -121,7 +121,7 @@ Install the latest version of the pypi python package
 [ctutlz](https://pypi.python.org/pypi/ctutlz):
 
 ```bash
-pip install --process-dependency-links  ctutlz
+pip install ctutlz
 ```
 
 ## Development

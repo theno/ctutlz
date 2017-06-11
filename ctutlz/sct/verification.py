@@ -1,6 +1,8 @@
 import collections
+
 from cryptography.hazmat.backends.openssl.backend import backend
 from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import ec, dsa, rsa
 from OpenSSL.crypto import verify, X509, PKey, Error as OpenSSL_crypto_Error
 
 from ctutlz.utils.cmd import CmdResult
@@ -26,10 +28,41 @@ def find_log(sct, logs):
     return None
 
 
-def verify_signature(signature_input, signature, pubkey_pem):
-    cryptography_key = serialization.load_pem_public_key(pubkey_pem, backend)
+def pkey_from_cryptography_key(crypto_key):
+    '''
+    Modified version of `OpenSSL.crypto.PKey.from_cryptography_key()` of
+    PyOpenSSL which also accepts EC Keys
+    (cf. https://github.com/pyca/pyopenssl/pull/636).
+    '''
+    pkey = PKey()
+    if not isinstance(crypto_key, (rsa.RSAPublicKey, rsa.RSAPrivateKey,
+                                   dsa.DSAPublicKey, dsa.DSAPrivateKey,
+                                   ec.EllipticCurvePublicKey,
+                                   ec.EllipticCurvePrivateKey)):
+        raise TypeError("Unsupported key type")
 
-    pkey = PKey.from_cryptography_key(cryptography_key)
+    pkey._pkey = crypto_key._evp_pkey
+    if isinstance(crypto_key, (rsa.RSAPublicKey, dsa.DSAPublicKey,
+                               ec.EllipticCurvePublicKey)):
+        pkey._only_public = True
+    pkey._initialized = True
+    return pkey
+
+
+def verify_signature(signature_input, signature, pubkey_pem):
+    '''
+    Args:
+        signature_input(bytes): signed data
+        signature(bytes):
+        pubkey_pem(str): PEM formatted pubkey
+        digest_algo(str): name of the used digest algorithm, e.g. 'sha256'
+
+    Return:
+        (True, 'Verified OK\n', CmdResult(0, None, None, None) on success, else
+        (False, 'Verification Failure\n', CmdResult(1, None, None, None)
+    '''
+    cryptography_key = serialization.load_pem_public_key(pubkey_pem, backend)
+    pkey = pkey_from_cryptography_key(cryptography_key)
 
     auxiliary_cert = X509()
     auxiliary_cert.set_pubkey(pkey)
