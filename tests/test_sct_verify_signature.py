@@ -13,18 +13,8 @@ def test_verify_signature():
     signature = open(flo('{basedir}/signature.der'), 'rb').read()
     pubkey = open(flo('{basedir}/pubkey.pem'), 'rb').read()
 
-    got_verified, got_output, got_cmd_res = \
-        verify_signature(signature_input, signature, pubkey)
-
-    assert got_verified is True
-    assert got_output == 'Verified OK\n'
-    assert got_cmd_res.exitcode == 0
+    assert verify_signature(signature_input, signature, pubkey) is True
 
     signature_input = b'some invalid signature input'
 
-    got_verified, got_output, got_cmd_res = \
-        verify_signature(signature_input, signature, pubkey)
-
-    assert got_verified is False
-    assert got_output == 'Verification Failure\n'
-    assert got_cmd_res.exitcode == 1
+    assert verify_signature(signature_input, signature, pubkey) is False
