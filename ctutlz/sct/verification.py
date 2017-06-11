@@ -5,8 +5,6 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import ec, dsa, rsa
 from OpenSSL.crypto import verify, X509, PKey, Error as OpenSSL_crypto_Error
 
-from ctutlz.utils.cmd import CmdResult
-
 
 SctVerificationResult = collections.namedtuple(
     typename='SctVerificationResult',
