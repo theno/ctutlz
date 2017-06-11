@@ -75,10 +75,8 @@ def verify_signature(signature_input, signature,
         verify(cert=auxiliary_cert, signature=signature,
                data=signature_input, digest=digest_algo)
     except OpenSSL_crypto_Error:
-        # return False, 'Verification Failure\n', cmd_res
         return False
 
-    # return True, 'Verified OK\n', cmd_res
     return True
 
 

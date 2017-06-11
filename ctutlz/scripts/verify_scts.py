@@ -125,9 +125,9 @@ def show_verification(verification):
     show_signature_verbose(sct.signature)
     prefix = 'Sign. b64 : '
     logger.info(prefix + text_with_newlines(sct.signature_b64, line_length=16*3,
-                                            newline='\n' + ' ' * len(prefix)))
+                                            newline='\n' + ' '*len(prefix)))
 
-    logger.verbose('--')  # new "paragraph" for verification result
+    logger.verbose('--')  # visual gap between sct infos and verification result
 
     log = verification.log
     if log is None:
