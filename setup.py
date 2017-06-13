@@ -34,12 +34,17 @@ def create_readme_with_long_description():
     return long_description
 
 
+this_dir = os.path.abspath(os.path.dirname(__file__))
+filename = os.path.join(this_dir, 'ctutlz', '_version.py')
+with open(filename, 'rt') as fh:
+    version = fh.read().split('"')[1]
+
 description = __doc__.split('\n')[0]
 long_description = create_readme_with_long_description()
 
 setup(
     name='ctutlz',
-    version='0.7.1',
+    version=version,
     description=description,
     long_description=long_description,
     url='https://github.com/theno/ctutlz',

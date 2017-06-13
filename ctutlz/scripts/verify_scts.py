@@ -22,6 +22,7 @@ from ctutlz.sct.signature_input import create_signature_input_precert
 from ctutlz.sct.signature_input import create_signature_input
 from ctutlz.utils.string import to_hex
 from ctutlz.utils.logger import VERBOSE, init_logger, setup_logging, logger
+from ctutlz._version import __version__
 
 
 def verify_scts_by_cert(res, ctlogs):
@@ -168,6 +169,11 @@ def create_parser():
     parser.add_argument('hostname',
                         nargs='+',
                         help="host name of the server (example: 'ritter.vg')")
+    parser.add_argument('-v', '--version',
+                        action='version',
+                        default=False,
+                        version=__version__,
+                        help='print version number')
 
     meg = parser.add_mutually_exclusive_group()
     meg.add_argument('--short',
