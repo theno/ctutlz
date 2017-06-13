@@ -106,7 +106,7 @@ ASN1Cert = namedtuple(
         '_parse_func': lambda _: _parse_asn1_cert,
 
         'der': lambda self: self._parse['der'],
-        'pyasn1': lambda self: der_decoder(self.der, rfc5280.Certificate),
+        'pyasn1': lambda self: der_decoder(self.der, rfc5280.Certificate()),
     }
 )
 
