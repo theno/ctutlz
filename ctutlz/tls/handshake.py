@@ -31,7 +31,7 @@ def scts_from_cert(cert_der):
     sctlist_oid = ObjectIdentifier(value='1.3.6.1.4.1.11129.2.4.2')
     exts = [extension
             for extension
-            in cert['tbsCertificate']['extensions']
+            in cert['tbsCertificate'].get('extensions', [])
             if extension['extnID'] == sctlist_oid]
 
     if len(exts) != 0:
@@ -72,25 +72,26 @@ def scts_from_ocsp_resp(ocsp_resp_der):
             ocsp_resp_der, asn1Spec=pyasn1_modules.rfc2560.OCSPResponse())
 
         response_bytes = ocsp_resp.getComponentByName('responseBytes')
-        # os: octet string
-        response_os = response_bytes.getComponentByName('response')
+        if response_bytes is not None:
+            # os: octet string
+            response_os = response_bytes.getComponentByName('response')
 
-        der_decoder.defaultErrorState = ber.decoder.stDumpRawValue
-        response, _ = der_decoder(response_os, Sequence())
+            der_decoder.defaultErrorState = ber.decoder.stDumpRawValue
+            response, _ = der_decoder(response_os, Sequence())
 
-        sctlist_os_hex = sctlist_hex_from_ocsp_pretty_print(
-            response.prettyPrint())
+            sctlist_os_hex = sctlist_hex_from_ocsp_pretty_print(
+                response.prettyPrint())
 
-        if sctlist_os_hex:
-            sctlist_os_der = binascii.unhexlify(sctlist_os_hex)
-            sctlist_os, _ = der_decoder(sctlist_os_der, OctetString())
-            sctlist_hex = sctlist_os.prettyPrint().split('0x')[-1]
-            sctlist_der = binascii.unhexlify(sctlist_hex)
+            if sctlist_os_hex:
+                sctlist_os_der = binascii.unhexlify(sctlist_os_hex)
+                sctlist_os, _ = der_decoder(sctlist_os_der, OctetString())
+                sctlist_hex = sctlist_os.prettyPrint().split('0x')[-1]
+                sctlist_der = binascii.unhexlify(sctlist_hex)
 
-            sctlist = SignedCertificateTimestampList(sctlist_der)
-            return [SignedCertificateTimestamp(entry.sct_der)
-                    for entry
-                    in sctlist.sct_list]
+                sctlist = SignedCertificateTimestampList(sctlist_der)
+                return [SignedCertificateTimestamp(entry.sct_der)
+                        for entry
+                        in sctlist.sct_list]
     return []
 
 
@@ -119,10 +120,11 @@ def scts_from_tls_ext_18(tls_ext_18_tdf):
 TlsHandshakeResult = namedtuple(
     typename='TlsHandshakeResult',
     field_names=[
-        'ee_cert_der',
-        'issuer_cert_der',
-        'ocsp_resp_der',
-        'tls_ext_18_tdf',
+        'ee_cert_der',      # (bytes)
+        'issuer_cert_der',  # (bytes)
+        'ocsp_resp_der',    # (bytes)
+        'tls_ext_18_tdf',   # (bytes)
+        'err',              # (str)
     ],
     lazy_vals={
         'ee_cert': lambda self: EndEntityCert(self.ee_cert_der),
@@ -204,31 +206,38 @@ def create_context(scts_tls, scts_ocsp):
     return ctx
 
 
-def create_socket(scts_tls, scts_ocsp):
+def create_socket(scts_tls, scts_ocsp, timeout):
     '''
     Args:
         scts_tls: If True, register callback for TSL extension 18 (for SCTs)
         scts_ocsp: If True, register callback for OCSP-response (for SCTs)
+        timeout(int): timeout for blocking socket.connect() operation
+                      None disables the timeout
     '''
     ctx = create_context(scts_tls, scts_ocsp)
     raw_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    raw_sock.settimeout(timeout)
     return OpenSSL.SSL.Connection(ctx, raw_sock)
 
 
-def do_handshake(domain, scts_tls=True, scts_ocsp=True):
+def do_handshake(domain, scts_tls=True, scts_ocsp=True, timeout=5):
     '''
     Args:
         domain: string with domain name,
                 for example: 'ritter.vg', or 'www.ritter.vg'
         scts_tls: If True, register callback for TSL extension 18 (for SCTs)
         scts_ocsp: If True, register callback for OCSP-response (for SCTs)
+        timeout(int): timeout for blocking socket.connect() operation,
+                      None disables the timeout
     '''
-    sock = create_socket(scts_tls, scts_ocsp)
-
+    sock = create_socket(scts_tls, scts_ocsp, timeout)
     sock.request_ocsp()
 
+    issuer_cert_x509 = None
+    ee_cert_x509 = None
     ocsp_resp_der = None
     tls_ext_18_tdf = None
+    err = ''
 
     try:
         sock.connect((domain, 443))
@@ -249,22 +258,23 @@ def do_handshake(domain, scts_tls=True, scts_ocsp=True):
                 ocsp_resp_der = ctx.ocsp_resp_der
 
     except Exception as exc:
-        import traceback
-        tb = traceback.format_exc()
-        exc_type = type(exc)
-        print(flo('### {exc}\n\n{tb}\n\nexc-type: {exc_type}'))
-        raise exc
+        err = flo('{domain}: {exc}')
     finally:
         sock.close()  # sock.close() possible?
 
-    ee_cert_der = OpenSSL.crypto.dump_certificate(
-        type=OpenSSL.crypto.FILETYPE_ASN1,
-        cert=ee_cert_x509)
+    ee_cert_der = None
+    if ee_cert_x509:
+        ee_cert_der = OpenSSL.crypto.dump_certificate(
+            type=OpenSSL.crypto.FILETYPE_ASN1,
+            cert=ee_cert_x509)
 
-    # https://tools.ietf.org/html/rfc5246#section-7.4.2
-    issuer_cert_der = OpenSSL.crypto.dump_certificate(
-        type=OpenSSL.crypto.FILETYPE_ASN1,
-        cert=issuer_cert_x509)
+    issuer_cert_der = None
+    if issuer_cert_x509:
+        # https://tools.ietf.org/html/rfc5246#section-7.4.2
+        issuer_cert_der = OpenSSL.crypto.dump_certificate(
+            type=OpenSSL.crypto.FILETYPE_ASN1,
+            cert=issuer_cert_x509)
 
     return TlsHandshakeResult(ee_cert_der, issuer_cert_der,
-                              ocsp_resp_der, tls_ext_18_tdf)
+                              ocsp_resp_der, tls_ext_18_tdf,
+                              err)

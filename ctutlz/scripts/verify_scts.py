@@ -154,14 +154,17 @@ def scrape_and_verify_scts(hostname, verification_tasks, ctlogs):
     if res.ee_cert_der:
         logger.debug('got certificate\n')
 
-    for verification_task in verification_tasks:
-        logger.info(flo('## {verification_task.__name__}\n'))
-        verifications = verification_task(res, ctlogs)
-        if verifications:
-            for verification in verifications:
-                show_verification(verification)
-        elif res.ee_cert_der is not None:
-            logger.info('no SCTs\n')
+    if res.err:
+        logger.warn(res.err)
+    else:
+        for verification_task in verification_tasks:
+            logger.info(flo('## {verification_task.__name__}\n'))
+            verifications = verification_task(res, ctlogs)
+            if verifications:
+                for verification in verifications:
+                    show_verification(verification)
+            elif res.ee_cert_der is not None:
+                logger.info('no SCTs\n')
 
 
 def create_parser():
