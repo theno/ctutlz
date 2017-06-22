@@ -29,10 +29,12 @@ def scts_from_cert(cert_der):
     cert, _ = der_decoder(
         cert_der, asn1Spec=pyasn1_modules.rfc5280.Certificate())
     sctlist_oid = ObjectIdentifier(value='1.3.6.1.4.1.11129.2.4.2')
-    exts = [extension
-            for extension
-            in cert['tbsCertificate'].get('extensions', [])
-            if extension['extnID'] == sctlist_oid]
+    exts = []
+    if 'extensions' in cert['tbsCertificate'].keys():
+        exts = [extension
+                for extension
+                in cert['tbsCertificate']['extensions']
+                if extension['extnID'] == sctlist_oid]
 
     if len(exts) != 0:
         extension_sctlist = exts[0]
@@ -137,11 +139,12 @@ TlsHandshakeResult = namedtuple(
 )
 
 
-def create_context(scts_tls, scts_ocsp):
+def create_context(scts_tls, scts_ocsp, timeout):
     '''
     Args:
         scts_tls: If True, register callback for TSL extension 18 (for SCTs)
         scts_ocsp: If True, register callback for OCSP-response (for SCTs)
+        timeout(int): timeout in seconds
     '''
 
     def verify_callback(conn, cert, errnum, depth, ok):
@@ -203,20 +206,17 @@ def create_context(scts_tls, scts_ocsp):
 
         ctx.set_ocsp_client_callback(ocsp_client_callback, data=None)
 
+    ctx.set_timeout(timeout)
+
     return ctx
 
 
-def create_socket(scts_tls, scts_ocsp, timeout):
+def create_socket(ctx):
     '''
     Args:
-        scts_tls: If True, register callback for TSL extension 18 (for SCTs)
-        scts_ocsp: If True, register callback for OCSP-response (for SCTs)
-        timeout(int): timeout for blocking socket.connect() operation
-                      None disables the timeout
+        ctx(OpenSSL.SSL.Context): OpenSSL context object
     '''
-    ctx = create_context(scts_tls, scts_ocsp)
     raw_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    raw_sock.settimeout(timeout)
     return OpenSSL.SSL.Connection(ctx, raw_sock)
 
 
@@ -227,10 +227,10 @@ def do_handshake(domain, scts_tls=True, scts_ocsp=True, timeout=5):
                 for example: 'ritter.vg', or 'www.ritter.vg'
         scts_tls: If True, register callback for TSL extension 18 (for SCTs)
         scts_ocsp: If True, register callback for OCSP-response (for SCTs)
-        timeout(int): timeout for blocking socket.connect() operation,
-                      None disables the timeout
+        timeout(int): timeout in seconds
     '''
-    sock = create_socket(scts_tls, scts_ocsp, timeout)
+    ctx = create_context(scts_tls, scts_ocsp, timeout)
+    sock = create_socket(ctx)
     sock.request_ocsp()
 
     issuer_cert_x509 = None
@@ -258,9 +258,12 @@ def do_handshake(domain, scts_tls=True, scts_ocsp=True, timeout=5):
                 ocsp_resp_der = ctx.ocsp_resp_der
 
     except Exception as exc:
-        err = flo('{domain}: {exc}')
+        exc_str = str(exc)
+        if exc_str == '':
+            exc_str = str(type(exc))
+        err = domain + ': ' + exc_str
     finally:
-        sock.close()  # sock.close() possible?
+        sock.close()
 
     ee_cert_der = None
     if ee_cert_x509:
