@@ -32,12 +32,14 @@ def create_parser():
                      metavar='<filename>',
                      dest='tbscert_filename',
                      required=True,
-                     help='write extracted tbsCertificate to this file (DER encoded)')
+                     help='write extracted tbsCertificate to this file '
+                          '(DER encoded)')
     req.add_argument('--sign-algo',
                      metavar='<filename>',
                      dest='sign_algo_filename',
                      required=True,
-                     help='write extracted signatureAlgorithm to this file (DER encoded)')
+                     help='write extracted signatureAlgorithm to this file '
+                          '(DER encoded)')
     req.add_argument('--signature',
                      metavar='<filename>',
                      dest='sign_value_filename',
