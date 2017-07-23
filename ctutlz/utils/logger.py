@@ -3,7 +3,7 @@ import sys
 
 logger = logging.getLogger('ctutlz')
 
-VERBOSE = 15
+VERBOSE = 15  # between DEBUG/10 and INFO/20
 
 
 def init_logger():
