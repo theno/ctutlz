@@ -6,7 +6,7 @@ Currently there exist three log lists with differing infos:
 2. log_list.json
 3. all_logs_list.json.
 
-This three log lists will be merged into one list in the future.  Diskussion:
+This three log lists will be merged into one list in the future.  Discussion:
 https://groups.google.com/forum/?fromgroups#!topic/certificate-transparency/zBv7EK0522w
 '''
 
