@@ -122,7 +122,7 @@ def _pyenv_exists():
 
 def _determine_latest_pythons():
     # TODO implementation
-    return ['2.6.9', '2.7.13', '3.3.6', '3.4.6', '3.5.3', '3.6.1']
+    return ['2.6.9', '2.7.13', '3.3.6', '3.4.6', '3.5.3', '3.6.2']
 
 
 def _highest_minor(pythons):
