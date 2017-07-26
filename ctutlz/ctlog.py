@@ -55,8 +55,7 @@ def download_log_list():
     '''Download json file with known logs accepted by chrome and return the
     logs as a list of `Log` items.
     '''
-    url = 'https://www.certificate-transparency.org/known-logs/' \
-          'all_logs_list.json'
+    url = 'https://www.gstatic.com/ct/log_list/all_logs_list.json'
     response = urllib_request.urlopen(url)
     response_str = response.read()
     try:
