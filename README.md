@@ -16,9 +16,21 @@ subprocesses to call any OpenSSL commands).
 [2]: https://www.certificate-transparency.org/how-ct-works#TOC-TLS-Extension
 [3]: https://www.certificate-transparency.org/how-ct-works#TOC-OCSP-Stapling
 
+----
+* [Usage](#usage)
+  * [verify-scts](#verify-scts)
+  * [ctloglist](#ctloglist)
+  * [decompose-cert](#decompose-cert)
+  * [API](#api)
+* [Installation](#installation)
+* [Development](#development)
+  * [Fabfile](#fabfile)
+  * [Devel-Commands](#devel-commands)
+----
+
 ## Usage
 
-As a tool:
+### verify-scts
 
 ```
 > verify-scts --help
@@ -93,6 +105,84 @@ domain=ritter.vg
 fmt=pdf  # {pdf,html,rst,...}
 verify-scts $domain 2>&1 | pandoc --from=markdown -o $domain-scts.$fmt
 ```
+
+### ctloglist
+
+```
+> ctloglist --help
+
+usage: ctloglist [-h] [-v] [--short | --debug] [--json | --schema]
+
+Download, merge and summarize known logs for Certificate Transparency (CT)
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -v, --version  print version number
+  --short        show short results
+  --debug        show more for diagnostic purposes
+  --json         print merged log lists as json
+  --schema       print json schema
+
+Print output to stdout, warning and errors to stderr. Currently there exist
+three log lists with differing infos: 1. listing of webpage
+https://www.certificate-transparency.org/known-logs 2. log_list.json 3.
+all_logs_list.json. This three log lists will be merged into one list in the
+future. Discussion:
+https://groups.google.com/forum/?fromgroups#!topic/certificate-
+transparency/zBv7EK0522w
+```
+Examples:
+
+```bash
+# list really all known logs
+#  infos aggregated from:
+#  * log_list.json
+#  * all_logs.json
+#  * from log list webpage
+
+# overview
+> ctloglist --short
+
+# full, aggregated info
+> ctloglist
+
+# write into a json file
+> ctloglist --json | really_all_logs.json
+```
+
+```bash
+# only show inconsistencies of the ct log lists
+> ctloglist 1>/dev/null
+```
+
+### decompose-cert
+
+```
+> decompose-cert --help
+
+usage: decompose-cert [-h] [-v] --cert <filename> [--tbscert <filename>]
+                      [--sign-algo <filename>] [--signature <filename>]
+
+Decompose an ASN.1 certificate into its components tbsCertificate in DER
+format, signatureAlgorithm in DER format, and signatureValue as bytes
+according to https://tools.ietf.org/html/rfc5280#section-4.1
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         print version number
+  --tbscert <filename>  write extracted tbsCertificate to this file (DER
+                        encoded)
+  --sign-algo <filename>
+                        write extracted signatureAlgorithm to this file (DER
+                        encoded)
+  --signature <filename>
+                        write extracted signatureValue to this file
+
+required arguments:
+  --cert <filename>     Certificate in PEM, Base64, or DER format
+```
+
+### API
 
 Import module in your python code, for example:
 
