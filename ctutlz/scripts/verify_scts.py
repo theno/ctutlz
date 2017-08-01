@@ -17,6 +17,7 @@ from utlz import flo, first_paragraph, text_with_newlines
 
 from ctutlz.tls.handshake import do_handshake
 from ctutlz.ctlog import download_log_list, get_log_list, read_log_list
+from ctutlz.ctlog import Logs, set_operator_names
 from ctutlz.sct.verification import verify_scts
 from ctutlz.sct.signature_input import create_signature_input_precert
 from ctutlz.sct.signature_input import create_signature_input
@@ -238,9 +239,13 @@ def main():
     setup_logging(args.loglevel)
     logger.debug(args)
 
-    ctlogs = args.fetch_ctlogs()
+    logs_dict = args.fetch_ctlogs()
+    set_operator_names(logs_dict)
+    ctlogs = Logs(logs_dict['logs'])
     if args.log_list_filename:
-        ctlogs = read_log_list(args.log_list_filename)
+        logs_dict = read_log_list(args.log_list_filename)
+        set_operator_names(logs_dict)
+        ctlogs = Logs(logs_dict['logs'])
 
     for host in args.hostname:
         scrape_and_verify_scts(host, args.verification_tasks, ctlogs)

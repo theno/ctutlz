@@ -53,8 +53,9 @@ setup(
     license='MIT',
     entry_points={
         'console_scripts': [
+            'ctloglist = ctutlz.scripts.ctloglist:main',
+            'decompose-cert = ctutlz.scripts.decompose_cert:main',
             'verify-scts = ctutlz.scripts.verify_scts:main',
-            'ctlog-get-entries = ctutlz.scripts.ctlog_get_entries:main',
         ],
     },
     classifiers=[
@@ -78,10 +79,12 @@ setup(
         'docs',
         'tests',
     ]),
-    package_data={'ctutlz': ['all_logs_list.json'], },
+    package_data={'ctutlz': ['all_logs_list.json', 'log_list_schema.json'], },
     install_requires=[
         'cffi>=1.4.0',
-        'pyasn1>=0.2.0',
+        'cryptography<2.0.0',
+        'html2text>=2016.9.19',
+        'pyasn1>=0.2.0,<0.3.0',
         'pyasn1-modules>=0.0.9',
         'pyOpenSSL>=17.0.0',
         'requests>=2.17.0',
