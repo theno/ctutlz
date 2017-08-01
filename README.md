@@ -128,8 +128,7 @@ three log lists with differing infos: 1. listing of webpage
 https://www.certificate-transparency.org/known-logs 2. log_list.json 3.
 all_logs_list.json. This three log lists will be merged into one list in the
 future. Discussion:
-https://groups.google.com/forum/?fromgroups#!topic/certificate-
-transparency/zBv7EK0522w
+https://groups.google.com/forum/?fromgroups#!topic/certificate-transparency/zBv7EK0522w
 ```
 Examples:
 
@@ -147,7 +146,7 @@ Examples:
 > ctloglist
 
 # write into a json file
-> ctloglist --json | really_all_logs.json
+> ctloglist --json > really_all_logs.json
 ```
 
 ```bash
