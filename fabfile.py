@@ -234,7 +234,7 @@ def test(args='', py=None):
 @task
 def pypi():
     '''Build package and upload to pypi.'''
-    if query_yes_no('version updated in setup.py?'):
+    if query_yes_no('version updated in ctutlz/_version.py?'):
 
         print(cyan('\n## clean-up\n'))
         execute(clean)
