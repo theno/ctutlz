@@ -107,11 +107,14 @@ def Logs(log_dicts):
             'chrome_inclusion_status': ...,
             'notes': ...,
             'id_b64_non_calculated': ...,
-            'compliant_to_chrome_ct_policy': ...,
         }
     ],
     ]
     '''
+    for log in log_dicts:
+        log.pop('id_b64', None)
+        log.pop('pubkey', None)
+        log.pop('compliant_to_chrome_ct_policy', None)
     return [Log(**kwargs) for kwargs in log_dicts]
 
 
@@ -240,7 +243,7 @@ def read_log_list(filename):
     return data
 
 
-def get_log_list(list_name='all_logs_list.json'):
+def get_log_list(list_name='really_all_logs.json'):
     '''Try to read log list from local file.  If file not exists download
     log list.
 
@@ -292,7 +295,7 @@ def _log_dict_from_log_text(log_text):
                        (?P<notes_text>(:?[^:]+\n)*)  # notes text
                        (?P<rest>(:?.*[\n$])*)''',
                    log_text,
-                   flags=re.M|re.X)
+                   flags=re.M | re.X)
     res_dict = res.groupdict()
     log_dict = {
         # normalize: assure trailing '/'
@@ -334,7 +337,7 @@ def _log_dict_from_log_text(log_text):
         elif cis.lower().startswith('pending'):
             log_dict['chrome_status'] = ChromeStates.PENDING
         elif cis.lower().startswith('Applied for inclusion but did '
-                                  'not qualify'):
+                                    'not qualify'):
             log_dict['chrome_status'] = ChromeStates.NOT_QUALIFIED
         elif cis.lower().startswith('frozen'):
             log_dict['chrome_status'] = ChromeStates.FROZEN

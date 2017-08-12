@@ -79,7 +79,7 @@ setup(
         'docs',
         'tests',
     ]),
-    package_data={'ctutlz': ['all_logs_list.json', 'log_list_schema.json'], },
+    package_data={'ctutlz': ['really_all_logs.json', 'log_list_schema.json'], },
     install_requires=[
         'cffi>=1.4.0',
         'cryptography<2.0.0',

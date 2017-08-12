@@ -304,3 +304,9 @@ Run tool `verify-scts` from source:
 ```bash
 PYTHONPATH='.' .tox/py36/bin/python  ctutlz/scripts/verify_scts -h
 ```
+
+### Update `really_all_logs.json`
+
+```
+.tox/py36/bin/ctloglist --json > ctutlz/really_all_logs.json
+```

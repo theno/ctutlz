@@ -201,6 +201,7 @@ def show_verification(verification):
     else:
         logger.info(flo('Log found : {log.description}'))
         logger.verbose('Operator  : ' + ', '.join(log.operated_by))
+        logger.info(flo('Chrome    : {log.chrome_status}'))
 
     if verification.verified:
         logger.info(flo('Result    : Verified OK'))
@@ -239,7 +240,7 @@ def main():
     setup_logging(args.loglevel)
     logger.debug(args)
 
-    # set ctlogs
+    # set ctlogs, type: [<ctutlz.ctlog.Log>, ...]
     logs_dict = args.fetch_ctlogs()
     set_operator_names(logs_dict)
     ctlogs = Logs(logs_dict['logs'])
