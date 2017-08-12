@@ -256,6 +256,36 @@ def get_log_list(list_name='all_logs_list.json'):
 
 
 def _log_dict_from_log_text(log_text):
+    '''
+    Args:
+        log_text example (str):
+            """
+            ct.googleapis.com/pilot
+
+            Base64 Log ID: pLkJkLQYWBSHuxOizGdwCjw1mAT5G9+443fNDsgN3BA=
+            Operator: Google
+            Started: 2013-03-25
+            HTTPS supported: yes
+
+            Maximum Merge Delay: 24 hours
+            Contact: google-ct-logs@googlegroups.com
+            Chrome inclusion status: Included."""
+
+    return example: {
+        'url': 'ct.googleapis.com/pilot/',
+        'id_b64_non_calculated': 'pLkJkLQYWBSHuxOizGdwCj'
+                                 'w1mAT5G9+443fNDsgN3BA=',
+        'operated_by': ['Google'],
+        'started': '2013-03-25',
+        'https_supported': 'yes',
+        'maximum_merge_delay': 86400,
+        'contact': 'google-ct-logs@googlegroups.com',
+        'chrome_inclusion_status': 'Included.',
+        'chrome_status': 'included',
+        'description': None,
+        'key': None,
+    }
+    '''
     res = re.match(r'''(?P<url>[^ \n]+)              # log url
                        (?P<ignore>\s[-]\s)?          # optional ' - ' (ignore)
                        (?P<notes_head>[^\n]*\n?)     # notes headline
