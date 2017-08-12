@@ -26,6 +26,70 @@ from ctutlz.utils.logger import VERBOSE, init_logger, setup_logging, logger
 from ctutlz._version import __version__
 
 
+def create_parser():
+    parser = argparse.ArgumentParser(description=first_paragraph(__doc__))
+    parser.add_argument('hostname',
+                        nargs='+',
+                        help="host name of the server (example: 'ritter.vg')")
+    parser.add_argument('-v', '--version',
+                        action='version',
+                        default=False,
+                        version=__version__,
+                        help='print version number')
+
+    meg = parser.add_mutually_exclusive_group()
+    meg.add_argument('--short',
+                     dest='loglevel',
+                     action='store_const',
+                     const=logging.INFO,
+                     default=VERBOSE,  # default loglevel if nothing set
+                     help='show short results and warnings/errors only')
+    meg.add_argument('--debug',
+                     dest='loglevel',
+                     action='store_const',
+                     const=logging.DEBUG,
+                     help='show more for diagnostic purposes')
+
+    meg1 = parser.add_mutually_exclusive_group()
+    meg1.add_argument('--cert-only',
+                      dest='verification_tasks',
+                      action='store_const',
+                      const=[verify_scts_by_cert],
+                      default=[verify_scts_by_cert,
+                               verify_scts_by_tls,
+                               verify_scts_by_ocsp],
+                      help='only verify SCTs included in the certificate')
+    meg1.add_argument('--tls-only',
+                      dest='verification_tasks',
+                      action='store_const',
+                      const=[verify_scts_by_tls],
+                      help='only verify SCTs gathered from TLS handshake')
+    meg1.add_argument('--ocsp-only',
+                      dest='verification_tasks',
+                      action='store_const',
+                      const=[verify_scts_by_ocsp],
+                      help='only verify SCTs gathered via OCSP request')
+
+    meg2 = parser.add_mutually_exclusive_group()
+    meg2.add_argument('--log-list',
+                      dest='log_list_filename',
+                      metavar='<filename>',
+                      help='filename of a log list in JSON format')
+    meg2.add_argument('--latest-logs',
+                      dest='fetch_ctlogs',
+                      action='store_const',
+                      const=download_log_list,
+                      default=get_log_list,
+                      help='for SCT verification against known CT Logs '
+                           "(compliant with Chome's CT policy) "
+                           'download latest version of '
+                           'https://www.certificate-transparency.org/'
+                           'known-logs/all_logs_list.json '
+                           '-- use built-in log list from 2017-06-05 '
+                           'if --latest-logs or --log-list are not set')
+    return parser
+
+
 def verify_scts_by_cert(res, ctlogs):
     '''
     Args:
@@ -168,70 +232,6 @@ def scrape_and_verify_scts(hostname, verification_tasks, ctlogs):
                 logger.info('no SCTs\n')
 
 
-def create_parser():
-    parser = argparse.ArgumentParser(description=first_paragraph(__doc__))
-    parser.add_argument('hostname',
-                        nargs='+',
-                        help="host name of the server (example: 'ritter.vg')")
-    parser.add_argument('-v', '--version',
-                        action='version',
-                        default=False,
-                        version=__version__,
-                        help='print version number')
-
-    meg = parser.add_mutually_exclusive_group()
-    meg.add_argument('--short',
-                     dest='loglevel',
-                     action='store_const',
-                     const=logging.INFO,
-                     default=VERBOSE,  # default loglevel if nothing set
-                     help='show short results and warnings/errors only')
-    meg.add_argument('--debug',
-                     dest='loglevel',
-                     action='store_const',
-                     const=logging.DEBUG,
-                     help='show more for diagnostic purposes')
-
-    meg1 = parser.add_mutually_exclusive_group()
-    meg1.add_argument('--cert-only',
-                      dest='verification_tasks',
-                      action='store_const',
-                      const=[verify_scts_by_cert],
-                      default=[verify_scts_by_cert,
-                               verify_scts_by_tls,
-                               verify_scts_by_ocsp],
-                      help='only verify SCTs included in the certificate')
-    meg1.add_argument('--tls-only',
-                      dest='verification_tasks',
-                      action='store_const',
-                      const=[verify_scts_by_tls],
-                      help='only verify SCTs gathered from TLS handshake')
-    meg1.add_argument('--ocsp-only',
-                      dest='verification_tasks',
-                      action='store_const',
-                      const=[verify_scts_by_ocsp],
-                      help='only verify SCTs gathered via OCSP request')
-
-    meg2 = parser.add_mutually_exclusive_group()
-    meg2.add_argument('--log-list',
-                      dest='log_list_filename',
-                      metavar='<filename>',
-                      help='filename of a log list in JSON format')
-    meg2.add_argument('--latest-logs',
-                      dest='fetch_ctlogs',
-                      action='store_const',
-                      const=download_log_list,
-                      default=get_log_list,
-                      help='for SCT verification against known CT Logs '
-                           "(compliant with Chome's CT policy) "
-                           'download latest version of '
-                           'https://www.certificate-transparency.org/'
-                           'known-logs/all_logs_list.json '
-                           '-- use built-in log list from 2017-06-05 '
-                           'if --latest-logs or --log-list are not set')
-    return parser
-
-
 def main():
     init_logger()
     parser = create_parser()
@@ -239,6 +239,7 @@ def main():
     setup_logging(args.loglevel)
     logger.debug(args)
 
+    # set ctlogs
     logs_dict = args.fetch_ctlogs()
     set_operator_names(logs_dict)
     ctlogs = Logs(logs_dict['logs'])
