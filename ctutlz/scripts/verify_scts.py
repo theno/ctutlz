@@ -81,7 +81,7 @@ def create_parser():
                       const=download_log_list,
                       default=get_log_list,
                       help='for SCT verification against known CT Logs '
-                           "(compliant with Chome's CT policy) "
+                           "(compliant with Chrome's CT policy) "
                            'download latest version of '
                            'https://www.certificate-transparency.org/'
                            'known-logs/all_logs_list.json '

@@ -56,7 +56,7 @@ optional arguments:
   --log-list <filename>
                         filename of a log list in JSON format
   --latest-logs         for SCT verification against known CT Logs (compliant
-                        with Chome's CT policy) download latest version of
+                        with Chrome's CT policy) download latest version of
                         https://www.certificate-transparency.org/known-
                         logs/all_logs_list.json -- use built-in log list
                         really_all_logs.json from 2017-08-11 if --latest-logs
