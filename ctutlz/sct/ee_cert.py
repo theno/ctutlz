@@ -1,13 +1,122 @@
 import struct
 
+import OpenSSL
 from pyasn1_modules import rfc5280
-from pyasn1.type.univ import ObjectIdentifier
+from pyasn1.type.univ import ObjectIdentifier, Sequence
 from pyasn1.codec.der.encoder import encode as der_encoder
 from pyasn1.codec.der.decoder import decode as der_decoder
 
 from utlz import namedtuple
 
 from ctutlz.utils.encoding import sha256_digest
+
+
+# https://hg.mozilla.org/mozilla-central/file/tip/security/certverifier/ExtendedValidation.cpp
+EV_OIDs = ['1.2.392.200091.100.721.1',
+           '1.3.6.1.4.1.6334.1.100.1',
+           '2.16.756.1.89.1.2.1.1',
+           '1.3.6.1.4.1.23223.1.1.1',
+           '1.3.6.1.4.1.23223.1.1.1',
+           '1.3.6.1.4.1.23223.1.1.1',
+           '2.16.840.1.113733.1.7.23.6',
+           '1.3.6.1.4.1.14370.1.6',
+           '2.16.840.1.113733.1.7.48.1',
+           '2.16.840.1.114404.1.1.2.4.1',
+           '2.16.840.1.114404.1.1.2.4.1',
+           '2.16.840.1.114404.1.1.2.4.1',
+           '1.3.6.1.4.1.6449.1.2.1.5.1',
+           '1.3.6.1.4.1.6449.1.2.1.5.1',
+           '1.3.6.1.4.1.6449.1.2.1.5.1',
+           '2.16.840.1.114413.1.7.23.3',
+           '2.16.840.1.114413.1.7.23.3',
+           '2.16.840.1.114414.1.7.23.3',
+           '2.16.840.1.114414.1.7.23.3',
+           '2.16.840.1.114412.2.1',
+           '1.3.6.1.4.1.8024.0.2.100.1.2',
+           '1.3.6.1.4.1.782.1.2.1.8.1',
+           '2.16.840.1.114028.10.1.2',
+           '1.3.6.1.4.1.4146.1.1',
+           '1.3.6.1.4.1.4146.1.1',
+           '1.3.6.1.4.1.4146.1.1',
+           '2.16.578.1.26.1.3.3',
+           '1.3.6.1.4.1.22234.2.5.2.3.1',
+           '1.3.6.1.4.1.17326.10.14.2.1.2',
+           '1.3.6.1.4.1.17326.10.8.12.1.2',
+           '1.3.6.1.4.1.34697.2.1',
+           '1.3.6.1.4.1.34697.2.2',
+           '1.3.6.1.4.1.34697.2.3',
+           '1.3.6.1.4.1.34697.2.4',
+           '1.2.616.1.113527.2.5.1.1',
+           '1.2.616.1.113527.2.5.1.1',
+           '1.3.6.1.4.1.14777.6.1.1',
+           '1.3.6.1.4.1.14777.6.1.2',
+           '1.3.6.1.4.1.7879.13.24.1',
+           '1.3.6.1.4.1.40869.1.1.22.3',
+           '1.3.6.1.4.1.4788.2.202.1',
+           '2.16.840.1.113733.1.7.23.6',
+           '1.3.6.1.4.1.14370.1.6',
+           '2.16.840.1.113733.1.7.48.1',
+           '1.3.6.1.4.1.13177.10.1.3.10',
+           '1.3.6.1.4.1.40869.1.1.22.3',
+           '2.16.792.3.0.4.1.1.4',
+           '1.3.159.1.17.1',
+           '1.3.6.1.4.1.36305.2',
+           '1.3.6.1.4.1.36305.2',
+           '2.16.840.1.114412.2.1',
+           '2.16.840.1.114412.2.1',
+           '2.16.840.1.114412.2.1',
+           '2.16.840.1.114412.2.1',
+           '2.16.840.1.114412.2.1',
+           '1.3.6.1.4.1.8024.0.2.100.1.2',
+           '1.3.6.1.4.1.6449.1.2.1.5.1',
+           '1.3.6.1.4.1.6449.1.2.1.5.1',
+           '1.3.6.1.4.1.6449.1.2.1.5.1',
+           '1.3.6.1.4.1.4146.1.1',
+           '2.16.840.1.114028.10.1.2',
+           '2.16.528.1.1003.1.2.7',
+           '2.16.840.1.114028.10.1.2',
+           '2.16.840.1.114028.10.1.2',
+           '2.16.156.112554.3',
+           '1.3.6.1.4.1.36305.2',
+           '1.3.6.1.4.1.36305.2',
+           '1.2.392.200091.100.721.1',
+           '2.16.756.5.14.7.4.8',
+           '1.3.6.1.4.1.22234.3.5.3.1',
+           '1.3.6.1.4.1.22234.3.5.3.2',
+           '1.3.6.1.4.1.22234.2.14.3.11',
+           '1.3.6.1.4.1.22234.2.14.3.11',
+           '1.3.6.1.4.1.22234.2.14.3.11',
+           '2.16.840.1.113733.1.7.23.6',
+           '2.23.140.1.1',
+           '2.23.140.1.1',
+           '2.23.140.1.1',
+           '2.23.140.1.1',
+           '2.23.140.1.1',
+           '1.3.171.1.1.10.5.2']
+
+
+def is_ev_cert(ee_cert):
+    '''Return True if ee_cert is an extended validation certificate, else False.
+
+    Args:
+        ee_cert (EndEntityCert)
+    '''
+    oid_certificate_policies = ObjectIdentifier('2.5.29.32')
+    policy_extension = [ext
+                        for ext
+                        in ee_cert.tbscert.pyasn1['extensions']
+                        if ext['extnID'] == oid_certificate_policies][0]
+    sequence_der = policy_extension['extnValue']  # type: Sequence()
+    sequence, _ = der_decoder(sequence_der, Sequence())
+
+    oids = []
+    for idx in range(len(sequence)):
+        inner_sequence = sequence.getComponentByPosition(idx)
+        oid = inner_sequence.getComponentByPosition(0)
+        oids.append(str(oid))
+
+    intersection = list(set(oids) & set(EV_OIDs))
+    return intersection != []
 
 
 def pyasn1_certificate_from_der(cert_der):
@@ -21,6 +130,14 @@ def copy_pyasn1_instance(instance):
     der = der_encoder(instance)
     copy, _ = der_decoder(der, rfc5280.TBSCertificate())
     return copy
+
+
+def pyopenssl_certificate_from_der(cert_der):
+    '''Return OpenSSL.crypto.X509 instance parsed from cert_der.
+    '''
+    cert = OpenSSL.crypto.load_certificate(type=OpenSSL.crypto.FILETYPE_ASN1,
+                                           buffer=cert_der)
+    return cert
 
 
 def tbscert_without_sctlist(tbscert):
@@ -93,6 +210,11 @@ EndEntityCert = namedtuple(
 
         'pyasn1': lambda self: pyasn1_certificate_from_der(self.der),
         'tbscert': lambda self: TbsCert(self.pyasn1['tbsCertificate']),
+
+        # FIXME: YAGNI?
+        'pyopenssl': lambda self: pyopenssl_certificate_from_der(self.der),
+
+        'is_ev_cert': lambda self: is_ev_cert(self),
     }
 )
 
