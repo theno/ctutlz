@@ -220,6 +220,10 @@ def scrape_and_verify_scts(hostname, verification_tasks, ctlogs):
                        scts_ocsp=(verify_scts_by_ocsp in verification_tasks))
     if res.ee_cert_der:
         logger.debug('got certificate\n')
+        if res.ee_cert.is_ev_cert:
+            logger.info('EV cert\n')
+        else:
+            logger.info('no EV cert\n')
 
     if res.err:
         logger.warn(res.err)
