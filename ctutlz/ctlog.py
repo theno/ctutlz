@@ -222,6 +222,25 @@ def download_log_list(url=URL_ALL_LOGS):
     logs as a list of `Log` items.
 
     Return: dict, the 'logs_dict'
+
+    logs_dict example: {
+      'logs: [
+        {
+          "description": "Google 'Aviator' log",
+          "key": "MFkwE..."
+          "url": "ct.googleapis.com/aviator/",
+          "maximum_merge_delay": 86400,
+          "operated_by": [0],
+          "final_sth": {
+            ...
+          },
+          "dns_api_endpoint": ...
+        },
+      ],
+      'operators': [
+        ...
+      ]
+    }
     '''
     response = urllib_request.urlopen(url)
     response_str = response.read()
@@ -237,6 +256,25 @@ def read_log_list(filename):
     '''Read log list from file `filename` and return as logs_dict.
 
     Return: dict, the 'logs_dict'
+
+    logs_dict example: {
+      'logs: [
+        {
+          "description": "Google 'Aviator' log",
+          "key": "MFkwE..."
+          "url": "ct.googleapis.com/aviator/",
+          "maximum_merge_delay": 86400,
+          "operated_by": [0],
+          "final_sth": {
+            ...
+          },
+          "dns_api_endpoint": ...
+        },
+      ],
+      'operators': [
+        ...
+      ]
+    }
     '''
     filename = abspath(expanduser(filename))
     data = load_json(filename)
@@ -248,6 +286,25 @@ def get_log_list(list_name='really_all_logs.json'):
     log list.
 
     Return: dict, the 'logs_dict'
+
+    logs_dict example: {
+      'logs: [
+        {
+          "description": "Google 'Aviator' log",
+          "key": "MFkwE..."
+          "url": "ct.googleapis.com/aviator/",
+          "maximum_merge_delay": 86400,
+          "operated_by": [0],
+          "final_sth": {
+            ...
+          },
+          "dns_api_endpoint": ...
+        },
+      ],
+      'operators': [
+        ...
+      ]
+    }
     '''
     thisdir = dirname(__file__)
     filename = join(thisdir, list_name)
