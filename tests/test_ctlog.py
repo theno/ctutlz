@@ -12,58 +12,111 @@ ct.googleapis.com/pilot
 
 Base64 Log ID: pLkJkLQYWBSHuxOizGdwCjw1mAT5G9+443fNDsgN3BA=
 Operator: Google
-Started: 2013-03-25
-HTTPS supported: yes
-
-Maximum Merge Delay: 24 hours
 Contact: google-ct-logs@googlegroups.com
-Chrome inclusion status: Included.
+Chrome bug: https://crbug.com/389511
 ''',
             'expected': {
                 'url': 'ct.googleapis.com/pilot/',
                 'id_b64_non_calculated': 'pLkJkLQYWBSHuxOizGdwCj'
                                          'w1mAT5G9+443fNDsgN3BA=',
                 'operated_by': ['Google'],
-                'started': '2013-03-25',
-                'https_supported': 'yes',
-                'maximum_merge_delay': 86400,
                 'contact': 'google-ct-logs@googlegroups.com',
-                'chrome_inclusion_status': 'Included.',
-                'chrome_status': 'included',
+                'chrome_bug': 'https://crbug.com/389511',
+                'maximum_merge_delay': None,
                 'description': None,
                 'key': None,
             },
         },
         {
             'input': '''\
-ct.googleapis.com/submariner - Log for untrusted roots.
+ct.googleapis.com/submariner
+
+Base64 Log ID: qJnYeAySkKr0YvMYgMz71SRR6XDQ+/WR73Ww2ZtkVoE=
+Operator: Google
+Contact: google-ct-logs@googlegroups.com
 
 Note that this log is not trusted by Chrome. It only logs certificates that
 chain to roots that are on track for inclusion in browser roots or were
 trusted at some previous point. See the announcement blog post.
-Base64 Log ID: qJnYeAySkKr0YvMYgMz71SRR6XDQ+/WR73Ww2ZtkVoE=
-Operator: Google
-Started: 2016-03-22
-HTTPS supported:yes
-Contact: google-ct-logs@googlegroups.com
-Chrome inclusion status: Not included
+
 ''',
             'expected': {
                 'url': 'ct.googleapis.com/submariner/',
                 'id_b64_non_calculated': 'qJnYeAySkKr0YvMYgMz71S'
                                          'RR6XDQ+/WR73Ww2ZtkVoE=',
                 'operated_by': ['Google'],
-                'started': '2016-03-22',
-                'https_supported': 'yes',
                 'contact': 'google-ct-logs@googlegroups.com',
-                'chrome_inclusion_status': 'Not included',
-                'notes': 'Log for untrusted roots. Note that this log is not '
+                'notes': 'Note that this log is not '
                          'trusted by Chrome. It only logs certificates that '
                          'chain to roots that are on track for inclusion in '
                          'browser roots or were trusted at some previous '
                          'point. See the announcement blog post.',
                 'maximum_merge_delay': None,
-                'chrome_status': 'not included',
+                'description': None,
+                'key': None,
+            },
+        },
+        {
+            'input': '''\
+ct.googleapis.com/testtube
+
+Base64 Log ID: sMyD5aX5fWuvfAnMKEkEhyrH6IsTLGNQt8b9JuFsbHc=
+Operator: Google
+Contact: google-ct-logs@googlegroups.com
+
+Note that this log is intended for testing purposes only and will only log
+certificates that chain to a root explicitly added to it.
+To add a test root to Testtube, please email google-ct-logs@googlegroups.com
+
+A test root for Testtube should:
+
+  * have a certificate "Subject" field that:
+    * includes the word "Test" (to reduce the chances of real certificates being mixed up with test certificates.
+    * identifies the organization that the test root is for (to allow easy classification of test traffic).
+  * not allow real certificates to chain to it, either because:
+    * it is a self-signed root CA certificate identified as a test certificate (as above).
+    * it is an intermediate CA certificate that chains to a root certificate that is also identified as a test certificate.
+  * be a CA certificate, by:
+    * having CA:TRUE in the Basic Constraints extension.
+    * include the 'Certificate Sign' bit in the Key Usage extension.
+
+Note that for historical reasons Testtube includes some test roots that do not
+comply with all of the above requirements.
+
+''',
+            'expected': {
+                'url': 'ct.googleapis.com/testtube/',
+                'id_b64_non_calculated': 'sMyD5aX5fWuvfAnMKEkEhy'
+                                         'rH6IsTLGNQt8b9JuFsbHc=',
+                'operated_by': ['Google'],
+                'contact': 'google-ct-logs@googlegroups.com',
+                'notes': 'Note that this log is intended for testing purposes '
+                         'only and will only log certificates that chain to a '
+                         'root explicitly added to it. To add a test root to '
+                         'Testtube, please email '
+                         'google-ct-logs@googlegroups.com '
+                         'A test root for Testtube should: '
+                         '* have a certificate "Subject" field that: '
+                         '* includes the word "Test" (to reduce the chances of '
+                         'real certificates being mixed up with test '
+                         'certificates. '
+                         '* identifies the organization that the test root is '
+                         'for (to allow easy classification of test traffic). '
+                         '* not allow real certificates to chain to it, either '
+                         'because: '
+                         '* it is a self-signed root CA certificate identified '
+                         'as a test certificate (as above). '
+                         '* it is an intermediate CA certificate that chains '
+                         'to a root certificate that is also identified as a '
+                         'test certificate. '
+                         '* be a CA certificate, by: '
+                         '* having CA:TRUE in the Basic Constraints extension. '
+                         "* include the 'Certificate Sign' bit in the Key "
+                         'Usage extension. '
+                         'Note that for historical reasons Testtube includes '
+                         'some test roots that do not comply with all of the '
+                         'above requirements.''',
+                'maximum_merge_delay': None,
                 'description': None,
                 'key': None,
             },
@@ -78,414 +131,442 @@ Chrome inclusion status: Not included
 def test_logs_dict_from_html_str():
     thisdir = os.path.abspath(os.path.dirname(__file__))
     with open(
-          os.path.join(thisdir, 'data', 'test_ctlog', 'known-logs.html')) as fh:
+          os.path.join(thisdir, 'data', 'test_ctlog',
+                       'known-logs_2017-08-24.html')) as fh:
         input = fh.read()
     expected_logs_dict = {
-        'active_logs': [
-            {'chrome_inclusion_status': 'Included.',
-             'chrome_status': 'included',
-             'contact': 'google-ct-logs@googlegroups.com',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'pLkJkLQYWBSHuxOizGdwCj'
-                                      'w1mAT5G9+443fNDsgN3BA=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['Google'],
-             'started': '2013-03-25',
-             'url': 'ct.googleapis.com/pilot/'},
-            {'chrome_inclusion_status': 'Included (since M55).',
-             'chrome_status': 'included',
-             'contact': 'google-ct-logs@googlegroups.com',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'KTxRllTIOWW6qlD8WAfUt2'
-                                      '+/WHopctykwwz05UVH9Hg=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'notes': "Accepts only certificates issued by Let's Encrypt "
-                      'or other subordinate',
-             'operated_by': ['Google'],
-             'started': '2016-07-27',
-             'url': 'ct.googleapis.com/icarus/'},
-            {'chrome_inclusion_status': 'Included (since M43).',
-             'chrome_status': 'included',
-             'contact': 'google-ct-logs@googlegroups.com',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': '7ku9t3XOYLrhQmkfq+GeZq'
-                                      'MPfl+wctiDAMR7iXqo/cs=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['Google'],
-             'started': '2014-09-01',
-             'url': 'ct.googleapis.com/rocketeer/'},
-            {'chrome_inclusion_status': 'Included (since M55).',
-             'chrome_status': 'included',
-             'contact': 'google-ct-logs@googlegroups.com',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'u9nfvB+KcbWTlCOXqpJ7Rz'
-                                      'hXlQqrUugakJZkNo4e0YU=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'notes': "Does not accept certificates issued by Let's "
-                      'Encrypt or other',
-             'operated_by': ['Google'],
-             'started': '2016-06-10',
-             'url': 'ct.googleapis.com/skydiver/'},
-            {'chrome_inclusion_status': 'Included.',
-             'chrome_status': 'included',
-             'contact': 'ctops@digicert.com',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'VhQGmi/XwuzT9eG9RLI+x0'
-                                      'Z2ubyZEVzA75SYVdaJ0N0=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['DigiCert'],
-             'submitted_for_inclusion_in_chrome': '2014-09-30',
-             'url': 'ct1.digicert-ct.com/log/'},
-            {'chrome_inclusion_status': 'Included (since M45).',
-             'chrome_status': 'included',
-             'contact': 'DL-ENG-Symantec-CT-Log@symantec.com',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': '3esdK3oNT6Ygi4GtgWhwfi'
-                                      '6OnQHVXIiNPRHEzbbsvsw=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['Symantec'],
-             'submitted_for_inclusion_in_chrome': '2015-05-1',
-             'url': 'ct.ws.symantec.com/'},
-            {'chrome_inclusion_status': 'Included (since M50).',
-             'chrome_status': 'included',
-             'contact': 'DL-ENG-Symantec-VEGA-CT-Log@symantec.com; +1 '
-                        '(650) 527-466',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'vHjh38X2PGhGSTNNoQ+hXw'
-                                      'l5aSAJwIG08/aRfz7ZuKU=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['Symantec'],
-             'submitted_for_inclusion_in_chrome': '2015-11-13',
-             'url': 'vega.ws.symantec.com/'},
-            {'chrome_inclusion_status': 'Included (since M47).',
-             'chrome_status': 'included',
-             'contact': 'ctlog-admin@venafi.com',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'rDua7X+pZ0dXFZ5tfVdWcv'
-                                      'nZgQCUHpve/+yhMTt1eC0=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['Venafi'],
-             'submitted_for_inclusion_in_chrome': '2015-06-11',
-             'url': 'ctlog.api.venafi.com/'},
-            {'chrome_inclusion_status': 'Included (since M54).',
-             'chrome_status': 'included',
-             'contact': 'ctlog@wosign.com; +86-755-8600 8688',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'QbLcLonmPOSvG6e7Kb9oxt'
-                                      '7m+fHMBH4w3/rjs7olkmM=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['WoSign'],
-             'submitted_for_inclusion_in_chrome': '2016-04-19',
-             'url': 'ctlog.wosign.com/'},
-            {'chrome_inclusion_status': 'Pending inclusion.',
-             'chrome_status': 'pending for inclusion',
-             'contact': 'ctlog@wosign.com; +86-755-8600 8688',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'Y9AAYCbd4QuwYB9FJEaWXu'
-                                      'K26izU+8layGalUK+Qdbc=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['WoSign'],
-             'submitted_for_inclusion_in_chrome': '2017-05-03',
-             'url': 'ctlog2.wosign.com/'},
-            {'chrome_inclusion_status': 'Included (since M53).',
-             'chrome_status': 'included',
-             'contact': 'ctlog-admin@cnnic.cn; +86 (010) 58813200',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'pXesnO11SN2PAltnokEInf'
-                                      'huD0duwgPC7L7bGF8oJjg=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['CNNIC'],
-             'submitted_for_inclusion_in_chrome': '2016-02-02',
-             'url': 'ctserver.cnnic.cn/'},
-            {'chrome_inclusion_status': 'Included (since M54).',
-             'chrome_status': 'included',
-             'contact': 'ct@startssl.com',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'NLtq1sPfnAPuqKSZ/3iRSG'
-                                      'ydXlysktAfe/0bzhnbSO8=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['StartCom'],
-             'submitted_for_inclusion_in_chrome': '2016-05-13',
-             'url': 'ct.startssl.com/'},
-            {'chrome_inclusion_status': 'Applied for inclusion but did '
-                                        'not qualify.',
-             'contact': 'atecnica@izenpe.net',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'iUFEnHB0Lga5/JznsRa6AC'
-                                      'SqNtWa9E8CBEBPAPfqhWY=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['Izenpe'],
-             'submitted_for_inclusion_in_chrome': '2016-05-24',
-             'url': 'ct.izenpe.eus/'},
-            {'chrome_inclusion_status': 'Applied for inclusion but did '
-                                        'not qualify.',
-             'contact': 'capoc@gdca.com.cn; +86 (20) 83487228-805',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'yc+JCiEQnGZswXo+0GXJMN'
-                                      'DgE1qf66ha8UIQuAckIao=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['Wang Shengnan'],
-             'submitted_for_inclusion_in_chrome': '2016-04-07',
-             'url': 'ct.gdca.com.cn/'},
-            {'chrome_inclusion_status': 'Applied for inclusion but did '
-                                        'not qualify.',
-             'contact': 'capoc@gdca.com.cn; +86 (20) 83487228-805',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'kkow+Qkzb/Q11pk6EKx1os'
-                                      'ZBco5/wtZZrmGI/61AzgE=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['GDCA'],
-             'submitted_for_inclusion_in_chrome': '2016-10-10',
-             'url': 'ctlog.gdca.com.cn/'},
-            {'chrome_inclusion_status': 'Pending inclusion.',
-             'chrome_status': 'pending for inclusion',
-             'contact': 'ctlog-admin@venafi.com',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'AwGd8/2FppqOvR+sxtqbpz'
-                                      '5Gl3T+d/V5/FoIuDKMHWs=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['Venafi'],
-             'submitted_for_inclusion_in_chrome': '2017-02-03',
-             'url': 'ctlog-gen2.api.venafi.com/'},
-            {'chrome_inclusion_status': 'Included (since M60).',
-             'chrome_status': 'included',
-             'contact': 'DL-ENG-Symantec-SIRIUS-CT-Log@symantec.com',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'ZcEiNe5l6Bb61JRKt7o0u'
-                                      'i0oxZSZBIan6v71fha2T8=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['Symantec'],
-             'submitted_for_inclusion_in_chrome': '2017-02-15',
-             'url': 'sirius.ws.symantec.com/'},
-            {'chrome_inclusion_status': 'Included (since M60).',
-             'chrome_status': 'included',
-             'contact': 'ctops@digicert.com',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'h3W/51l8+IxDmV+9827/Vo'
-                                      '1HVjb/SrVgwbTq/16ggw8=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['DigiCert'],
-             'submitted_for_inclusion_in_chrome': '2017-03-03',
-             'url': 'ct2.digicert-ct.com/log/'},
-            {'chrome_inclusion_status': 'Included (since M60).',
-             'chrome_status': 'included',
-             'contact': 'ctops@comodo.com',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'b1N2rDHwMRnYmQCkURX/dx'
-                                      'UcEdkCwQApBo2yCJo32RM=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['Comodo'],
-             'submitted_for_inclusion_in_chrome': '2017-03-21',
-             'url': 'mammoth.ct.comodo.com/'},
-            {'contact': 'ctops@comodo.com',
-             'description': None,
-             'function': 'active',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'VYHUwhaQNgFK6gubVzxT8M'
-                                      'DkOHhwJQgXL6OqHQcT0ww=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['Comodo'],
-             'submitted_for_inclusion_in_chrome': '2017-03-21',
-             'url': 'sabre.ct.comodo.com/'}],
-        'frozen_logs': [
-            {'contact': 'google-ct-logs@googlegroups.com',
-             'description': None,
-             'function': 'frozen',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'aPaY+B9kgr46jO65KB1M/H'
-                                      'FRXWeT1ETRCmesu09P+8Q=',
-             'key': None,
-             'maximum_merge_delay': None,
-             'operated_by': ['Google'],
-             'started': '2013-09-30',
-             'url': 'ct.googleapis.com/aviator/'}],
-        'logs_that_ceased_operation': [
-            {'chrome_inclusion_status': 'Not included anymore (was '
-                                        'briefly planned for',
-             'chrome_status': 'not included',
-             'contact': 'ops@ctlogs.org',
-             'description': None,
-             'function': 'ceased operation',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'OTdvVF97Rgf1l0LXaM1dJD'
-                                      'e/NHO2U0pINLz3Lmgcg8k=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['Matt Palmer'],
-             'submitted_for_inclusion_in_chrome': '2014-08-12',
-             'url': 'alpha.ctlogs.org/'},
-            {'chrome_inclusion_status': 'Applied for '
-                                        'inclusion but did '
-                                        'not qualify.',
-             'contact': 'ctlog@wosign.com; +86-755-8600 '
-                        '8688',
-             'description': None,
-             'function': 'ceased operation',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'nk/3PcPOIgtpIXyJnkaAdq'
-                                      'v414Y21cz8haMadWKLqIs=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['WoSign'],
-             'submitted_for_inclusion_in_chrome': '2015-09-22',
-             'url': 'ct.wosign.com/'},
-            {'chrome_inclusion_status': 'Included (since '
-                                        'M43) but '
-                                        'disqualified '
-                                        '(since M52).',
-             'chrome_status': 'included, but then '
-                              'disqualified',
-             'contact': 'ian@certly.io',
-             'description': None,
-             'function': 'ceased operation',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'zbUXm3/BwEb+6jETaj+PAC'
-                                      '5hgvr4iW/syLL1tatgSQA=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['Certly'],
-             'submitted_for_inclusion_in_chrome': '2014-12-14',
-             'url': 'log.certly.io/'},
-            {'chrome_inclusion_status': 'Included (since '
-                                        'M44) but '
-                                        'disqualified '
-                                        '(since M53).',
-             'chrome_status': 'included, but then '
-                              'disqualified',
-             'contact': 'atecnica@izenpe.net',
-             'description': None,
-             'function': 'ceased operation',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'dGG0oJz7PUHXUVlXWy52Sa'
-                                      'RFqNJ3CbDMVkpkgrfrQaM=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['Izenpe'],
-             'submitted_for_inclusion_in_chrome': '2014-11-10',
-             'url': 'ct.izenpe.com/'},
-            {'contact': 'certificatetransparency@outlook.com; '
-                        '+86 (17) 316230-527',
-             'description': None,
-             'function': 'ceased operation',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': '4BJ2KekEllZOPQFHmESYqk'
-                                      'j4rbFmAOt5AqHvmQmQYnM=',
-             'key': None,
-             'maximum_merge_delay': 86400,
-             'operated_by': ['Beijing PuChuangSiDa '
-                             'Technology Ltd.'],
-             'submitted_for_inclusion_in_chrome': '2016-11-22',
-             'url': 'www.certificatetransparency.cn/ct/'}],
-        'special_purpose_logs': [
-            {'chrome_inclusion_status': 'Not included',
-             'chrome_status': 'not included',
-             'contact': 'google-ct-logs@googlegroups.com',
-             'description': None,
-             'function': 'special purpose',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'qJnYeAySkKr0YvMYgMz71S'
-                                      'RR6XDQ+/WR73Ww2ZtkVoE=',
-             'key': None,
-             'maximum_merge_delay': None,
-             'notes': 'Log for untrusted roots. Note that this '
-                      'log is not trusted by Chrome. It only '
-                      'logs certificates that chain to roots '
-                      'that are on track for inclusion in '
-                      'browser roots or were trusted at some '
-                      'previous point. See the announcement blog '
-                      'post.',
-             'operated_by': ['Google'],
-             'started': '2016-03-22',
-             'url': 'ct.googleapis.com/submariner/'},
-            {'chrome_inclusion_status': 'Not included.',
-             'chrome_status': 'not included',
-             'contact': 'google-ct-logs@googlegroups.com',
-             'description': None,
-             'function': 'special purpose',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'HQJLjrFJizRN/YfqPvwJlv'
-                                      'dQbyNdHUlwYaR3PEOcJfs=',
-             'key': None,
-             'maximum_merge_delay': None,
-             'notes': 'Log for expired certificates. Note that '
-                      'this log is not trusted by Chrome. It '
-                      'only logs certificates that have expired. '
-                      'See the announcement post.',
-             'operated_by': ['Google'],
-             'started': '2016-12-19',
-             'url': 'ct.googleapis.com/daedalus/'},
-            {'description': None,
-             'function': 'special purpose',
-             'https_supported': 'yes',
-             'id_b64_non_calculated': 'sMyD5aX5fWuvfAnMKEkEhy'
-                                      'rH6IsTLGNQt8b9JuFsbHc=',
-             'key': None,
-             'maximum_merge_delay': None,
-             'notes': 'Test log. Note that this log is intended '
-                      'for testing purposes only and will only '
-                      'log certificates that chain to a root '
-                      'explicitly added to it. See the '
-                      'announcement email.',
-             'operated_by': ['Google'],
-             'started': '2014-08-25',
-             'url': 'ct.googleapis.com/testtube/'}]}
+        'completely_distrusted_by_chrome': [{'chrome_bug': 'https://crbug.com/667663',
+                                             'chrome_state': 'distrusted',
+                                             'contact': 'certificatetransparency@outlook.com',
+                                             'description': None,
+                                             'id_b64_non_calculated': '4BJ2KekEllZOPQFHmESYqkj4rbFmAOt5AqHvmQmQYnM=',
+                                             'key': None,
+                                             'maximum_merge_delay': None,
+                                             'notes': 'Included in Chrome since M-58',
+                                             'operated_by': ['Beijing PuChuangSiDa '
+                                                             'Technology Ltd.'],
+                                             'url': 'www.certificatetransparency.cn/ct/'}],
+        'disqualified_from_chrome': [{'chrome_bug': 'https://crbug.com/431700',
+                                      'chrome_state': 'disqualified',
+                                      'contact': 'atecnica@izenpe.net',
+                                      'description': None,
+                                      'id_b64_non_calculated': 'dGG0oJz7PUHXUVlXWy52SaRFqNJ3CbDMVkpkgrfrQaM=',
+                                      'key': None,
+                                      'maximum_merge_delay': None,
+                                      'operated_by': ['Izenpe'],
+                                      'url': 'ct.izenpe.com/'},
+                                     {'chrome_bug': 'https://crbug.com/499446',
+                                      'chrome_state': 'disqualified',
+                                      'contact': 'ctlog-admin@venafi.com',
+                                      'description': None,
+                                      'id_b64_non_calculated': 'rDua7X+pZ0dXFZ5tfVdWcvnZgQCUHpve/+yhMTt1eC0=',
+                                      'key': None,
+                                      'maximum_merge_delay': None,
+                                      'operated_by': ['Venafi'],
+                                      'url': 'ctlog.api.venafi.com/'},
+                                     {'chrome_state': 'disqualified',
+                                      'contact': 'ian@certly.io',
+                                      'description': None,
+                                      'id_b64_non_calculated': 'zbUXm3/BwEb+6jETaj+PAC5hgvr4iW/syLL1tatgSQA=',
+                                      'key': None,
+                                      'maximum_merge_delay': None,
+                                      'operated_by': ['Certly'],
+                                      'url': 'log.certly.io/'}],
+        'frozen_logs': [{'chrome_state': 'frozen',
+                         'contact': 'google-ct-logs@googlegroups.com',
+                         'description': None,
+                         'id_b64_non_calculated': 'aPaY+B9kgr46jO65KB1M/HFRXWeT1ETRCmesu09P+8Q=',
+                         'key': None,
+                         'maximum_merge_delay': None,
+                         'operated_by': ['Google'],
+                         'url': 'ct.googleapis.com/aviator/'}],
+        'included_in_chrome': [{'chrome_bug': 'https://crbug.com/632753',
+                                'chrome_state': 'included',
+                                'contact': 'google-ct-logs@googlegroups.com',
+                                'description': None,
+                                'id_b64_non_calculated': 'KTxRllTIOWW6qlD8WAfUt2+/WHopctykwwz05UVH9Hg=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'operated_by': ['Google'],
+                                'url': 'ct.googleapis.com/icarus/'},
+                               {'chrome_bug': 'https://crbug.com/389511',
+                                'chrome_state': 'included',
+                                'contact': 'google-ct-logs@googlegroups.com',
+                                'description': None,
+                                'id_b64_non_calculated': 'pLkJkLQYWBSHuxOizGdwCjw1mAT5G9+443fNDsgN3BA=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'operated_by': ['Google'],
+                                'url': 'ct.googleapis.com/pilot/'},
+                               {'chrome_bug': 'https://crbug.com/431057',
+                                'chrome_state': 'included',
+                                'contact': 'google-ct-logs@googlegroups.com',
+                                'description': None,
+                                'id_b64_non_calculated': '7ku9t3XOYLrhQmkfq+GeZqMPfl+wctiDAMR7iXqo/cs=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'operated_by': ['Google'],
+                                'url': 'ct.googleapis.com/rocketeer/'},
+                               {'chrome_bug': 'https://crbug.com/632752',
+                                'chrome_state': 'included',
+                                'contact': 'google-ct-logs@googlegroups.com',
+                                'description': None,
+                                'id_b64_non_calculated': 'u9nfvB+KcbWTlCOXqpJ7RzhXlQqrUugakJZkNo4e0YU=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'operated_by': ['Google'],
+                                'url': 'ct.googleapis.com/skydiver/'},
+                               {'chrome_bug': 'https://crbug.com/611672',
+                                'chrome_state': 'included',
+                                'contact': 'ct@startssl.com',
+                                'description': None,
+                                'id_b64_non_calculated': 'NLtq1sPfnAPuqKSZ/3iRSGydXlysktAfe/0bzhnbSO8=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'operated_by': ['StartCom'],
+                                'url': 'ct.startssl.com/'},
+                               {'chrome_bug': 'https://crbug.com/483625',
+                                'chrome_state': 'included',
+                                'contact': 'DL-ENG-Symantec-CT-Log@symantec.com',
+                                'description': None,
+                                'id_b64_non_calculated': '3esdK3oNT6Ygi4GtgWhwfi6OnQHVXIiNPRHEzbbsvsw=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'operated_by': ['Symantec'],
+                                'url': 'ct.ws.symantec.com/'},
+                               {'chrome_bug': 'https://crbug.com/419255',
+                                'chrome_state': 'included',
+                                'contact': 'ctops@digicert.com',
+                                'description': None,
+                                'id_b64_non_calculated': 'VhQGmi/XwuzT9eG9RLI+x0Z2ubyZEVzA75SYVdaJ0N0=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'operated_by': ['DigiCert'],
+                                'url': 'ct1.digicert-ct.com/log/'},
+                               {'chrome_bug': 'https://crbug.com/698094',
+                                'chrome_state': 'included',
+                                'contact': 'ctops@digicert.com',
+                                'description': None,
+                                'id_b64_non_calculated': 'h3W/51l8+IxDmV+9827/Vo1HVjb/SrVgwbTq/16ggw8=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'notes': 'Included in Chrome since M-60',
+                                'operated_by': ['DigiCert'],
+                                'url': 'ct2.digicert-ct.com/log/'},
+                               {'chrome_bug': 'https://crbug.com/688510',
+                                'chrome_state': 'included',
+                                'contact': 'ctlog-admin@venafi.com',
+                                'description': None,
+                                'id_b64_non_calculated': 'AwGd8/2FppqOvR+sxtqbpz5Gl3T+d/V5/FoIuDKMHWs=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'operated_by': ['Venafi'],
+                                'url': 'ctlog-gen2.api.venafi.com/'},
+                               {'chrome_bug': 'https://crbug.com/605415',
+                                'chrome_state': 'included',
+                                'contact': 'ctlog@wosign.com',
+                                'description': None,
+                                'id_b64_non_calculated': 'QbLcLonmPOSvG6e7Kb9oxt7m+fHMBH4w3/rjs7olkmM=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'notes': 'Included in Chrome since M-54',
+                                'operated_by': ['WoSign'],
+                                'url': 'ctlog.wosign.com/'},
+                               {'chrome_bug': 'https://crbug.com/583208',
+                                'chrome_state': 'included',
+                                'contact': 'ctlog-admin@cnnic.cn',
+                                'description': None,
+                                'id_b64_non_calculated': 'pXesnO11SN2PAltnokEInfhuD0duwgPC7L7bGF8oJjg=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'operated_by': ['CNNIC'],
+                                'url': 'ctserver.cnnic.cn/'},
+                               {'chrome_bug': 'https://crbug.com/703699',
+                                'chrome_state': 'included',
+                                'contact': 'ctops@comodo.com',
+                                'description': None,
+                                'id_b64_non_calculated': 'b1N2rDHwMRnYmQCkURX/dxUcEdkCwQApBo2yCJo32RM=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'notes': 'Included in Chrome since M-60',
+                                'operated_by': ['Comodo'],
+                                'url': 'mammoth.ct.comodo.com/'},
+                               {'chrome_bug': 'https://crbug.com/703700',
+                                'chrome_state': 'included',
+                                'contact': 'ctops@comodo.com',
+                                'description': None,
+                                'id_b64_non_calculated': 'VYHUwhaQNgFK6gubVzxT8MDkOHhwJQgXL6OqHQcT0ww=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'notes': 'Included in Chrome since M-60',
+                                'operated_by': ['Comodo'],
+                                'url': 'sabre.ct.comodo.com/'},
+                               {'chrome_bug': 'https://crbug.com/692782',
+                                'chrome_state': 'included',
+                                'contact': 'DL-ENG-Symantec-SIRIUS-CT-Log@symantec.com',
+                                'description': None,
+                                'id_b64_non_calculated': 'FZcEiNe5l6Bb61JRKt7o0ui0oxZSZBIan6v71fha2T8=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'notes': 'Included in Chrome since M-60',
+                                'operated_by': ['Symantec'],
+                                'url': 'sirius.ws.symantec.com/'},
+                               {'chrome_state': 'included',
+                                'contact': 'DL-ENG-Symantec-VEGA-CT-Log@symantec.com',
+                                'description': None,
+                                'id_b64_non_calculated': 'vHjh38X2PGhGSTNNoQ+hXwl5aSAJwIG08/aRfz7ZuKU=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'operated_by': ['Symantec'],
+                                'url': 'vega.ws.symantec.com/'}],
+        'other_logs': [{'chrome_state': None,
+                        'contact': 'google-ct-logs@googlegroups.com',
+                        'description': None,
+                        'id_b64_non_calculated': 'HQJLjrFJizRN/YfqPvwJlvdQbyNdHUlwYaR3PEOcJfs=',
+                        'key': None,
+                        'maximum_merge_delay': None,
+                        'notes': 'Note that this log is not trusted by Chrome. It '
+                                 'only logs certificates that have expired. See the '
+                                 'announcement post.',
+                        'operated_by': ['Google'],
+                        'url': 'ct.googleapis.com/daedalus/'},
+                       {'chrome_state': None,
+                        'contact': 'google-ct-logs@googlegroups.com',
+                        'description': None,
+                        'id_b64_non_calculated': 'qJnYeAySkKr0YvMYgMz71SRR6XDQ+/WR73Ww2ZtkVoE=',
+                        'key': None,
+                        'maximum_merge_delay': None,
+                        'notes': 'Note that this log is not trusted by Chrome. It '
+                                 'only logs certificates that chain to roots that are '
+                                 'on track for inclusion in browser roots or were '
+                                 'trusted at some previous point. See the '
+                                 'announcement blog post.',
+                        'operated_by': ['Google'],
+                        'url': 'ct.googleapis.com/submariner/'},
+                       {'chrome_state': None,
+                        'contact': 'google-ct-logs@googlegroups.com',
+                        'description': None,
+                        'id_b64_non_calculated': 'sMyD5aX5fWuvfAnMKEkEhyrH6IsTLGNQt8b9JuFsbHc=',
+                        'key': None,
+                        'maximum_merge_delay': None,
+                        'notes': 'Note that this log is intended for testing purposes '
+                                 'only and will only log certificates that chain to a '
+                                 'root explicitly added to it. To add a test root to '
+                                 'Testtube, please email '
+                                 'google-ct-logs@googlegroups.com A test root for '
+                                 'Testtube should: * have a certificate "Subject" '
+                                 'field that: * includes the word "Test" (to reduce '
+                                 'the chances of real certificates being mixed up '
+                                 'with test certificates. * identifies the '
+                                 'organization that the test root is for (to allow '
+                                 'easy classification of test traffic). * not allow '
+                                 'real certificates to chain to it, either because: * '
+                                 'it is a self-signed root CA certificate identified '
+                                 'as a test certificate (as above). * it is an '
+                                 'intermediate CA certificate that chains to a root '
+                                 'certificate that is also identified as a test '
+                                 'certificate. * be a CA certificate, by: * having '
+                                 'CA:TRUE in the Basic Constraints extension. * '
+                                 "include the 'Certificate Sign' bit in the Key Usage "
+                                 'extension. Note that for historical reasons '
+                                 'Testtube includes some test roots that do not '
+                                 'comply with all of the above requirements.',
+                        'operated_by': ['Google'],
+                        'url': 'ct.googleapis.com/testtube/'},
+                       {'chrome_state': None,
+                        'contact': 'roland@letsencrypt.org',
+                        'description': None,
+                        'id_b64_non_calculated': 'KWr6LVaLyg0uqESVaulyH8Nfo1Xs2plpOq/UWKca790=',
+                        'key': None,
+                        'maximum_merge_delay': None,
+                        'operated_by': ["Let's Encrypt"],
+                        'url': 'clicky.ct.letsencrypt.org/'},
+                       {'chrome_state': None,
+                        'contact': 'filippo@cloudflare.com',
+                        'description': None,
+                        'id_b64_non_calculated': 'sLeEvIHA3cR1ROiD8FmFu5B30TTYq4iysuUzmAuOUIs=',
+                        'key': None,
+                        'maximum_merge_delay': None,
+                        'operated_by': ['Up In The Air Consulting'],
+                        'url': 'ct.filippo.io/behindthesofa/'},
+                       {'chrome_state': None,
+                        'description': None,
+                        'id_b64_non_calculated': 'p85KTmIH4K3e5f2qSx+GdodntdACpV1HMQ5+ZwqV6rI=',
+                        'key': None,
+                        'maximum_merge_delay': None,
+                        'notes': 'Contact:',
+                        'operated_by': ['Symantec'],
+                        'url': 'deneb.ws.symantec.com/'},
+                       {'chrome_state': None,
+                        'contact': 'rob.stradling@comodo.com',
+                        'description': None,
+                        'id_b64_non_calculated': '23b9raxl59CVCIhuIVm9i5A1L1/q0+PcXiLrNQrMe5g=',
+                        'key': None,
+                        'maximum_merge_delay': None,
+                        'operated_by': ['Comodo'],
+                        'url': 'dodo.ct.comodo.com/'},
+                       {'chrome_state': None,
+                        'contact': 'linus@nordu.net',
+                        'description': None,
+                        'id_b64_non_calculated': 'U3tpo1ZDNanASQTjlZOywpjrjXpugwI2NcYnJIzWtEA=',
+                        'key': None,
+                        'maximum_merge_delay': None,
+                        'operated_by': ['NORDUnet'],
+                        'url': 'flimsy.ct.nordu.net:8080/'},
+                       {'chrome_state': None,
+                        'contact': 'linus@nordu.net',
+                        'description': None,
+                        'id_b64_non_calculated': 'qucLfzy41WbIbC8Wl5yfRF9pqw60U1WJsvd6AwEE880=',
+                        'key': None,
+                        'maximum_merge_delay': None,
+                        'notes': '--- Comments',
+                        'operated_by': ['NORDUnet'],
+                        'url': 'plausible.ct.nordu.net/'}],
+        'pending_inclusion_in_chrome': [{'certificate_expiry_range': '[2017-01-01 '
+                                                                     '00:00:00 UTC, '
+                                                                     '2018-01-01 '
+                                                                     '00:00:00 UTC)',
+                                         'chrome_bug': 'https://crbug.com/756813',
+                                         'chrome_state': 'pending for inclusion',
+                                         'contact': 'google-ct-logs@googlegroups.com',
+                                         'description': None,
+                                         'id_b64_non_calculated': '+tTJfMSe4vishcXqXOoJ0CINu/TknGtQZi/4aPhrjCg=',
+                                         'key': None,
+                                         'maximum_merge_delay': None,
+                                         'operated_by': ['Google'],
+                                         'url': 'ct.googleapis.com/logs/argon2017/'},
+                                        {'certificate_expiry_range': '[2018-01-01 '
+                                                                     '00:00:00 UTC, '
+                                                                     '2019-01-01 '
+                                                                     '00:00:00 UTC)',
+                                         'chrome_bug': 'https://crbug.com/756814',
+                                         'chrome_state': 'pending for inclusion',
+                                         'contact': 'google-ct-logs@googlegroups.com',
+                                         'description': None,
+                                         'id_b64_non_calculated': 'pFASaQVaFVReYhGrN7wQP2KuVXakXksXFEU+GyIQaiU=',
+                                         'key': None,
+                                         'maximum_merge_delay': None,
+                                         'operated_by': ['Google'],
+                                         'url': 'ct.googleapis.com/logs/argon2018/'},
+                                        {'certificate_expiry_range': '[2019-01-01 '
+                                                                     '00:00:00 UTC, '
+                                                                     '2020-01-01 '
+                                                                     '00:00:00 UTC)',
+                                         'chrome_bug': 'https://crbug.com/756817',
+                                         'chrome_state': 'pending for inclusion',
+                                         'contact': 'google-ct-logs@googlegroups.com',
+                                         'description': None,
+                                         'id_b64_non_calculated': 'Y/Lbzeg7zCzPC3KEJ1drM6SNYXePvXWmOLHHaFRL2I0=',
+                                         'key': None,
+                                         'maximum_merge_delay': None,
+                                         'operated_by': ['Google'],
+                                         'url': 'ct.googleapis.com/logs/argon2019/'},
+                                        {'certificate_expiry_range': '[2020-01-01 '
+                                                                     '00:00:00 UTC, '
+                                                                     '2021-01-01 '
+                                                                     '00:00:00 UTC)',
+                                         'chrome_bug': 'https://crbug.com/756818',
+                                         'chrome_state': 'pending for inclusion',
+                                         'contact': 'google-ct-logs@googlegroups.com',
+                                         'description': None,
+                                         'id_b64_non_calculated': 'sh4FzIuizYogTodm+Su5iiUgZ2va+nDnsklTLe+LkF4=',
+                                         'key': None,
+                                         'maximum_merge_delay': None,
+                                         'operated_by': ['Google'],
+                                         'url': 'ct.googleapis.com/logs/argon2020/'},
+                                        {'certificate_expiry_range': '[2021-01-01 '
+                                                                     '00:00:00 UTC, '
+                                                                     '2022-01-01 '
+                                                                     '00:00:00 UTC)',
+                                         'chrome_bug': 'https://crbug.com/756819',
+                                         'chrome_state': 'pending for inclusion',
+                                         'contact': 'google-ct-logs@googlegroups.com',
+                                         'description': None,
+                                         'id_b64_non_calculated': '9lyUL9F3MCIUVBgIMJRWjuNNExkzv98MLyALzE7xZOM=',
+                                         'key': None,
+                                         'maximum_merge_delay': None,
+                                         'operated_by': ['Google'],
+                                         'url': 'ct.googleapis.com/logs/argon2021/'},
+                                        {'chrome_bug': 'http://crbug.com/712069',
+                                         'chrome_state': 'pending for inclusion',
+                                         'contact': 'CTLS@sheca.com',
+                                         'description': None,
+                                         'id_b64_non_calculated': 'MtxZwtTEGWjVbhS8YayPDkXbOfrzwVWqQlL1AB+gxiM=',
+                                         'key': None,
+                                         'maximum_merge_delay': None,
+                                         'operated_by': ['SHECA'],
+                                         'url': 'ct.sheca.com/'},
+                                        {'chrome_state': 'pending for inclusion',
+                                         'contact': 'ctlog@wosign.com',
+                                         'description': None,
+                                         'id_b64_non_calculated': 'Y9AAYCbd4QuwYB9FJEaWXuK26izU+8layGalUK+Qdbc=',
+                                         'key': None,
+                                         'maximum_merge_delay': None,
+                                         'operated_by': ['WoSign'],
+                                         'url': 'ctlog2.wosign.com/'}],
+        'rejected_by_chrome': [{'chrome_bug': 'http://crbug.com/403190',
+                                'chrome_state': 'rejected',
+                                'contact': 'ops@ctlogs.org',
+                                'description': None,
+                                'id_b64_non_calculated': 'OTdvVF97Rgf1l0LXaM1dJDe/NHO2U0pINLz3Lmgcg8k=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'operated_by': ['Matt Palmer'],
+                                'url': 'alpha.ctlogs.org/'},
+                               {'chrome_bug': 'http://crbug.com/447603',
+                                'chrome_state': 'rejected',
+                                'contact': 'ct-help@akamai.com',
+                                'description': None,
+                                'id_b64_non_calculated': 'lgbALGkAM6odFF9ZxuJkjQVJ8N+WqrjbkVpw2OzzkKU=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'operated_by': ['Akamai'],
+                                'url': 'ct.akamai.com/'},
+                               {'chrome_bug': 'https://crbug.com/598526',
+                                'chrome_state': 'rejected',
+                                'contact': 'capoc@gdca.com.cn',
+                                'description': None,
+                                'id_b64_non_calculated': 'yc+JCiEQnGZswXo+0GXJMNDgE1qf66ha8UIQuAckIao=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'operated_by': ['Wang Shengnan'],
+                                'url': 'ct.gdca.com.cn/'},
+                               {'chrome_bug': 'https://crbug.com/614323',
+                                'chrome_state': 'rejected',
+                                'contact': 'atecnica@izenpe.eus',
+                                'description': None,
+                                'id_b64_non_calculated': 'iUFEnHB0Lga5/JznsRa6ACSqNtWa9E8CBEBPAPfqhWY=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'operated_by': ['Izenpe'],
+                                'url': 'ct.izenpe.eus/'},
+                               {'chrome_bug': 'https://crbug.com/534745',
+                                'chrome_state': 'rejected',
+                                'contact': 'ctlog@wosign.com',
+                                'description': None,
+                                'id_b64_non_calculated': 'nk/3PcPOIgtpIXyJnkaAdqv414Y21cz8haMadWKLqIs=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'operated_by': ['WoSign'],
+                                'url': 'ct.wosign.com/'},
+                               {'chrome_bug': 'https://crbug.com/654306',
+                                'chrome_state': 'rejected',
+                                'contact': 'capoc@gdca.com.cn',
+                                'description': None,
+                                'id_b64_non_calculated': 'kkow+Qkzb/Q11pk6EKx1osZBco5/wtZZrmGI/61AzgE=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'operated_by': ['GDCA'],
+                                'url': 'ctlog.gdca.com.cn/'},
+                               {'chrome_state': 'rejected',
+                                'contact': 'CTLS@sheca.com',
+                                'description': None,
+                                'id_b64_non_calculated': 'z1XiiSNJfDQNUgbQU1Ouslg0tS8fjclSaAnyEu/dfKY=',
+                                'key': None,
+                                'maximum_merge_delay': None,
+                                'operated_by': ['SHECA'],
+                                'url': 'ctlog.sheca.com/'}]}
+
     got = ctlog._logs_dict_from_html(html=input)
+    # from pprint import pprint; pprint(got, indent=1, width=80)
     assert got == expected_logs_dict

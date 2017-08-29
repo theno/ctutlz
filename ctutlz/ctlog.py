@@ -14,23 +14,18 @@ from utlz.types import Enum
 
 from ctutlz.utils.encoding import decode_from_b64, encode_to_b64
 from ctutlz.utils.encoding import digest_from_b64
+from ctutlz.utils.logger import logger
 
 
-# a subset of this states is 'compliant with chrome ct policy': INCLUDED, FROZEN
+# states 'compliant with chrome ct policy'
 ChromeStates = Enum(INCLUDED='included',
                     FROZEN='frozen',
 
                     PENDING='pending for inclusion',
 
-                    DISQUALIFIED='included, but then disqualified',
-
-                    NOT_QUALIFIED='applied for inclusion but did not qualify',
-                    NOT_INCLUDED='not included')
-
-Functions = Enum(ACTIVE='active',
-                 FROZEN='frozen',
-                 SPECIAL_PURPOSE='special purpose',
-                 CEASED='ceased operation')
+                    DISQUALIFIED='disqualified',
+                    REJECTED='rejected',
+                    DISTRUSTED='distrusted')
 
 Log = namedtuple(
     typename='Log',
@@ -41,22 +36,20 @@ Log = namedtuple(
         'maximum_merge_delay',
         'operated_by',
 
+        # optional infos from *.json
         'final_sth=None',
         'disqualified_at=None',
         'dns_api_endpoint=None',
 
-        'started=None',
-        'submitted_for_inclusion_in_chrome=None',
+        # optional infos from webpage 'known logs'
         'contact=None',
-        'https_supported=None',
-        'chrome_inclusion_status=None',
+        'chrome_bug=None',
         'notes=None',
         'id_b64_non_calculated=None',
+        'certificate_expiry_range=None',
 
         # ChromeStates attribute or None
-        'chrome_status=None',
-        # Functions attribute or None
-        'function=None',  # included, pending for inclusion, testing, ...
+        'chrome_state=None',
 
         # TODO add real checks; interact with logs (-> ctlog.py):
 
@@ -74,11 +67,11 @@ Log = namedtuple(
                                           text_with_newlines(text=self.key,
                                                              line_length=64),
                                           '-----END PUBLIC KEY-----']),
-        'compliant_to_chrome_ct_policy':
+        'scts_accepted_by_chrome':
             lambda self:
-                None if self.chrome_status is None else
-                True if self.chrome_status in [ChromeStates.INCLUDED,
-                                               ChromeStates.FROZEN] else
+                None if self.chrome_state is None else
+                True if self.chrome_state in [ChromeStates.INCLUDED,
+                                              ChromeStates.FROZEN] else
                 False,
     }
 )
@@ -346,26 +339,24 @@ def _log_dict_from_log_text(log_text):
         'key': None,
     }
     '''
-    res = re.match(r'''(?P<url>[^ \n]+)              # log url
-                       (?P<ignore>\s[-]\s)?          # optional ' - ' (ignore)
-                       (?P<notes_head>[^\n]*\n?)     # notes headline
-                       (?P<notes_text>(:?[^:]+\n)*)  # notes text
-                       (?P<rest>(:?.*[\n$])*)''',
+    res = re.match(r'''(?P<log_url>[^ \n]+)
+                       (?P<key_vals>(:?[^:]+:.+[\n$])*)
+                       (?P<notes>(.*[\n$])*)''',
                    log_text,
                    flags=re.M | re.X)
     res_dict = res.groupdict()
+
     log_dict = {
-        # normalize: assure trailing '/'
-        'url': res_dict['url'].rstrip('/') + '/',
+        # normalize: assure url ends with a '/'
+        'url': res_dict['log_url'].rstrip('/') + '/',
     }
-    notes_head = res_dict.get('notes_head', '').strip()
-    if notes_head:
-        notes_text = res_dict.get('notes_text', '').strip()
-        notes = ' '.join([notes_head, notes_text])
-        notes = re.sub(r'\s+', ' ', notes)
+
+    notes = res_dict.get('notes', '').strip()
+    if notes:
+        notes = re.sub(r'\s+', ' ', notes)  # just a oneliner, no formattings
         log_dict['notes'] = notes
 
-    key_vals = res_dict.get('rest', '')
+    key_vals = res_dict.get('key_vals', '')
     for line in key_vals.split('\n'):
         if ':' in line:
             key, val = line.split(':', 1)
@@ -383,23 +374,6 @@ def _log_dict_from_log_text(log_text):
                 key = 'operated_by'
                 val = [val]
             log_dict[key] = val
-
-    cis = log_dict.get('chrome_inclusion_status', False)
-    if cis:
-        # disqualified-case must be before included-case
-        if 'disqualified' in cis.lower():
-            log_dict['chrome_status'] = ChromeStates.DISQUALIFIED
-        elif cis.lower().startswith('included'):
-            log_dict['chrome_status'] = ChromeStates.INCLUDED
-        elif cis.lower().startswith('pending'):
-            log_dict['chrome_status'] = ChromeStates.PENDING
-        elif cis.lower().startswith('Applied for inclusion but did '
-                                    'not qualify'):
-            log_dict['chrome_status'] = ChromeStates.NOT_QUALIFIED
-        elif cis.lower().startswith('frozen'):
-            log_dict['chrome_status'] = ChromeStates.FROZEN
-        elif cis.lower().startswith('not included'):
-            log_dict['chrome_status'] = ChromeStates.NOT_INCLUDED
 
     for key in 'description', 'key', 'maximum_merge_delay':
         # set to default `None` if they not exist
@@ -425,14 +399,14 @@ def _logs_dict_from_html(html):
     try:
         # remove erroneous ####-headers
         text = re.sub(r'####\s*$', '', text, flags=re.M)
-        text = re.sub(r'####\s+(?=.*:)', '', text, flags=re.M)
+        text = re.sub(r'####\s+(?=.*: )', '', text, flags=re.M)
         # remove backticks (from surrounding log ids)
         text = re.sub(r'`', '', text, flags=re.M)
     except Exception:  # InvocationError:
         # Python-2.6
         # remove erroneous ####-headers
         text = re.sub(r'####\s*$', '', text)
-        text = re.sub(r'####\s+(?=.*:)', '', text)
+        text = re.sub(r'####\s+(?=.*: )', '', text)
         # remove backticks (from surrounding log ids)
         # (does not work at Python-2.6: text = re.sub(r'`', '', text, re.M) )
         text = text.replace('`', '')
@@ -442,6 +416,8 @@ def _logs_dict_from_html(html):
     # remove trailing spaces
     text = '\n'.join([line.rstrip() for line in text.split('\n')])
 
+    logger.debug(text)
+
     # keep only text blocks with log lists, drop first and second section
     log_blocks = text.split('\n### ', -1)[2:]
 
@@ -449,23 +425,34 @@ def _logs_dict_from_html(html):
     for text_block in log_blocks:
         # eg. (' Active Logs', ' \n\n#### ct.googleapis.com/pilot\n...')
         name, rest = text_block.split('\n\n', 1)
-        # eg. log_list_name = 'active_logs'
-        log_list_name = name.strip().lower().replace(' ', '_')
-        logs_dict[log_list_name] = []
+        # title of the log block,  eg. title = 'included in chrome'
+        title = name.strip().lower().replace(' ', '_')
+
+        chrome_state = None
+        if title.startswith('included'):
+            chrome_state = ChromeStates.INCLUDED
+        elif title.startswith('frozen'):
+            chrome_state = ChromeStates.FROZEN
+        elif title.startswith('pending'):
+            chrome_state = ChromeStates.PENDING
+        elif title.startswith('disqualified'):
+            chrome_state = ChromeStates.DISQUALIFIED
+        elif title.startswith('rejected'):
+            chrome_state = ChromeStates.REJECTED
+        elif 'distrusted' in title:
+            chrome_state = ChromeStates.DISTRUSTED
+        elif title.startswith('other'):
+            chrome_state = None
+        else:
+            raise Exception('unknown chrome_state for log-text_block')
+
+        logs_dict[title] = []
         for log_text in rest.strip().lstrip('#### ').split('\n\n#### '):
             if log_text.strip() != '':
                 log_dict = _log_dict_from_log_text(log_text)
+                log_dict['chrome_state'] = chrome_state
 
-                if log_list_name == 'active_logs':
-                    log_dict['function'] = Functions.ACTIVE
-                elif log_list_name == 'frozen_logs':
-                    log_dict['function'] = Functions.FROZEN
-                elif log_list_name == 'special_purpose_logs':
-                    log_dict['function'] = Functions.SPECIAL_PURPOSE
-                elif log_list_name == 'logs_that_ceased_operation':
-                    log_dict['function'] = Functions.CEASED
-
-                logs_dict[log_list_name].append(log_dict)
+                logs_dict[title].append(log_dict)
 
     return logs_dict
 

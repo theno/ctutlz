@@ -130,8 +130,12 @@ https://www.certificate-transparency.org/known-logs 2. log_list.json 3.
 all_logs_list.json. This three log lists will be merged into one list in the
 future.
 ```
-Discussion:
+Discussion:  
 https://groups.google.com/forum/?fromgroups#!topic/certificate-transparency/zBv7EK0522w
+
+Created with `ctloglist`:
+* [really_all_logs.md](https://github.com/theno/ctutlz/blob/master/ctutlz/really_all_logs.md)
+* [really_all_logs.json](https://github.com/theno/ctutlz/blob/master/ctutlz/really_all_logs.json)
 
 Examples:
 
@@ -308,8 +312,9 @@ Run tool `verify-scts` from source:
 PYTHONPATH='.' .tox/py36/bin/python  ctutlz/scripts/verify_scts -h
 ```
 
-### Update `really_all_logs.json`
+### Update really_all_logs
 
 ```
+.tox/py36/bin/ctloglist > ctutlz/really_all_logs.md
 .tox/py36/bin/ctloglist --json > ctutlz/really_all_logs.json
 ```
