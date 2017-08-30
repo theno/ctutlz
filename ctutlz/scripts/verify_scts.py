@@ -202,7 +202,7 @@ def show_verification(verification):
     else:
         logger.info(flo('Log found : {log.description}'))
         logger.verbose('Operator  : ' + ', '.join(log.operated_by))
-        logger.info(flo('Chrome    : {log.chrome_status}'))
+        logger.info(flo('Chrome    : {log.chrome_state}'))
 
     if verification.verified:
         logger.info(flo('Result    : Verified OK'))

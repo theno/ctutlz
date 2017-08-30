@@ -96,48 +96,19 @@ def Logs(log_dicts):
             'started': ...,
             'submitted_for_inclusion_in_chrome': ...,
             'contact': ...,
-            'https_supported': ...,
-            'chrome_inclusion_status': ...,
+            'chrome_bug'. ...,
             'notes': ...,
             'id_b64_non_calculated': ...,
-        }
-    ],
+
+            'chrome_state', CHROME_STATE.<enum>
+        },
     ]
     '''
     for log in log_dicts:
         log.pop('id_b64', None)
         log.pop('pubkey', None)
-        log.pop('compliant_to_chrome_ct_policy', None)
+        log.pop('scts_accepted_by_chrome', None)
     return [Log(**kwargs) for kwargs in log_dicts]
-
-
-def amend_by_chrome_inclusion_status(logs_dict):
-    '''Amend (mutable) each log of dict `logs_dict` by its inclusion status.
-
-    logs_dict example: {
-      'logs: [
-        {
-          "description": "Google 'Aviator' log",
-          "key": "MFkwE..."
-          "url": "ct.googleapis.com/aviator/",
-          "maximum_merge_delay": 86400,
-          "operated_by": [0],
-          "final_sth": {
-            ...
-          },
-          "dns_api_endpoint": ...
-        },
-      ],
-      'operators': [
-        ...
-      ]
-    }
-    '''
-    for log in logs_dict['logs']:
-        if 'final_sth' in log.keys():
-            log['chrome_inclusion_status'] = 'Frozen'
-        else:
-            log['chrome_inclusion_status'] = 'Included'
 
 
 def set_operator_names(logs_dict):

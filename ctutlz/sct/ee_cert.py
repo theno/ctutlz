@@ -101,19 +101,24 @@ def is_ev_cert(ee_cert):
     Args:
         ee_cert (EndEntityCert)
     '''
-    oid_certificate_policies = ObjectIdentifier('2.5.29.32')
-    policy_extension = [ext
-                        for ext
-                        in ee_cert.tbscert.pyasn1['extensions']
-                        if ext['extnID'] == oid_certificate_policies][0]
-    sequence_der = policy_extension['extnValue']  # type: Sequence()
-    sequence, _ = der_decoder(sequence_der, Sequence())
-
     oids = []
-    for idx in range(len(sequence)):
-        inner_sequence = sequence.getComponentByPosition(idx)
-        oid = inner_sequence.getComponentByPosition(0)
-        oids.append(str(oid))
+    oid_certificate_policies = ObjectIdentifier('2.5.29.32')
+
+    all_extensions = ee_cert.tbscert.pyasn1['extensions']
+    if all_extensions is not None:
+        policy_extensions = [ext
+                             for ext
+                             in all_extensions
+                             if ext['extnID'] == oid_certificate_policies]
+        if len(policy_extensions) > 0:
+            policy_extension = policy_extensions[0]
+            sequence_der = policy_extension['extnValue']  # type: Sequence()
+            sequence, _ = der_decoder(sequence_der, Sequence())
+
+            for idx in range(len(sequence)):
+                inner_sequence = sequence.getComponentByPosition(idx)
+                oid = inner_sequence.getComponentByPosition(0)
+                oids.append(str(oid))
 
     intersection = list(set(oids) & set(EV_OIDs))
     return intersection != []
