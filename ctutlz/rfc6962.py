@@ -355,7 +355,7 @@ def _parse_signed_certificate_timestamp(tdf):
         signature_len = parser.read('signature_len', '!H')
         parser.read('signature', flo('!{signature_len}s'))
 
-    return parser.result()
+        return parser.result()
 
 
 SignedCertificateTimestamp = namedtuple(
@@ -389,6 +389,8 @@ SignedCertificateTimestamp = namedtuple(
         'signature_alg_sign_hex': lambda self:
             to_hex(self.signature_algorithm_sign),
         'signature_b64': lambda self: encode_to_b64(self.signature),  # str
+
+        'b64': lambda self: encode_to_b64(self.tdf)  # str
     }
 )
 
