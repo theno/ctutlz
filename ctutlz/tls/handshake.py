@@ -247,7 +247,8 @@ def do_handshake(domain, scts_tls=True, scts_ocsp=True, timeout=5):
         ee_cert_x509 = sock.get_peer_certificate()
         # type: [OpenSSL.crypto.X509, ...]
         chain_x509s = sock.get_peer_cert_chain()
-        issuer_cert_x509 = chain_x509s[1]
+        if len(chain_x509s) > 1:
+            issuer_cert_x509 = chain_x509s[1]
 
         ctx = sock.get_context()
         if scts_tls:
