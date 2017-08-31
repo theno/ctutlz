@@ -116,7 +116,7 @@ def merge_logs(log_a, log_b):
 
 
 def merge_log_list_r(list_a, list_b, merged_logs=[], unmerged_a=[]):
-    '''Merge two log lists `list_a`, `list_b` merged by log url.'''
+    '''Merge two log lists `list_a` and `list_b` merged by log url.'''
     if len(list_a) == 0:
         unmerged_b = list_b
         return (merged_logs, unmerged_a, unmerged_b)
@@ -283,6 +283,10 @@ def merge_log_lists(included_from_webpage,
         logger.warn(red(flo(
             'chrome frozen log not listet in log_list.json: {log.url}')))
 
+    ll_rest, all_rest = \
+        merge_enrich_a_with_b(ll_rest, all_rest)
+    rest = ll_rest + all_rest
+
     # warn for logs only listed on webpage
 
     _, webpage_rest, _ = merge_log_list_r(all_from_webpage, log_list_logs)
@@ -302,11 +306,6 @@ def merge_log_lists(included_from_webpage,
          'logs': ll_rejected},
         {'heading': 'distrusted logs (log_list.json, webpage)',
          'logs': ll_distrusted},
-        {'heading': 'logs with INVALID STATE (log_list.json, webpage)',
-         'logs': ll_other},
-
-        {'heading': 'UNLISTED ON WEBPAGE (log_list.json)',
-         'logs': ll_rest},
 
         {'heading': 'included logs NOT IN log_list.json '
                     '(webpage, all_logs.json)',
@@ -322,8 +321,8 @@ def merge_log_lists(included_from_webpage,
         {'heading': 'other logs (webpage, all_logs.json)',
          'logs': nn_other},
 
-        {'heading': 'UNLISTED ON WEBPAGE (all_logs.json)',
-         'logs': all_rest},
+        {'heading': 'UNLISTED ON WEBPAGE (log_list.json or all_logs.json)',
+         'logs': rest},
     ]
 
 
@@ -453,6 +452,7 @@ def ctloglist(print_json=None):
     log_lists = merge_log_lists(**locals())
 
     if print_json:
+
         data = {
             'operators': all_dict['operators'],
             'logs': list_from_lists(log_lists)
