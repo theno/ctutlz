@@ -7,9 +7,9 @@ Merged log lists:
 * [log_list.json](https://www.gstatic.com/ct/log_list/log_list.json)
 * [all_logs_list.json](https://www.gstatic.com/ct/log_list/all_logs_list.json)
 
-Version (Date): 2017-08-29
+Version (Date): 2017-08-31
 
-Datetime: 2017-08-29 23:31:42.743320
+Datetime: 2017-08-31 18:27:29.903078
 
 
 ## included logs (log_list.json, webpage)
@@ -380,79 +380,6 @@ QGlo/EmtYU6DRzwat43f/3swtLr/L8ugFOOt1YU/RFmMjGCL17ixv66MZw==
 -----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE1/TMabLkDpCjiupacAlP7xNi0I1J
 YP8bQFAHDG1xhtolSY1l4QgNRzRrvSe8liE+NPWHdjGxfx3JhTsN9x8/6Q==
------END PUBLIC KEY-----
-```
-
-## UNLISTED ON WEBPAGE (log_list.json)
-
-3 logs
-
-* [log.certly.io/](#log.certly.io)
-* [ct.izenpe.com/](#ct.izenpe.com)
-* [ctlog.api.venafi.com/](#ctlog.api.venafi.com)
-
-### log.certly.io/
-
-* __description__: `Certly.IO log`
-* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAECyPLhWKYYUgEc+tUXfPQB4wtGS2MNvXrjwFCCnyYJifBtd2Sk7Cu+Js9DNhMTh35FftHaHu6ZrclnNBKwmbbSA==`
-* __url__: `log.certly.io/`
-* __maximum merge delay__: `86400`
-* __operated by__: `Certly`
-* __disqualified at__: `1460678400`
-* __dns api endpoint__: `certly.ct.googleapis.com`
-* __chrome state__: `disqualified`
-* __scts accepted by chrome__: False
-* __id b64__: `zbUXm3/BwEb+6jETaj+PAC5hgvr4iW/syLL1tatgSQA=`
-* __pubkey__:
-```
------BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAECyPLhWKYYUgEc+tUXfPQB4wtGS2M
-NvXrjwFCCnyYJifBtd2Sk7Cu+Js9DNhMTh35FftHaHu6ZrclnNBKwmbbSA==
------END PUBLIC KEY-----
-```
-
-### ct.izenpe.com/
-
-* __description__: `Izenpe log`
-* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJ2Q5DC3cUBj4IQCiDu0s6j51up+TZAkAEcQRF6tczw90rLWXkJMAW7jr9yc92bIKgV8vDXU4lDeZHvYHduDuvg==`
-* __url__: `ct.izenpe.com/`
-* __maximum merge delay__: `86400`
-* __operated by__: `Izenpe`
-* __disqualified at__: `1464566400`
-* __dns api endpoint__: `izenpe1.ct.googleapis.com`
-* __chrome state__: `disqualified`
-* __scts accepted by chrome__: False
-* __id b64__: `dGG0oJz7PUHXUVlXWy52SaRFqNJ3CbDMVkpkgrfrQaM=`
-* __pubkey__:
-```
------BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJ2Q5DC3cUBj4IQCiDu0s6j51up+T
-ZAkAEcQRF6tczw90rLWXkJMAW7jr9yc92bIKgV8vDXU4lDeZHvYHduDuvg==
------END PUBLIC KEY-----
-```
-
-### ctlog.api.venafi.com/
-
-* __description__: `Venafi log`
-* __key__: `MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAolpIHxdSlTXLo1s6H1OCdpSj/4DyHDc8wLG9wVmLqy1lk9fz4ATVmm+/1iN2Nk8jmctUKK2MFUtlWXZBSpym97M7frGlSaQXUWyA3CqQUEuIJOmlEjKTBEiQAvpfDjCHjlV2Be4qTM6jamkJbiWtgnYPhJL6ONaGTiSPm7Byy57iaz/hbckldSOIoRhYBiMzeNoA0DiRZ9KmfSeXZ1rB8y8X5urSW+iBzf2SaOfzBvDpcoTuAaWx2DPazoOl28fP1hZ+kHUYvxbcMjttjauCFx+JII0dmuZNIwjfeG/GBb9frpSX219k1O4Wi6OEbHEr8at/XQ0y7gTikOxBn/s5wQIDAQAB`
-* __url__: `ctlog.api.venafi.com/`
-* __maximum merge delay__: `86400`
-* __operated by__: `Venafi`
-* __disqualified at__: `1488307346`
-* __dns api endpoint__: `venafi.ct.googleapis.com`
-* __chrome state__: `disqualified`
-* __scts accepted by chrome__: False
-* __id b64__: `rDua7X+pZ0dXFZ5tfVdWcvnZgQCUHpve/+yhMTt1eC0=`
-* __pubkey__:
-```
------BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAolpIHxdSlTXLo1s6H1OC
-dpSj/4DyHDc8wLG9wVmLqy1lk9fz4ATVmm+/1iN2Nk8jmctUKK2MFUtlWXZBSpym
-97M7frGlSaQXUWyA3CqQUEuIJOmlEjKTBEiQAvpfDjCHjlV2Be4qTM6jamkJbiWt
-gnYPhJL6ONaGTiSPm7Byy57iaz/hbckldSOIoRhYBiMzeNoA0DiRZ9KmfSeXZ1rB
-8y8X5urSW+iBzf2SaOfzBvDpcoTuAaWx2DPazoOl28fP1hZ+kHUYvxbcMjttjauC
-Fx+JII0dmuZNIwjfeG/GBb9frpSX219k1O4Wi6OEbHEr8at/XQ0y7gTikOxBn/s5
-wQIDAQAB
 -----END PUBLIC KEY-----
 ```
 
@@ -975,7 +902,7 @@ HpWlLadMSkmOi4+3+MziW5dy1eo/sSFI6ERrf+rvIv/f9F87bXcEsa+Qjw==
 -----END PUBLIC KEY-----
 ```
 
-## UNLISTED ON WEBPAGE (all_logs.json)
+## UNLISTED ON WEBPAGE (log_list.json or all_logs.json)
 
 3 logs
 
@@ -990,7 +917,10 @@ HpWlLadMSkmOi4+3+MziW5dy1eo/sSFI6ERrf+rvIv/f9F87bXcEsa+Qjw==
 * __url__: `log.certly.io/`
 * __maximum merge delay__: `86400`
 * __operated by__: `Certly`
-* __scts accepted by chrome__: None
+* __disqualified at__: `1460678400`
+* __dns api endpoint__: `certly.ct.googleapis.com`
+* __chrome state__: `disqualified`
+* __scts accepted by chrome__: False
 * __id b64__: `zbUXm3/BwEb+6jETaj+PAC5hgvr4iW/syLL1tatgSQA=`
 * __pubkey__:
 ```
@@ -1007,7 +937,10 @@ NvXrjwFCCnyYJifBtd2Sk7Cu+Js9DNhMTh35FftHaHu6ZrclnNBKwmbbSA==
 * __url__: `ct.izenpe.com/`
 * __maximum merge delay__: `86400`
 * __operated by__: `Izenpe`
-* __scts accepted by chrome__: None
+* __disqualified at__: `1464566400`
+* __dns api endpoint__: `izenpe1.ct.googleapis.com`
+* __chrome state__: `disqualified`
+* __scts accepted by chrome__: False
 * __id b64__: `dGG0oJz7PUHXUVlXWy52SaRFqNJ3CbDMVkpkgrfrQaM=`
 * __pubkey__:
 ```
@@ -1024,7 +957,10 @@ ZAkAEcQRF6tczw90rLWXkJMAW7jr9yc92bIKgV8vDXU4lDeZHvYHduDuvg==
 * __url__: `ctlog.api.venafi.com/`
 * __maximum merge delay__: `86400`
 * __operated by__: `Venafi`
-* __scts accepted by chrome__: None
+* __disqualified at__: `1488307346`
+* __dns api endpoint__: `venafi.ct.googleapis.com`
+* __chrome state__: `disqualified`
+* __scts accepted by chrome__: False
 * __id b64__: `rDua7X+pZ0dXFZ5tfVdWcvnZgQCUHpve/+yhMTt1eC0=`
 * __pubkey__:
 ```
