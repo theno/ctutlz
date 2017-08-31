@@ -1,6 +1,7 @@
 import struct
 
 import OpenSSL
+import pyasn1.error
 from pyasn1_modules import rfc5280
 from pyasn1.type.univ import ObjectIdentifier, Sequence
 from pyasn1.codec.der.encoder import encode as der_encoder
@@ -113,7 +114,10 @@ def is_ev_cert(ee_cert):
         if len(policy_extensions) > 0:
             policy_extension = policy_extensions[0]
             sequence_der = policy_extension['extnValue']  # type: Sequence()
-            sequence, _ = der_decoder(sequence_der, Sequence())
+            try:
+                sequence, _ = der_decoder(sequence_der, Sequence())
+            except pyasn1.error.PyAsn1Error:
+                sequence = []  # invalid encoded certificate policy extension
 
             for idx in range(len(sequence)):
                 inner_sequence = sequence.getComponentByPosition(idx)
