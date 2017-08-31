@@ -168,6 +168,7 @@ def merge_overwrite_a_with_b(log_list_a, log_list_b):
 def merge_log_lists(included_from_webpage,
                     frozen_from_webpage,
                     pending_from_webpage,
+                    disqualified_from_webpage,
                     rejected_from_webpage,
                     distrusted_from_webpage,
                     other_from_webpage,
@@ -185,6 +186,7 @@ def merge_log_lists(included_from_webpage,
     ll_included = []
     ll_frozen = []
     ll_pending = []
+    ll_disqualified = []
     ll_rejected = []
     ll_distrusted = []
     ll_other = []
@@ -192,6 +194,7 @@ def merge_log_lists(included_from_webpage,
     nn_included = []
     nn_frozen = []
     nn_pending = []
+    nn_disqualified = []
     nn_rejected = []
     nn_distrusted = []
     nn_other = []
@@ -206,6 +209,8 @@ def merge_log_lists(included_from_webpage,
         merge_log_list_r(ll_rest, frozen_from_webpage)
     ll_pending, ll_rest, nn_pending = \
         merge_log_list_r(ll_rest, pending_from_webpage)
+    ll_disqualified, ll_rest, nn_rejected = \
+        merge_log_list_r(ll_rest, disqualified_from_webpage)
     ll_rejected, ll_rest, nn_rejected = \
         merge_log_list_r(ll_rest, rejected_from_webpage)
     ll_distrusted, ll_rest, nn_distrusted = \
@@ -227,6 +232,8 @@ def merge_log_lists(included_from_webpage,
         merge_enrich_a_with_b(ll_frozen, all_rest)
     ll_pending, all_rest = \
         merge_enrich_a_with_b(ll_pending, all_rest)
+    ll_disqualified, all_rest = \
+        merge_enrich_a_with_b(ll_disqualified, all_rest)
     ll_rejected, all_rest = \
         merge_enrich_a_with_b(ll_rejected, all_rest)
     ll_distrusted, all_rest = \
@@ -240,6 +247,8 @@ def merge_log_lists(included_from_webpage,
         merge_overwrite_a_with_b(nn_frozen, all_rest)
     nn_pending, all_rest = \
         merge_overwrite_a_with_b(nn_pending, all_rest)
+    nn_disqualified, all_rest = \
+        merge_overwrite_a_with_b(nn_disqualified, all_rest)
     nn_rejected, all_rest = \
         merge_overwrite_a_with_b(nn_rejected, all_rest)
     nn_distrusted, all_rest = \
@@ -419,6 +428,8 @@ def ctloglist(print_json=None):
     included_from_webpage = Logs(webpage_dict['included_in_chrome'])
     frozen_from_webpage = Logs(webpage_dict['frozen_logs'])
     pending_from_webpage = Logs(webpage_dict['pending_inclusion_in_chrome'])
+    disqualified_from_webpage = \
+        Logs(webpage_dict['disqualified_from_chrome'])
     rejected_from_webpage = Logs(webpage_dict['rejected_by_chrome'])
     distrusted_from_webpage = Logs(webpage_dict[
         'completely_distrusted_by_chrome'])
