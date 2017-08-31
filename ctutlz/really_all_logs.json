@@ -376,6 +376,75 @@
         {
             "active": null,
             "alive": null,
+            "certificate_expiry_range": null,
+            "chrome_bug": null,
+            "chrome_state": "disqualified",
+            "contact": "ian@certly.io",
+            "description": "Certly.IO log",
+            "disqualified_at": 1460678400,
+            "dns_api_endpoint": "certly.ct.googleapis.com",
+            "final_sth": null,
+            "id_b64": "zbUXm3/BwEb+6jETaj+PAC5hgvr4iW/syLL1tatgSQA=",
+            "id_b64_non_calculated": "zbUXm3/BwEb+6jETaj+PAC5hgvr4iW/syLL1tatgSQA=",
+            "key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAECyPLhWKYYUgEc+tUXfPQB4wtGS2MNvXrjwFCCnyYJifBtd2Sk7Cu+Js9DNhMTh35FftHaHu6ZrclnNBKwmbbSA==",
+            "maximum_merge_delay": 86400,
+            "notes": null,
+            "operated_by": [
+                3
+            ],
+            "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAECyPLhWKYYUgEc+tUXfPQB4wtGS2M\nNvXrjwFCCnyYJifBtd2Sk7Cu+Js9DNhMTh35FftHaHu6ZrclnNBKwmbbSA==\n-----END PUBLIC KEY-----",
+            "scts_accepted_by_chrome": false,
+            "url": "log.certly.io/"
+        },
+        {
+            "active": null,
+            "alive": null,
+            "certificate_expiry_range": null,
+            "chrome_bug": "https://crbug.com/431700",
+            "chrome_state": "disqualified",
+            "contact": "atecnica@izenpe.net",
+            "description": "Izenpe log",
+            "disqualified_at": 1464566400,
+            "dns_api_endpoint": "izenpe1.ct.googleapis.com",
+            "final_sth": null,
+            "id_b64": "dGG0oJz7PUHXUVlXWy52SaRFqNJ3CbDMVkpkgrfrQaM=",
+            "id_b64_non_calculated": "dGG0oJz7PUHXUVlXWy52SaRFqNJ3CbDMVkpkgrfrQaM=",
+            "key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJ2Q5DC3cUBj4IQCiDu0s6j51up+TZAkAEcQRF6tczw90rLWXkJMAW7jr9yc92bIKgV8vDXU4lDeZHvYHduDuvg==",
+            "maximum_merge_delay": 86400,
+            "notes": null,
+            "operated_by": [
+                4
+            ],
+            "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJ2Q5DC3cUBj4IQCiDu0s6j51up+T\nZAkAEcQRF6tczw90rLWXkJMAW7jr9yc92bIKgV8vDXU4lDeZHvYHduDuvg==\n-----END PUBLIC KEY-----",
+            "scts_accepted_by_chrome": false,
+            "url": "ct.izenpe.com/"
+        },
+        {
+            "active": null,
+            "alive": null,
+            "certificate_expiry_range": null,
+            "chrome_bug": "https://crbug.com/499446",
+            "chrome_state": "disqualified",
+            "contact": "ctlog-admin@venafi.com",
+            "description": "Venafi log",
+            "disqualified_at": 1488307346,
+            "dns_api_endpoint": "venafi.ct.googleapis.com",
+            "final_sth": null,
+            "id_b64": "rDua7X+pZ0dXFZ5tfVdWcvnZgQCUHpve/+yhMTt1eC0=",
+            "id_b64_non_calculated": "rDua7X+pZ0dXFZ5tfVdWcvnZgQCUHpve/+yhMTt1eC0=",
+            "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAolpIHxdSlTXLo1s6H1OCdpSj/4DyHDc8wLG9wVmLqy1lk9fz4ATVmm+/1iN2Nk8jmctUKK2MFUtlWXZBSpym97M7frGlSaQXUWyA3CqQUEuIJOmlEjKTBEiQAvpfDjCHjlV2Be4qTM6jamkJbiWtgnYPhJL6ONaGTiSPm7Byy57iaz/hbckldSOIoRhYBiMzeNoA0DiRZ9KmfSeXZ1rB8y8X5urSW+iBzf2SaOfzBvDpcoTuAaWx2DPazoOl28fP1hZ+kHUYvxbcMjttjauCFx+JII0dmuZNIwjfeG/GBb9frpSX219k1O4Wi6OEbHEr8at/XQ0y7gTikOxBn/s5wQIDAQAB",
+            "maximum_merge_delay": 86400,
+            "notes": null,
+            "operated_by": [
+                9
+            ],
+            "pubkey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAolpIHxdSlTXLo1s6H1OC\ndpSj/4DyHDc8wLG9wVmLqy1lk9fz4ATVmm+/1iN2Nk8jmctUKK2MFUtlWXZBSpym\n97M7frGlSaQXUWyA3CqQUEuIJOmlEjKTBEiQAvpfDjCHjlV2Be4qTM6jamkJbiWt\ngnYPhJL6ONaGTiSPm7Byy57iaz/hbckldSOIoRhYBiMzeNoA0DiRZ9KmfSeXZ1rB\n8y8X5urSW+iBzf2SaOfzBvDpcoTuAaWx2DPazoOl28fP1hZ+kHUYvxbcMjttjauC\nFx+JII0dmuZNIwjfeG/GBb9frpSX219k1O4Wi6OEbHEr8at/XQ0y7gTikOxBn/s5\nwQIDAQAB\n-----END PUBLIC KEY-----",
+            "scts_accepted_by_chrome": false,
+            "url": "ctlog.api.venafi.com/"
+        },
+        {
+            "active": null,
+            "alive": null,
             "certificate_expiry_range": "[2017-01-01 00:00:00 UTC, 2018-01-01 00:00:00 UTC)",
             "chrome_bug": "https://crbug.com/756813",
             "chrome_state": "pending for inclusion",
@@ -924,75 +993,6 @@
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEWTmyppTGMrn+Y2keMDujW9WwQ8lQ\nHpWlLadMSkmOi4+3+MziW5dy1eo/sSFI6ERrf+rvIv/f9F87bXcEsa+Qjw==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": null,
             "url": "ct.filippo.io/behindthesofa/"
-        },
-        {
-            "active": null,
-            "alive": null,
-            "certificate_expiry_range": null,
-            "chrome_bug": null,
-            "chrome_state": "disqualified",
-            "contact": null,
-            "description": "Certly.IO log",
-            "disqualified_at": 1460678400,
-            "dns_api_endpoint": "certly.ct.googleapis.com",
-            "final_sth": null,
-            "id_b64": "zbUXm3/BwEb+6jETaj+PAC5hgvr4iW/syLL1tatgSQA=",
-            "id_b64_non_calculated": null,
-            "key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAECyPLhWKYYUgEc+tUXfPQB4wtGS2MNvXrjwFCCnyYJifBtd2Sk7Cu+Js9DNhMTh35FftHaHu6ZrclnNBKwmbbSA==",
-            "maximum_merge_delay": 86400,
-            "notes": null,
-            "operated_by": [
-                3
-            ],
-            "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAECyPLhWKYYUgEc+tUXfPQB4wtGS2M\nNvXrjwFCCnyYJifBtd2Sk7Cu+Js9DNhMTh35FftHaHu6ZrclnNBKwmbbSA==\n-----END PUBLIC KEY-----",
-            "scts_accepted_by_chrome": false,
-            "url": "log.certly.io/"
-        },
-        {
-            "active": null,
-            "alive": null,
-            "certificate_expiry_range": null,
-            "chrome_bug": null,
-            "chrome_state": "disqualified",
-            "contact": null,
-            "description": "Izenpe log",
-            "disqualified_at": 1464566400,
-            "dns_api_endpoint": "izenpe1.ct.googleapis.com",
-            "final_sth": null,
-            "id_b64": "dGG0oJz7PUHXUVlXWy52SaRFqNJ3CbDMVkpkgrfrQaM=",
-            "id_b64_non_calculated": null,
-            "key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJ2Q5DC3cUBj4IQCiDu0s6j51up+TZAkAEcQRF6tczw90rLWXkJMAW7jr9yc92bIKgV8vDXU4lDeZHvYHduDuvg==",
-            "maximum_merge_delay": 86400,
-            "notes": null,
-            "operated_by": [
-                4
-            ],
-            "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJ2Q5DC3cUBj4IQCiDu0s6j51up+T\nZAkAEcQRF6tczw90rLWXkJMAW7jr9yc92bIKgV8vDXU4lDeZHvYHduDuvg==\n-----END PUBLIC KEY-----",
-            "scts_accepted_by_chrome": false,
-            "url": "ct.izenpe.com/"
-        },
-        {
-            "active": null,
-            "alive": null,
-            "certificate_expiry_range": null,
-            "chrome_bug": null,
-            "chrome_state": "disqualified",
-            "contact": null,
-            "description": "Venafi log",
-            "disqualified_at": 1488307346,
-            "dns_api_endpoint": "venafi.ct.googleapis.com",
-            "final_sth": null,
-            "id_b64": "rDua7X+pZ0dXFZ5tfVdWcvnZgQCUHpve/+yhMTt1eC0=",
-            "id_b64_non_calculated": null,
-            "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAolpIHxdSlTXLo1s6H1OCdpSj/4DyHDc8wLG9wVmLqy1lk9fz4ATVmm+/1iN2Nk8jmctUKK2MFUtlWXZBSpym97M7frGlSaQXUWyA3CqQUEuIJOmlEjKTBEiQAvpfDjCHjlV2Be4qTM6jamkJbiWtgnYPhJL6ONaGTiSPm7Byy57iaz/hbckldSOIoRhYBiMzeNoA0DiRZ9KmfSeXZ1rB8y8X5urSW+iBzf2SaOfzBvDpcoTuAaWx2DPazoOl28fP1hZ+kHUYvxbcMjttjauCFx+JII0dmuZNIwjfeG/GBb9frpSX219k1O4Wi6OEbHEr8at/XQ0y7gTikOxBn/s5wQIDAQAB",
-            "maximum_merge_delay": 86400,
-            "notes": null,
-            "operated_by": [
-                9
-            ],
-            "pubkey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAolpIHxdSlTXLo1s6H1OC\ndpSj/4DyHDc8wLG9wVmLqy1lk9fz4ATVmm+/1iN2Nk8jmctUKK2MFUtlWXZBSpym\n97M7frGlSaQXUWyA3CqQUEuIJOmlEjKTBEiQAvpfDjCHjlV2Be4qTM6jamkJbiWt\ngnYPhJL6ONaGTiSPm7Byy57iaz/hbckldSOIoRhYBiMzeNoA0DiRZ9KmfSeXZ1rB\n8y8X5urSW+iBzf2SaOfzBvDpcoTuAaWx2DPazoOl28fP1hZ+kHUYvxbcMjttjauC\nFx+JII0dmuZNIwjfeG/GBb9frpSX219k1O4Wi6OEbHEr8at/XQ0y7gTikOxBn/s5\nwQIDAQAB\n-----END PUBLIC KEY-----",
-            "scts_accepted_by_chrome": false,
-            "url": "ctlog.api.venafi.com/"
         }
     ],
     "operators": [
