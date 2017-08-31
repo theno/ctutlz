@@ -425,21 +425,39 @@ def ctloglist(print_json=None):
 
     webpage_dict = logs_dict_from_webpage()
 
-    included_from_webpage = Logs(webpage_dict['included_in_chrome'])
-    frozen_from_webpage = Logs(webpage_dict['frozen_logs'])
-    pending_from_webpage = Logs(webpage_dict['pending_inclusion_in_chrome'])
-    disqualified_from_webpage = \
-        Logs(webpage_dict['disqualified_from_chrome'])
-    rejected_from_webpage = Logs(webpage_dict['rejected_by_chrome'])
-    distrusted_from_webpage = Logs(webpage_dict[
-        'completely_distrusted_by_chrome'])
-    other_from_webpage = Logs(webpage_dict['other_logs'])
-
     all_from_webpage = Logs([log_dict
                              for log_list
                              in [webpage_dict[key] for key in webpage_dict]
                              for log_dict
                              in log_list])
+
+    included_from_webpage = Logs(webpage_dict['included_in_chrome'])
+    webpage_dict.pop('included_in_chrome')
+
+    frozen_from_webpage = Logs(webpage_dict['frozen_logs'])
+    webpage_dict.pop('frozen_logs')
+
+    pending_from_webpage = Logs(webpage_dict['pending_inclusion_in_chrome'])
+    webpage_dict.pop('pending_inclusion_in_chrome')
+
+    disqualified_from_webpage = \
+        Logs(webpage_dict['disqualified_from_chrome'])
+    webpage_dict.pop('disqualified_from_chrome')
+
+    rejected_from_webpage = Logs(webpage_dict['rejected_by_chrome'])
+    webpage_dict.pop('rejected_by_chrome')
+
+    distrusted_from_webpage = Logs(webpage_dict[
+        'completely_distrusted_by_chrome'])
+    webpage_dict.pop('completely_distrusted_by_chrome')
+
+    other_from_webpage = Logs(webpage_dict['other_logs'])
+    webpage_dict.pop('other_logs')
+
+    unknown_log_titles = [key for key in webpage_dict.keys()]
+    if unknown_log_titles:
+        logger.error(red(flo(
+            'unknown log titles (i.e. log states): {unknown_log_titles}')))
 
     # log_list.json: chrome ct policy compliant logs
 
