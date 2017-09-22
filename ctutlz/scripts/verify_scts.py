@@ -221,9 +221,13 @@ def scrape_and_verify_scts(hostname, verification_tasks, ctlogs):
     if res.ee_cert_der:
         logger.debug('got certificate\n')
         if res.ee_cert.is_ev_cert:
-            logger.info('EV cert\n')
+            logger.info('* EV cert')
         else:
-            logger.info('no EV cert\n')
+            logger.info('* no EV cert')
+        if res.ee_cert.is_letsencrypt_cert:
+            logger.info("* issued by Let's Encrypt\n")
+        else:
+            logger.info("* not issued by Let's Encrypt\n")
 
     if res.err:
         logger.warn(res.err)

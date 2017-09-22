@@ -9,6 +9,7 @@ from pyasn1.codec.der.decoder import decode as der_decoder
 
 from utlz import namedtuple
 
+from ctutlz.utils.string import string_without_prefix
 from ctutlz.utils.encoding import sha256_digest
 
 
@@ -128,6 +129,26 @@ def is_ev_cert(ee_cert):
     return intersection != []
 
 
+def is_letsencrypt_cert(ee_cert):
+    '''Return True if ee_cert was issued by Let's Encrypt.
+
+    Args:
+        ee_cert (EndEntityCert)
+    '''
+    organization_name_oid = ObjectIdentifier(value='2.5.4.10')
+    issuer = ee_cert.tbscert.pyasn1['issuer']
+    if issuer:
+        for rdn in issuer['rdnSequence']:
+            for item in rdn:
+                if item.getComponentByName('type') == organization_name_oid:
+                    organisation_name = str(item.getComponentByName('value'))
+                    organisation_name = string_without_prefix('\x13\r',
+                                                              organisation_name)
+                    if organisation_name == "Let's Encrypt":
+                        return True
+    return False
+
+
 def pyasn1_certificate_from_der(cert_der):
     '''Return pyasn1_modules.rfc5280.Certificate instance parsed from cert_der.
     '''
@@ -224,6 +245,7 @@ EndEntityCert = namedtuple(
         'pyopenssl': lambda self: pyopenssl_certificate_from_der(self.der),
 
         'is_ev_cert': lambda self: is_ev_cert(self),
+        'is_letsencrypt_cert': lambda self: is_letsencrypt_cert(self),
     }
 )
 

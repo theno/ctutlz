@@ -31,3 +31,19 @@ def test_is_ev_cert():
         ee_cert = EndEntityCert(cert_der)
 
         assert ee_cert.is_ev_cert is expected
+
+
+def test_is_letsencrypt_cert():
+    basedir = join(dirname(__file__), 'data', 'test_sct_ee_cert')
+
+    test_data = [
+        ('issued_by_letsencrypt.der', True),
+        ('issued_by_letsencrypt_2.der', True),
+        ('issued_by_letsencrypt_not.der', False),
+    ]
+
+    for filename, expected in test_data:
+        cert_der = open(flo('{basedir}/{filename}'), 'rb').read()
+        ee_cert = EndEntityCert(cert_der)
+
+        assert ee_cert.is_letsencrypt_cert is expected
