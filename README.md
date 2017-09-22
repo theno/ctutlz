@@ -309,7 +309,7 @@ PYTHONPATH='.' .tox/py36/bin/python -m pytest -s
 Run tool `verify-scts` from source:
 
 ```bash
-PYTHONPATH='.' .tox/py36/bin/python  ctutlz/scripts/verify_scts -h
+PYTHONPATH='.' .tox/py36/bin/python  ctutlz/scripts/verify_scts.py -h
 ```
 
 ### Update really_all_logs
