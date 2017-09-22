@@ -7,9 +7,9 @@ Merged log lists:
 * [log_list.json](https://www.gstatic.com/ct/log_list/log_list.json)
 * [all_logs_list.json](https://www.gstatic.com/ct/log_list/all_logs_list.json)
 
-Version (Date): 2017-08-31
+Version (Date): 2017-09-22
 
-Datetime: 2017-08-31 20:46:00.475229
+Datetime: 2017-09-22 22:02:49.876532
 
 
 ## included logs (log_list.json, webpage)
@@ -320,7 +320,7 @@ TOaft0oaFIZDqUiwy1o/PErK38SCFFWa+PeOQFXc9NKv6nV0+05/YIYuUQ==
 * __maximum merge delay__: `86400`
 * __operated by__: `Comodo`
 * __dns api endpoint__: `comodo-sabre.ct.googleapis.com`
-* __contact__: `ctops@comodo.com`
+* __contact__: `rob.stradling@comodo.com`
 * __chrome bug__: `https://crbug.com/703700`
 * __notes__: `Included in Chrome since M-60`
 * __chrome state__: `included`
@@ -342,7 +342,7 @@ VZY9CgiixXGz0akvKD6DEL8S0ERmFe9U4ZiA0M4kbT5nmuk3I85Sk4bagA==
 * __maximum merge delay__: `86400`
 * __operated by__: `Comodo`
 * __dns api endpoint__: `comodo-mammoth.ct.googleapis.com`
-* __contact__: `ctops@comodo.com`
+* __contact__: `rob.stradling@comodo.com`
 * __chrome bug__: `https://crbug.com/703699`
 * __notes__: `Included in Chrome since M-60`
 * __chrome state__: `included`
@@ -463,14 +463,13 @@ wQIDAQAB
 
 ## pending logs (webpage, all_logs.json)
 
-7 logs
+6 logs
 
 * [ct.googleapis.com/logs/argon2017/](#ct.googleapis.comlogsargon2017)
 * [ct.googleapis.com/logs/argon2018/](#ct.googleapis.comlogsargon2018)
 * [ct.googleapis.com/logs/argon2019/](#ct.googleapis.comlogsargon2019)
 * [ct.googleapis.com/logs/argon2020/](#ct.googleapis.comlogsargon2020)
 * [ct.googleapis.com/logs/argon2021/](#ct.googleapis.comlogsargon2021)
-* [ctlog2.wosign.com/](#ctlog2.wosign.com)
 * [ct.sheca.com/](#ct.sheca.com)
 
 ### ct.googleapis.com/logs/argon2017/
@@ -578,25 +577,6 @@ w/tbr5xkoQlmhB18aKfsxD+MnILgGNl0FOm0eYGilFVi85wLRIOhK8lxKw==
 -----END PUBLIC KEY-----
 ```
 
-### ctlog2.wosign.com/
-
-* __description__: `WoSign log 2`
-* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEpYzoNS6O5Wp1rVxLMWEpnTBXjgITX+nKu1KoQwVgvw1zV3eyBdhn9vAzyflE3rZTc6oMVcKDCkvOXhrHFx2zzQ==`
-* __url__: `ctlog2.wosign.com/`
-* __maximum merge delay__: `86400`
-* __operated by__: `WoSign`
-* __contact__: `ctlog@wosign.com`
-* __chrome state__: `pending for inclusion`
-* __scts accepted by chrome__: False
-* __id b64__: `Y9AAYCbd4QuwYB9FJEaWXuK26izU+8layGalUK+Qdbc=`
-* __pubkey__:
-```
------BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEpYzoNS6O5Wp1rVxLMWEpnTBXjgIT
-X+nKu1KoQwVgvw1zV3eyBdhn9vAzyflE3rZTc6oMVcKDCkvOXhrHFx2zzQ==
------END PUBLIC KEY-----
-```
-
 ### ct.sheca.com/
 
 * __description__: `SHECA CT log 2`
@@ -605,7 +585,6 @@ X+nKu1KoQwVgvw1zV3eyBdhn9vAzyflE3rZTc6oMVcKDCkvOXhrHFx2zzQ==
 * __maximum merge delay__: `86400`
 * __operated by__: `SHECA`
 * __contact__: `CTLS@sheca.com`
-* __chrome bug__: `http://crbug.com/712069`
 * __chrome state__: `pending for inclusion`
 * __scts accepted by chrome__: False
 * __id b64__: `MtxZwtTEGWjVbhS8YayPDkXbOfrzwVWqQlL1AB+gxiM=`
@@ -619,10 +598,11 @@ MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEsY4diqo6rM6Gy1N26KidWb4XiAMH
 
 ## rejected logs (webpage, all_logs.json)
 
-7 logs
+8 logs
 
 * [ct.izenpe.eus/](#ct.izenpe.eus)
 * [ct.wosign.com/](#ct.wosign.com)
+* [ctlog2.wosign.com/](#ctlog2.wosign.com)
 * [ct.gdca.com.cn/](#ct.gdca.com.cn)
 * [ctlog.gdca.com.cn/](#ctlog.gdca.com.cn)
 * [ctlog.sheca.com/](#ctlog.sheca.com)
@@ -666,6 +646,25 @@ Oc73xfK2N+mj7eT1RQkOZxT9UyTVOpTy6rUT2R2LXKfD82vYPy07ZXJY1g==
 -----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE1+wvK3VPN7yjQ7qLZWY8fWrlDCqm
 wuUm/gx9TnzwOrzi0yLcAdAfbkOcXG6DrZwV9sSNYLUdu6NiaX7rp6oBmw==
+-----END PUBLIC KEY-----
+```
+
+### ctlog2.wosign.com/
+
+* __description__: `WoSign log 2`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEpYzoNS6O5Wp1rVxLMWEpnTBXjgITX+nKu1KoQwVgvw1zV3eyBdhn9vAzyflE3rZTc6oMVcKDCkvOXhrHFx2zzQ==`
+* __url__: `ctlog2.wosign.com/`
+* __maximum merge delay__: `86400`
+* __operated by__: `WoSign`
+* __contact__: `ctlog@wosign.com`
+* __chrome state__: `rejected`
+* __scts accepted by chrome__: False
+* __id b64__: `Y9AAYCbd4QuwYB9FJEaWXuK26izU+8layGalUK+Qdbc=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEpYzoNS6O5Wp1rVxLMWEpnTBXjgIT
+X+nKu1KoQwVgvw1zV3eyBdhn9vAzyflE3rZTc6oMVcKDCkvOXhrHFx2zzQ==
 -----END PUBLIC KEY-----
 ```
 
@@ -717,6 +716,7 @@ MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEW0rHAbd0VLpAnEN1lD+s77NxVrjT
 * __maximum merge delay__: `86400`
 * __operated by__: `SHECA`
 * __contact__: `CTLS@sheca.com`
+* __chrome bug__: `http://crbug.com/704033`
 * __chrome state__: `rejected`
 * __scts accepted by chrome__: False
 * __id b64__: `z1XiiSNJfDQNUgbQU1Ouslg0tS8fjclSaAnyEu/dfKY=`
@@ -878,7 +878,6 @@ MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEw8i8S7qiGEs9NXv0ZJFh6uuOmR2Q
 * __url__: `deneb.ws.symantec.com/`
 * __maximum merge delay__: `86400`
 * __operated by__: `Symantec`
-* __notes__: `Contact:`
 * __scts accepted by chrome__: None
 * __id b64__: `p85KTmIH4K3e5f2qSx+GdodntdACpV1HMQ5+ZwqV6rI=`
 * __pubkey__:
