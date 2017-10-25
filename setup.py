@@ -99,5 +99,4 @@ setup(
     cffi_modules=[
         'ctutlz/tls/handshake_openssl_build.py:ffibuilder'
     ],
-    include_package_data=True,
 )
