@@ -20,7 +20,7 @@ def create_readme_with_long_description():
         shutil.copy(readme_md, readme)
     try:
         import pypandoc
-        long_description = pypandoc.convert(readme_md, 'rst')
+        long_description = pypandoc.convert(readme_md, 'rst', format='md')
         if os.path.islink(readme):
             os.remove(readme)
         with open(readme, 'w') as out:
@@ -99,4 +99,5 @@ setup(
     cffi_modules=[
         'ctutlz/tls/handshake_openssl_build.py:ffibuilder'
     ],
+    include_package_data=True,
 )
