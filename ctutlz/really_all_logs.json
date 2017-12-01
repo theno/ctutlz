@@ -109,7 +109,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                1
+                2
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEAkbFvhu7gkAW6MHSrBlpE1n4+HCF\nRkC5OLAjgqhkTH+/uzSfSl8ois8ZxAD2NgaTZe1M9akhYlrYkes4JECs6A==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": true,
@@ -132,7 +132,7 @@
             "maximum_merge_delay": 86400,
             "notes": "Included in Chrome since M-60",
             "operated_by": [
-                1
+                2
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEzF05L2a4TH/BLgOhNKPoioYCrkoR\nxvcmajeb8Dj4XQmNY+gxa4Zmz3mzJTwe33i0qMVp+rfwgnliQ/bM/oFmhA==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": true,
@@ -155,7 +155,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                2
+                3
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEluqsHEYMG1XcDfy1lCdGV0JwOmkY\n4r87xNuroPS2bMBTP01CEDPwWJePa75y9CrsHEKqAy8afig1dpkIPSEUhg==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": true,
@@ -178,7 +178,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                2
+                3
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE6pWeAv/u8TNtS4e8zf0ZF2L/lNPQ\nWQc/Ai0ckP7IRzA78d0NuBEMXR2G3avTK0Zm+25ltzv9WWis36b4ztIYTQ==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": true,
@@ -201,7 +201,7 @@
             "maximum_merge_delay": 86400,
             "notes": "Included in Chrome since M-60",
             "operated_by": [
-                2
+                3
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEowJkhCK7JewN47zCyYl93UXQ7uYV\nhY/Z5xcbE4Dq7bKFN61qxdglnfr0tPNuFiglN+qjN2Syxwv9UeXBBfQOtQ==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": true,
@@ -224,7 +224,7 @@
             "maximum_merge_delay": 86400,
             "notes": "Included in Chrome since M-54",
             "operated_by": [
-                5
+                6
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEzBGIey1my66PTTBmJxklIpMhRrQv\nAdPG+SvVyLpzmwai8IoCnNBrRhgwhbrpJIsO0VtwKAx+8TpFf1rzgkJgMQ==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": true,
@@ -247,7 +247,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                9
+                10
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEjicnerZVCXTrbEuUhGW85BXx6lrY\nfA43zro/bAna5ymW00VQb94etBzSg4j/KS/Oqf/fNN51D8DMGA2ULvw3AQ==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": true,
@@ -270,7 +270,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                10
+                11
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv7UIYZopMgTTJWPp2IXh\nhuAf1l6a9zM7gBvntj5fLaFm9pVKhKYhVnno94XuXeN8EsDgiSIJIj66FpUGvai5\nsamyetZhLocRuXhAiXXbDNyQ4KR51tVebtEq2zT0mT9liTtGwiksFQccyUsaVPhs\nHq9gJ2IKZdWauVA2Fm5x9h8B9xKn/L/2IaMpkIYtd967TNTP/dLPgixN1PLCLayp\nvurDGSVDsuWabA3FHKWL9z8wr7kBkbdpEhLlg2H+NAC+9nGKx+tQkuhZ/hWR65aX\n+CNUPy2OB9/u2rNPyDydb988LENXoUcMkQT0dU3aiYGkFAY0uZjD2vH97TM20xYt\nNQIDAQAB\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": true,
@@ -293,7 +293,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                11
+                12
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAESPNZ8/YFGNPbsu1Gfs/IEbVXsajW\nTOaft0oaFIZDqUiwy1o/PErK38SCFFWa+PeOQFXc9NKv6nV0+05/YIYuUQ==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": true,
@@ -316,7 +316,7 @@
             "maximum_merge_delay": 86400,
             "notes": "Included in Chrome since M-60",
             "operated_by": [
-                8
+                9
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE8m/SiQ8/xfiHHqtls9m7FyOMBg4J\nVZY9CgiixXGz0akvKD6DEL8S0ERmFe9U4ZiA0M4kbT5nmuk3I85Sk4bagA==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": true,
@@ -339,7 +339,7 @@
             "maximum_merge_delay": 86400,
             "notes": "Included in Chrome since M-60",
             "operated_by": [
-                8
+                9
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7+R9dC4VFbbpuyOL+yy14ceAmEf7\nQGlo/EmtYU6DRzwat43f/3swtLr/L8ugFOOt1YU/RFmMjGCL17ixv66MZw==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": true,
@@ -390,7 +390,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                3
+                4
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAECyPLhWKYYUgEc+tUXfPQB4wtGS2M\nNvXrjwFCCnyYJifBtd2Sk7Cu+Js9DNhMTh35FftHaHu6ZrclnNBKwmbbSA==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": false,
@@ -413,7 +413,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                4
+                5
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJ2Q5DC3cUBj4IQCiDu0s6j51up+T\nZAkAEcQRF6tczw90rLWXkJMAW7jr9yc92bIKgV8vDXU4lDeZHvYHduDuvg==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": false,
@@ -436,7 +436,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                9
+                10
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAolpIHxdSlTXLo1s6H1OC\ndpSj/4DyHDc8wLG9wVmLqy1lk9fz4ATVmm+/1iN2Nk8jmctUKK2MFUtlWXZBSpym\n97M7frGlSaQXUWyA3CqQUEuIJOmlEjKTBEiQAvpfDjCHjlV2Be4qTM6jamkJbiWt\ngnYPhJL6ONaGTiSPm7Byy57iaz/hbckldSOIoRhYBiMzeNoA0DiRZ9KmfSeXZ1rB\n8y8X5urSW+iBzf2SaOfzBvDpcoTuAaWx2DPazoOl28fP1hZ+kHUYvxbcMjttjauC\nFx+JII0dmuZNIwjfeG/GBb9frpSX219k1O4Wi6OEbHEr8at/XQ0y7gTikOxBn/s5\nwQIDAQAB\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": false,
@@ -560,6 +560,121 @@
         {
             "active": null,
             "alive": null,
+            "certificate_expiry_range": "[2017-01-01 00:00:00 UTC, 2018-01-01 00:00:00 UTC)",
+            "chrome_bug": "https://crbug.com/780653",
+            "chrome_state": "pending for inclusion",
+            "contact": "ivan@cloudflare.com",
+            "description": "Cloudflare 'Nimbus2017' Log",
+            "disqualified_at": null,
+            "dns_api_endpoint": null,
+            "final_sth": null,
+            "id_b64": "H7w24ALt6X9AGZ6Gs1c7ikIX2AGHdGrQ2gOgYFTSDfQ=",
+            "id_b64_non_calculated": "H7w24ALt6X9AGZ6Gs1c7ikIX2AGHdGrQ2gOgYFTSDfQ=",
+            "key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE15ypB40iQe6ToFJB2vSA8CW86/rzPNJ+kdg/LNpRvcjuKnLj/xhW5DoiDyI8xtUws5toLqtWwkFf1mRXFLFarw==",
+            "maximum_merge_delay": 86400,
+            "notes": null,
+            "operated_by": [
+                1
+            ],
+            "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE15ypB40iQe6ToFJB2vSA8CW86/rz\nPNJ+kdg/LNpRvcjuKnLj/xhW5DoiDyI8xtUws5toLqtWwkFf1mRXFLFarw==\n-----END PUBLIC KEY-----",
+            "scts_accepted_by_chrome": false,
+            "url": "ct.cloudflare.com/logs/nimbus2017/"
+        },
+        {
+            "active": null,
+            "alive": null,
+            "certificate_expiry_range": "[2018-01-01 00:00:00 UTC, 2019-01-01 00:00:00 UTC)",
+            "chrome_bug": "https://crbug.com/780654",
+            "chrome_state": "pending for inclusion",
+            "contact": "ivan@cloudflare.com",
+            "description": "Cloudflare 'Nimbus2018' Log",
+            "disqualified_at": null,
+            "dns_api_endpoint": null,
+            "final_sth": null,
+            "id_b64": "23Sv7ssp7LH+yj5xbSzluaq7NveEcYPHXZ1PN7Yfv2Q=",
+            "id_b64_non_calculated": "23Sv7ssp7LH+yj5xbSzluaq7NveEcYPHXZ1PN7Yfv2Q=",
+            "key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEAsVpWvrH3Ke0VRaMg9ZQoQjb5g/xh1z3DDa6IuxY5DyPsk6brlvrUNXZzoIg0DcvFiAn2kd6xmu4Obk5XA/nRg==",
+            "maximum_merge_delay": 86400,
+            "notes": null,
+            "operated_by": [
+                1
+            ],
+            "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEAsVpWvrH3Ke0VRaMg9ZQoQjb5g/x\nh1z3DDa6IuxY5DyPsk6brlvrUNXZzoIg0DcvFiAn2kd6xmu4Obk5XA/nRg==\n-----END PUBLIC KEY-----",
+            "scts_accepted_by_chrome": false,
+            "url": "ct.cloudflare.com/logs/nimbus2018/"
+        },
+        {
+            "active": null,
+            "alive": null,
+            "certificate_expiry_range": "[2019-01-01 00:00:00 UTC, 2020-01-01 00:00:00 UTC)",
+            "chrome_bug": "https://crbug.com/780655",
+            "chrome_state": "pending for inclusion",
+            "contact": "ivan@cloudflare.com",
+            "description": "Cloudflare 'Nimbus2019' Log",
+            "disqualified_at": null,
+            "dns_api_endpoint": null,
+            "final_sth": null,
+            "id_b64": "dH7agzGtMxCRIZzOJU9CcMK//V5CIAjGNzV55hB7zFY=",
+            "id_b64_non_calculated": "dH7agzGtMxCRIZzOJU9CcMK//V5CIAjGNzV55hB7zFY=",
+            "key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkZHz1v5r8a9LmXSMegYZAg4UW+Ug56GtNfJTDNFZuubEJYgWf4FcC5D+ZkYwttXTDSo4OkanG9b3AI4swIQ28g==",
+            "maximum_merge_delay": 86400,
+            "notes": null,
+            "operated_by": [
+                1
+            ],
+            "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkZHz1v5r8a9LmXSMegYZAg4UW+Ug\n56GtNfJTDNFZuubEJYgWf4FcC5D+ZkYwttXTDSo4OkanG9b3AI4swIQ28g==\n-----END PUBLIC KEY-----",
+            "scts_accepted_by_chrome": false,
+            "url": "ct.cloudflare.com/logs/nimbus2019/"
+        },
+        {
+            "active": null,
+            "alive": null,
+            "certificate_expiry_range": "[2020-01-01 00:00:00 UTC, 2021-01-01 00:00:00 UTC)",
+            "chrome_bug": "https://crbug.com/780656",
+            "chrome_state": "pending for inclusion",
+            "contact": "ivan@cloudflare.com",
+            "description": "Cloudflare 'Nimbus2020' Log",
+            "disqualified_at": null,
+            "dns_api_endpoint": null,
+            "final_sth": null,
+            "id_b64": "Xqdz+d9WwOe1Nkh90EngMnqRmgyEoRIShBh1loFxRVg=",
+            "id_b64_non_calculated": "Xqdz+d9WwOe1Nkh90EngMnqRmgyEoRIShBh1loFxRVg=",
+            "key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE01EAhx4o0zPQrXTcYjgCt4MVFsT0Pwjzb1RwrM0lhWDlxAYPP6/gyMCXNkOn/7KFsjL7rwk78tHMpY8rXn8AYg==",
+            "maximum_merge_delay": 86400,
+            "notes": null,
+            "operated_by": [
+                1
+            ],
+            "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE01EAhx4o0zPQrXTcYjgCt4MVFsT0\nPwjzb1RwrM0lhWDlxAYPP6/gyMCXNkOn/7KFsjL7rwk78tHMpY8rXn8AYg==\n-----END PUBLIC KEY-----",
+            "scts_accepted_by_chrome": false,
+            "url": "ct.cloudflare.com/logs/nimbus2020/"
+        },
+        {
+            "active": null,
+            "alive": null,
+            "certificate_expiry_range": "[2021-01-01 00:00:00 UTC, 2022-01-01 00:00:00 UTC)",
+            "chrome_bug": "https://crbug.com/780657",
+            "chrome_state": "pending for inclusion",
+            "contact": "ivan@cloudflare.com",
+            "description": "Cloudflare 'Nimbus2021' Log",
+            "disqualified_at": null,
+            "dns_api_endpoint": null,
+            "final_sth": null,
+            "id_b64": "RJRlLrDuzq/EQAfYqP4owNrmgr7YyzG1P9MzlrW2gag=",
+            "id_b64_non_calculated": "RJRlLrDuzq/EQAfYqP4owNrmgr7YyzG1P9MzlrW2gag=",
+            "key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAExpon7ipsqehIeU1bmpog9TFo4Pk8+9oN8OYHl1Q2JGVXnkVFnuuvPgSo2Ep+6vLffNLcmEbxOucz03sFiematg==",
+            "maximum_merge_delay": 86400,
+            "notes": null,
+            "operated_by": [
+                1
+            ],
+            "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAExpon7ipsqehIeU1bmpog9TFo4Pk8\n+9oN8OYHl1Q2JGVXnkVFnuuvPgSo2Ep+6vLffNLcmEbxOucz03sFiematg==\n-----END PUBLIC KEY-----",
+            "scts_accepted_by_chrome": false,
+            "url": "ct.cloudflare.com/logs/nimbus2021/"
+        },
+        {
+            "active": null,
+            "alive": null,
             "certificate_expiry_range": null,
             "chrome_bug": null,
             "chrome_state": "pending for inclusion",
@@ -574,7 +689,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                14
+                15
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEsY4diqo6rM6Gy1N26KidWb4XiAMH\n8ifggr6x/Gc7Ru7T8Y3Wd+ijtNsJXKAJQ/xf0Gg0IyQIwk/Y0rad7dWM2w==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": false,
@@ -597,7 +712,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                4
+                5
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE18gOIz6eAjyauAdKKgX/SkuI1IpN\nOc73xfK2N+mj7eT1RQkOZxT9UyTVOpTy6rUT2R2LXKfD82vYPy07ZXJY1g==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": false,
@@ -620,7 +735,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                5
+                6
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE1+wvK3VPN7yjQ7qLZWY8fWrlDCqm\nwuUm/gx9TnzwOrzi0yLcAdAfbkOcXG6DrZwV9sSNYLUdu6NiaX7rp6oBmw==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": false,
@@ -643,7 +758,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                5
+                6
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEpYzoNS6O5Wp1rVxLMWEpnTBXjgIT\nX+nKu1KoQwVgvw1zV3eyBdhn9vAzyflE3rZTc6oMVcKDCkvOXhrHFx2zzQ==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": false,
@@ -666,7 +781,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                6
+                7
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAErQ8wrZ55pDiJJlSGq0FykG/7yhem\nrO7Gn30CBexBqMdBnTJJrbA5vTqHPnzuaGxg0Ucqk67hQPQLyDU8HQ9l0w==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": false,
@@ -689,7 +804,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                7
+                8
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEW0rHAbd0VLpAnEN1lD+s77NxVrjT\n4nuuobE+U6qXM6GCu19dHAv6hQ289+Wg4CLwoInZCn9fJpTTJOOZLuQVjQ==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": false,
@@ -712,7 +827,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                14
+                15
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEEalgK7RxRWbgLt7VhzvV/vCSN/Ro\nxpLdPxrivAwi1pljKW4yKBTAdiyAqCJRkdbrptjx7PAHfrD8dnB2cnyR6Q==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": false,
@@ -735,7 +850,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                15
+                16
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQ3nrSVxQKkpqj1mTvMNCdsKZ+CeB\nPAZs0sgEj3R7tLUh8uOo3DO5/iXpPQT8P7SuQONFfoSSKthS6x8/cxPQyA==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": false,
@@ -758,7 +873,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                16
+                17
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEovftE+HTXAIIxI6Lm4s7OWjHkmo4\noU8jxaVvb9dlgfjBm/SfqYtF9LlOG8miaReleIfZzohvQQO7oyrjd5eNeA==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": false,
@@ -781,7 +896,7 @@
             "maximum_merge_delay": 86400,
             "notes": "Included in Chrome since M-58",
             "operated_by": [
-                12
+                13
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArM8vS3Cs8Q2Wv+gK/kSd\n1IwXncOaEBGEE+2M+Tdtg+QAb7FLwKaJx2GPmjS7VlLKA1ZQ7yR/S0npNYHd8OcX\n9XLSI8XjE3/Xjng1j0nemASKY6+tojlwlYRoS5Ez/kzhMhfC8mG4Oo05f9WVgj5W\nGVBFb8sIMw3VGUIIGkhCEPFow8NBE8sNHtsCtyR6UZZuvAjqaa9t75KYjlXzZeXo\nnL4aR2AwfXqArVaDepPDrpMraiiKpl9jGQy+fHshY0E4t/fodnNrhcy8civBUtBb\nXTFOnSrzTZtkFJkmxnH4e/hE1eMjIPMK14tRPnKA0nh4NS1K50CZEZU01C9/+V81\nNwIDAQAB\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": false,
@@ -873,7 +988,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                2
+                3
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEloIeo806gIQel7i3BxmudhoO+FV2\nnRIzTpGI5NBIUFzBn2py1gH1FNbQOG7hMrxnDTfouiIQ0XKGeSiW+RcemA==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": null,
@@ -896,7 +1011,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                8
+                9
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAELPXCMfVjQ2oWSgrewu4fIW4Sfh3l\nco90CwKZ061pvAI1eflh6c8ACE90pKM0muBDHCN+j0HV7scco4KKQPqq4A==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": null,
@@ -919,7 +1034,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                13
+                14
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE4qWq6afhBUi0OdcWUYhyJLNXTkGq\nQ9PMS5lqoCgkV2h1ZvpNjBH2u8UbgcOQwqDo66z6BWQJGolozZYmNHE2kQ==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": null,
@@ -942,7 +1057,7 @@
             "maximum_merge_delay": 86400,
             "notes": "--- Comments",
             "operated_by": [
-                13
+                14
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE9UV9+jO2MCTzkabodO2F7LM03MUB\nc8MrdAtkcW6v6GA9taTTw9QJqofm0BbdAsbtJL/unyEf0zIkRgXjjzaYqQ==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": null,
@@ -965,7 +1080,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                17
+                18
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEHxoVg3cAdWK5n/YGBe2ViYNBgZfn\n4NQz/na6O8lJws3xz/4ScNe+qCJfsqRnAntxrh2sqOnRCNXO7zN6w18A3A==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": null,
@@ -988,7 +1103,7 @@
             "maximum_merge_delay": 86400,
             "notes": null,
             "operated_by": [
-                18
+                19
             ],
             "pubkey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEWTmyppTGMrn+Y2keMDujW9WwQ8lQ\nHpWlLadMSkmOi4+3+MziW5dy1eo/sSFI6ERrf+rvIv/f9F87bXcEsa+Qjw==\n-----END PUBLIC KEY-----",
             "scts_accepted_by_chrome": null,
@@ -1002,74 +1117,78 @@
         },
         {
             "id": 1,
-            "name": "DigiCert"
+            "name": "Cloudflare"
         },
         {
             "id": 2,
-            "name": "Symantec"
+            "name": "DigiCert"
         },
         {
             "id": 3,
-            "name": "Certly"
+            "name": "Symantec"
         },
         {
             "id": 4,
-            "name": "Izenpe"
+            "name": "Certly"
         },
         {
             "id": 5,
-            "name": "WoSign"
+            "name": "Izenpe"
         },
         {
             "id": 6,
-            "name": "Wang Shengnan"
+            "name": "WoSign"
         },
         {
             "id": 7,
-            "name": "GDCA"
+            "name": "Wang Shengnan"
         },
         {
             "id": 8,
-            "name": "Comodo"
+            "name": "GDCA"
         },
         {
             "id": 9,
-            "name": "Venafi"
+            "name": "Comodo"
         },
         {
             "id": 10,
-            "name": "CNNIC"
+            "name": "Venafi"
         },
         {
             "id": 11,
-            "name": "StartCom"
+            "name": "CNNIC"
         },
         {
             "id": 12,
-            "name": "Beijing PuChuangSiDa Technology Ltd."
+            "name": "StartCom"
         },
         {
             "id": 13,
-            "name": "NORDUnet"
+            "name": "Beijing PuChuangSiDa Technology Ltd."
         },
         {
             "id": 14,
-            "name": "SHECA"
+            "name": "NORDUnet"
         },
         {
             "id": 15,
-            "name": "Akamai"
+            "name": "SHECA"
         },
         {
             "id": 16,
-            "name": "Matt Palmer"
+            "name": "Akamai"
         },
         {
             "id": 17,
-            "name": "Let's Encrypt"
+            "name": "Matt Palmer"
         },
         {
             "id": 18,
+            "name": "Let's Encrypt"
+        },
+        {
+            "id": 19,
             "name": "Up In The Air Consulting"
         }
     ]

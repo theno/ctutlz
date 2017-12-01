@@ -7,9 +7,9 @@ Merged log lists:
 * [log_list.json](https://www.gstatic.com/ct/log_list/log_list.json)
 * [all_logs_list.json](https://www.gstatic.com/ct/log_list/all_logs_list.json)
 
-Version (Date): 2017-09-22
+Version (Date): 2017-12-01
 
-Datetime: 2017-09-22 22:02:49.876532
+Datetime: 2017-12-01 17:27:42.867548
 
 
 ## included logs (log_list.json, webpage)
@@ -463,13 +463,18 @@ wQIDAQAB
 
 ## pending logs (webpage, all_logs.json)
 
-6 logs
+11 logs
 
 * [ct.googleapis.com/logs/argon2017/](#ct.googleapis.comlogsargon2017)
 * [ct.googleapis.com/logs/argon2018/](#ct.googleapis.comlogsargon2018)
 * [ct.googleapis.com/logs/argon2019/](#ct.googleapis.comlogsargon2019)
 * [ct.googleapis.com/logs/argon2020/](#ct.googleapis.comlogsargon2020)
 * [ct.googleapis.com/logs/argon2021/](#ct.googleapis.comlogsargon2021)
+* [ct.cloudflare.com/logs/nimbus2017/](#ct.cloudflare.comlogsnimbus2017)
+* [ct.cloudflare.com/logs/nimbus2018/](#ct.cloudflare.comlogsnimbus2018)
+* [ct.cloudflare.com/logs/nimbus2019/](#ct.cloudflare.comlogsnimbus2019)
+* [ct.cloudflare.com/logs/nimbus2020/](#ct.cloudflare.comlogsnimbus2020)
+* [ct.cloudflare.com/logs/nimbus2021/](#ct.cloudflare.comlogsnimbus2021)
 * [ct.sheca.com/](#ct.sheca.com)
 
 ### ct.googleapis.com/logs/argon2017/
@@ -574,6 +579,111 @@ c1zA4PQ+TGRY+3ZjUTIYY9Wyu+3q/147JG4vNVKLtDWarZwVqGkg6lAYzA==
 -----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAETeBmZOrzZKo4xYktx9gI2chEce3c
 w/tbr5xkoQlmhB18aKfsxD+MnILgGNl0FOm0eYGilFVi85wLRIOhK8lxKw==
+-----END PUBLIC KEY-----
+```
+
+### ct.cloudflare.com/logs/nimbus2017/
+
+* __description__: `Cloudflare 'Nimbus2017' Log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE15ypB40iQe6ToFJB2vSA8CW86/rzPNJ+kdg/LNpRvcjuKnLj/xhW5DoiDyI8xtUws5toLqtWwkFf1mRXFLFarw==`
+* __url__: `ct.cloudflare.com/logs/nimbus2017/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Cloudflare`
+* __contact__: `ivan@cloudflare.com`
+* __chrome bug__: `https://crbug.com/780653`
+* __certificate expiry range__: `[2017-01-01 00:00:00 UTC, 2018-01-01 00:00:00 UTC)`
+* __chrome state__: `pending for inclusion`
+* __scts accepted by chrome__: False
+* __id b64__: `H7w24ALt6X9AGZ6Gs1c7ikIX2AGHdGrQ2gOgYFTSDfQ=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE15ypB40iQe6ToFJB2vSA8CW86/rz
+PNJ+kdg/LNpRvcjuKnLj/xhW5DoiDyI8xtUws5toLqtWwkFf1mRXFLFarw==
+-----END PUBLIC KEY-----
+```
+
+### ct.cloudflare.com/logs/nimbus2018/
+
+* __description__: `Cloudflare 'Nimbus2018' Log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEAsVpWvrH3Ke0VRaMg9ZQoQjb5g/xh1z3DDa6IuxY5DyPsk6brlvrUNXZzoIg0DcvFiAn2kd6xmu4Obk5XA/nRg==`
+* __url__: `ct.cloudflare.com/logs/nimbus2018/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Cloudflare`
+* __contact__: `ivan@cloudflare.com`
+* __chrome bug__: `https://crbug.com/780654`
+* __certificate expiry range__: `[2018-01-01 00:00:00 UTC, 2019-01-01 00:00:00 UTC)`
+* __chrome state__: `pending for inclusion`
+* __scts accepted by chrome__: False
+* __id b64__: `23Sv7ssp7LH+yj5xbSzluaq7NveEcYPHXZ1PN7Yfv2Q=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEAsVpWvrH3Ke0VRaMg9ZQoQjb5g/x
+h1z3DDa6IuxY5DyPsk6brlvrUNXZzoIg0DcvFiAn2kd6xmu4Obk5XA/nRg==
+-----END PUBLIC KEY-----
+```
+
+### ct.cloudflare.com/logs/nimbus2019/
+
+* __description__: `Cloudflare 'Nimbus2019' Log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkZHz1v5r8a9LmXSMegYZAg4UW+Ug56GtNfJTDNFZuubEJYgWf4FcC5D+ZkYwttXTDSo4OkanG9b3AI4swIQ28g==`
+* __url__: `ct.cloudflare.com/logs/nimbus2019/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Cloudflare`
+* __contact__: `ivan@cloudflare.com`
+* __chrome bug__: `https://crbug.com/780655`
+* __certificate expiry range__: `[2019-01-01 00:00:00 UTC, 2020-01-01 00:00:00 UTC)`
+* __chrome state__: `pending for inclusion`
+* __scts accepted by chrome__: False
+* __id b64__: `dH7agzGtMxCRIZzOJU9CcMK//V5CIAjGNzV55hB7zFY=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkZHz1v5r8a9LmXSMegYZAg4UW+Ug
+56GtNfJTDNFZuubEJYgWf4FcC5D+ZkYwttXTDSo4OkanG9b3AI4swIQ28g==
+-----END PUBLIC KEY-----
+```
+
+### ct.cloudflare.com/logs/nimbus2020/
+
+* __description__: `Cloudflare 'Nimbus2020' Log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE01EAhx4o0zPQrXTcYjgCt4MVFsT0Pwjzb1RwrM0lhWDlxAYPP6/gyMCXNkOn/7KFsjL7rwk78tHMpY8rXn8AYg==`
+* __url__: `ct.cloudflare.com/logs/nimbus2020/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Cloudflare`
+* __contact__: `ivan@cloudflare.com`
+* __chrome bug__: `https://crbug.com/780656`
+* __certificate expiry range__: `[2020-01-01 00:00:00 UTC, 2021-01-01 00:00:00 UTC)`
+* __chrome state__: `pending for inclusion`
+* __scts accepted by chrome__: False
+* __id b64__: `Xqdz+d9WwOe1Nkh90EngMnqRmgyEoRIShBh1loFxRVg=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE01EAhx4o0zPQrXTcYjgCt4MVFsT0
+Pwjzb1RwrM0lhWDlxAYPP6/gyMCXNkOn/7KFsjL7rwk78tHMpY8rXn8AYg==
+-----END PUBLIC KEY-----
+```
+
+### ct.cloudflare.com/logs/nimbus2021/
+
+* __description__: `Cloudflare 'Nimbus2021' Log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAExpon7ipsqehIeU1bmpog9TFo4Pk8+9oN8OYHl1Q2JGVXnkVFnuuvPgSo2Ep+6vLffNLcmEbxOucz03sFiematg==`
+* __url__: `ct.cloudflare.com/logs/nimbus2021/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Cloudflare`
+* __contact__: `ivan@cloudflare.com`
+* __chrome bug__: `https://crbug.com/780657`
+* __certificate expiry range__: `[2021-01-01 00:00:00 UTC, 2022-01-01 00:00:00 UTC)`
+* __chrome state__: `pending for inclusion`
+* __scts accepted by chrome__: False
+* __id b64__: `RJRlLrDuzq/EQAfYqP4owNrmgr7YyzG1P9MzlrW2gag=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAExpon7ipsqehIeU1bmpog9TFo4Pk8
++9oN8OYHl1Q2JGVXnkVFnuuvPgSo2Ep+6vLffNLcmEbxOucz03sFiematg==
 -----END PUBLIC KEY-----
 ```
 
