@@ -85,7 +85,7 @@ setup(
         'cryptography<2.0.0',
         'html2text>=2016.9.19',
         'pyasn1>=0.2.0,<0.3.0',
-        'pyasn1-modules>=0.0.9',
+        'pyasn1-modules>=0.0.9,<0.2.0',
         'pyOpenSSL>=17.0.0',
         'requests>=2.17.0',
         'utlz>=0.9.0',
