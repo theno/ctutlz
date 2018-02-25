@@ -1,6 +1,6 @@
 import inspect
 import sys
-from os.path import dirname
+from os.path import dirname, join
 
 from fabric.api import execute, local, task
 from fabric.context_managers import warn_only, quiet
@@ -121,8 +121,29 @@ def _pyenv_exists():
 
 
 def _determine_latest_pythons():
-    # TODO implementation
-    return ['2.6.9', '2.7.13', '3.3.6', '3.4.6', '3.5.3', '3.6.2']
+    thisdir = dirname(__file__)
+    filename_setup_py = join(thisdir, 'setup.py')
+
+    # eg: minors_str = '2.6\n2.7\n3.3\n3.4\n3.5\n3.6'
+    minors_str = local(
+        flo('grep --perl-regexp --only-matching '
+            '"(?<=Programming Language :: Python :: )\\d+\\.\\d+" '
+            '{filename_setup_py}'),
+        capture=True)
+    print(minors_str)
+    # eg: minors = ['2.6', '2.7', '3.3', '3.4', '3.5', '3.6']
+    minors = minors_str.split()
+
+    # eg: ['2.6.9', '2.7.14', '3.3.7', '3.4.8', '3.5.5', '3.6.4']
+    latests = []
+    for minor in minors:
+        latest = local(flo(
+            'pyenv install --list | tr -d [:blank:] | '
+            'grep -P "^{minor}\.[\d\.]+$" | tail -n 1'), capture=True)
+        print(latest)
+        latests.append(latest)
+
+    return latests
 
 
 def _highest_minor(pythons):
@@ -147,6 +168,7 @@ def pythons():
                    'cd fabsetup  &&  fab setup.pyenv -H localhost'))
         return 1
 
+    print(cyan('\n## determine latest python versions'))
     latest_pythons = _determine_latest_pythons()
 
     print(cyan('\n## install latest python versions'))
