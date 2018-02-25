@@ -130,19 +130,28 @@ def _determine_latest_pythons():
             '"(?<=Programming Language :: Python :: )\\d+\\.\\d+" '
             '{filename_setup_py}'),
         capture=True)
-    print(minors_str)
     # eg: minors = ['2.6', '2.7', '3.3', '3.4', '3.5', '3.6']
     minors = minors_str.split()
 
     # eg: ['2.6.9', '2.7.14', '3.3.7', '3.4.8', '3.5.5', '3.6.4']
     latests = []
+
+    versions_str = local(flo(
+        'pyenv install --list | tr -d [:blank:] | '
+        'grep -P "^[\d\.]+$"'), capture=True)
+    versions = versions_str.split()
+
     for minor in minors:
-        latest = local(flo(
-            'pyenv install --list | tr -d [:blank:] | '
-            'grep -P "^{minor}\.[\d\.]+$" | tail -n 1'), capture=True)
-        print(latest)
+        candidates = [version
+                      for version
+                      in versions
+                      if version.startswith(minor)]
+        # sort version numbers: https://stackoverflow.com/a/2574090
+        candidates.sort(key=lambda s: [int(u) for u in s.split('.')])
+        latest = candidates[-1]
         latests.append(latest)
 
+    print(latests)
     return latests
 
 
