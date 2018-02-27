@@ -1,6 +1,6 @@
 '''Download, merge and summarize known logs for Certificate Transparency (CT).
 
-Print output to stdout, warning and errors to stderr.
+Print output to stdout, warnings and errors to stderr.
 
 Currently there exist three log lists with differing infos:
 
@@ -406,6 +406,12 @@ def show_logs(logs, heading, order=2):
 
 
 def ctloglist(print_json=None):
+    '''Gather ct-log lists and print the merged log list.
+
+    Args:
+        print_json(boolean): If True, print merged log list as json data.
+                             Else print as markdown.
+    '''
     if not print_json:
         today = datetime.date.today()
         now = datetime.datetime.now()

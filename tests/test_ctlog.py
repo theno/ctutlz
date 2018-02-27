@@ -1,6 +1,8 @@
 from __future__ import unicode_literals  # for Python-2
 import os.path
 
+import pytest
+
 from ctutlz import ctlog
 
 
