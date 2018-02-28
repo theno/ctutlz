@@ -172,13 +172,17 @@ def merge_log_lists(included_from_webpage,
                     rejected_from_webpage,
                     distrusted_from_webpage,
                     other_from_webpage,
+                    special_from_webpage,
+
                     all_from_webpage,
-                    log_list_logs, all_logs, **_):
+
+                    log_list_logs,
+                    all_logs,
+                    **_):
     '''Merge log lists, warn on log list errors and return merged logs.'''
     # log lists
 
-    # log_list.json contains defines the logs which are chrome ct policy
-    # compliant
+    # log_list.json contains the logs which are chrome ct policy compliant
     #
     # 'll_...' means:     log is listed in log_list.json
     # 'nn_...' means: log is not listed in log_list.json
@@ -190,6 +194,7 @@ def merge_log_lists(included_from_webpage,
     ll_rejected = []
     ll_distrusted = []
     ll_other = []
+    ll_special = []
 
     nn_included = []
     nn_frozen = []
@@ -198,6 +203,7 @@ def merge_log_lists(included_from_webpage,
     nn_rejected = []
     nn_distrusted = []
     nn_other = []
+    nn_special = []
 
     # merge log_list.json with log lists from webpage
 
@@ -217,6 +223,8 @@ def merge_log_lists(included_from_webpage,
         merge_log_list_r(ll_rest, distrusted_from_webpage)
     ll_other, ll_rest, nn_other = \
         merge_log_list_r(ll_rest, other_from_webpage)
+    ll_special, ll_rest, nn_special = \
+        merge_log_list_r(ll_rest, special_from_webpage)
 
     # `ll_rest` now contains all logs from log_list.json which are not
     # listed on webpage (this list should be empty, else the webpage is missing
@@ -240,6 +248,8 @@ def merge_log_lists(included_from_webpage,
         merge_enrich_a_with_b(ll_distrusted, all_rest)
     ll_other, all_rest = \
         merge_enrich_a_with_b(ll_other, all_rest)
+    ll_special, all_rest = \
+        merge_enrich_a_with_b(ll_special, all_rest)
 
     nn_included, all_rest = \
         merge_overwrite_a_with_b(nn_included, all_rest)
@@ -255,16 +265,19 @@ def merge_log_lists(included_from_webpage,
         merge_overwrite_a_with_b(nn_distrusted, all_rest)
     nn_other, all_rest = \
         merge_overwrite_a_with_b(nn_other, all_rest)
+    nn_special, all_rest = \
+        merge_overwrite_a_with_b(nn_special, all_rest)
 
-    # warn for missing logs on webpage
-
-    for log in ll_rest:
-        logger.warn(red(flo(
-            'log in log_list.json not listet on webpage: {log.url}')))
-
-    for log in all_rest:
-        logger.warn(red(flo(
-            'log in all_logs.json not listed on webpage: {log.url}')))
+    # currently only special purpose logs are listet on webpage known-logs.html
+    # # warn for missing logs on webpage
+    #
+    # for log in ll_rest:
+    #     logger.warn(red(flo(
+    #         'log in log_list.json not listet on webpage: {log.url}')))
+    #
+    # for log in all_rest:
+    #     logger.warn(red(flo(
+    #         'log in all_logs.json not listed on webpage: {log.url}')))
 
     # warn for wrongly listed logs
 
@@ -333,6 +346,8 @@ def merge_log_lists(included_from_webpage,
          'logs': nn_distrusted},
         {'heading': 'other logs (webpage, all_logs.json)',
          'logs': nn_other},
+        {'heading': 'special purpose logs (webpage, all_logs.json)',
+         'logs': nn_special},
 
         {'heading': 'UNLISTED ON WEBPAGE (log_list.json or all_logs.json)',
          'logs': rest},
@@ -441,28 +456,55 @@ def ctloglist(print_json=None):
                              for log_dict
                              in log_list])
 
-    included_from_webpage = Logs(webpage_dict['included_in_chrome'])
-    webpage_dict.pop('included_in_chrome')
+    included_from_webpage = Logs(webpage_dict.get('included_in_chrome', []))
+    try:
+        webpage_dict.pop('included_in_chrome')
+    except KeyError:
+        pass
 
-    frozen_from_webpage = Logs(webpage_dict['frozen_logs'])
-    webpage_dict.pop('frozen_logs')
+    frozen_from_webpage = Logs(webpage_dict.get('frozen_logs', []))
+    try:
+        webpage_dict.pop('frozen_logs')
+    except KeyError:
+        pass
 
-    pending_from_webpage = Logs(webpage_dict['pending_inclusion_in_chrome'])
-    webpage_dict.pop('pending_inclusion_in_chrome')
+    pending_from_webpage = Logs(webpage_dict.get('pending_inclusion_in_chrome', []))
+    try:
+        webpage_dict.pop('pending_inclusion_in_chrome')
+    except KeyError:
+        pass
 
     disqualified_from_webpage = \
-        Logs(webpage_dict['disqualified_from_chrome'])
-    webpage_dict.pop('disqualified_from_chrome')
+        Logs(webpage_dict.get('disqualified_from_chrome', []))
+    try:
+        webpage_dict.pop('disqualified_from_chrome')
+    except KeyError:
+        pass
 
-    rejected_from_webpage = Logs(webpage_dict['rejected_by_chrome'])
-    webpage_dict.pop('rejected_by_chrome')
+    rejected_from_webpage = Logs(webpage_dict.get('rejected_by_chrome', []))
+    try:
+        webpage_dict.pop('rejected_by_chrome')
+    except KeyError:
+        pass
 
-    distrusted_from_webpage = Logs(webpage_dict[
-        'completely_distrusted_by_chrome'])
-    webpage_dict.pop('completely_distrusted_by_chrome')
+    distrusted_from_webpage = Logs(webpage_dict.get(
+        'completely_distrusted_by_chrome', []))
+    try:
+        webpage_dict.pop('completely_distrusted_by_chrome')
+    except KeyError:
+        pass
 
-    other_from_webpage = Logs(webpage_dict['other_logs'])
-    webpage_dict.pop('other_logs')
+    other_from_webpage = Logs(webpage_dict.get('other_logs', []))
+    try:
+        webpage_dict.pop('other_logs')
+    except KeyError:
+        pass
+
+    special_from_webpage = Logs(webpage_dict.get('special_purpose_logs', []))
+    try:
+        webpage_dict.pop('special_purpose_logs')
+    except KeyError:
+        pass
 
     unknown_log_titles = [key for key in webpage_dict.keys()]
     if unknown_log_titles:

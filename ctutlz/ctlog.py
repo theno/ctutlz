@@ -366,7 +366,9 @@ def _logs_dict_from_html(html):
         text = _text_from_html(html.decode('utf-8'))  # Python-2
 
     # ged rid of ending section
-    text = text.split('To have another log included in this list')[0]
+    text = text.split('###  Known Logs')[-1]
+
+    # FIXME not needed anymore after redesign of known-logs.html?
     try:
         # remove erroneous ####-headers
         text = re.sub(r'####\s*$', '', text, flags=re.M)
@@ -387,10 +389,14 @@ def _logs_dict_from_html(html):
     # remove trailing spaces
     text = '\n'.join([line.rstrip() for line in text.split('\n')])
 
-    logger.debug(text)
+    text = text.split('\n\n---\n')[0]  # get rid of bottom comments section
 
-    # keep only text blocks with log lists, drop first and second section
-    log_blocks = text.split('\n### ', -1)[2:]
+    # logger.debug(text)
+
+    # keep only text blocks with log lists, drop first section
+    log_blocks = text.split('\n### ', -1)[1:]
+
+    # logger.debug(log_blocks)
 
     logs_dict = {}
     for text_block in log_blocks:
@@ -399,6 +405,8 @@ def _logs_dict_from_html(html):
         # title of the log block,  eg. title = 'included in chrome'
         title = name.strip().lower().replace(' ', '_')
 
+        # FIXME: simplify. Currently only special-purpose-logs are listed on
+        #        known-log.html
         chrome_state = None
         if title.startswith('included'):
             chrome_state = ChromeStates.INCLUDED
@@ -413,6 +421,8 @@ def _logs_dict_from_html(html):
         elif 'distrusted' in title:
             chrome_state = ChromeStates.DISTRUSTED
         elif title.startswith('other'):
+            chrome_state = None
+        elif title.startswith('special_purpose_logs'):
             chrome_state = None
         else:
             raise Exception('unknown chrome_state for log-text_block')

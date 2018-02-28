@@ -132,11 +132,10 @@ comply with all of the above requirements.
 # @pytest.mark.skip(reason="no way of currently testing this")
 def test_logs_dict_from_html_str():
     thisdir = os.path.abspath(os.path.dirname(__file__))
-    with open(
-          os.path.join(thisdir, 'data', 'test_ctlog',
-                       'known-logs_2017-08-24.html')) as fh:
-        input = fh.read()
-    expected_logs_dict = {
+    test_data = [
+        {
+            'filename': 'known-logs_2017-08-24.html',
+            'expected_logs_dict': {
         'completely_distrusted_by_chrome': [{'chrome_bug': 'https://crbug.com/667663',
                                              'chrome_state': 'distrusted',
                                              'contact': 'certificatetransparency@outlook.com',
@@ -568,7 +567,19 @@ def test_logs_dict_from_html_str():
                                 'maximum_merge_delay': None,
                                 'operated_by': ['SHECA'],
                                 'url': 'ctlog.sheca.com/'}]}
+        },
+        {
+            'filename': 'known-logs_2018-02-27.html',
+            'expected_logs_dict': {
+            }
+        },
+    ]
+    for item in test_data[1::]:
+        with open(os.path.join(thisdir, 'data', 'test_ctlog',
+                               item['filename'])) as fh:
+            input = fh.read()
 
-    got = ctlog._logs_dict_from_html(html=input)
-    # from pprint import pprint; pprint(got, indent=1, width=80)
-    assert got == expected_logs_dict
+        got = ctlog._logs_dict_from_html(html=input)
+
+        # from pprint import pprint; pprint(got, indent=1, width=80)
+        assert got == item['expected_logs_dict']
