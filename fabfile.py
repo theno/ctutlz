@@ -4,6 +4,12 @@ from os.path import dirname, join
 
 from fabric.api import execute, local, task
 from fabric.context_managers import warn_only, quiet
+try:
+    from fabsetup.fabutils import extract_minors_from_setup_py
+    from fabsetup.fabutils import determine_latest_pythons, highest_minor
+except ImportError:
+    print('fabsetup not installed, run:\n\n    pip2 install fabsetup')
+    sys.exit(1)
 
 
 # inspired by: http://stackoverflow.com/a/6618825
@@ -121,44 +127,9 @@ def _pyenv_exists():
 
 
 def _determine_latest_pythons():
-    thisdir = dirname(__file__)
-    filename_setup_py = join(thisdir, 'setup.py')
-
-    # eg: minors_str = '2.6\n2.7\n3.3\n3.4\n3.5\n3.6'
-    minors_str = local(
-        flo('grep --perl-regexp --only-matching '
-            '"(?<=Programming Language :: Python :: )\\d+\\.\\d+" '
-            '{filename_setup_py}'),
-        capture=True)
-    # eg: minors = ['2.6', '2.7', '3.3', '3.4', '3.5', '3.6']
-    minors = minors_str.split()
-
-    # eg: ['2.6.9', '2.7.14', '3.3.7', '3.4.8', '3.5.5', '3.6.4']
-    latests = []
-
-    versions_str = local(flo(
-        'pyenv install --list | tr -d [:blank:] | '
-        'grep -P "^[\d\.]+$"'), capture=True)
-    versions = versions_str.split()
-
-    for minor in minors:
-        candidates = [version
-                      for version
-                      in versions
-                      if version.startswith(minor)]
-        # sort version numbers: https://stackoverflow.com/a/2574090
-        candidates.sort(key=lambda s: [int(u) for u in s.split('.')])
-        latest = candidates[-1]
-        latests.append(latest)
-
-    print(latests)
-    return latests
-
-
-def _highest_minor(pythons):
-    highest = pythons[-1]
-    major, minor, patch = highest.split('.', 2)
-    return flo('{major}.{minor}')
+    filename_setup_py = join(dirname(__file__), 'setup.py')
+    minors = extract_minors_from_setup_py(filename_setup_py)
+    return determine_latest_pythons(minors)
 
 
 @task
@@ -225,7 +196,7 @@ def tox(args=''):
 
     latest_pythons = _determine_latest_pythons()
     # e.g. highest_minor_python: '3.6'
-    highest_minor_python = _highest_minor(latest_pythons)
+    highest_minor_python = highest_minor(latest_pythons)
 
     _local_needs_pythons(flo('cd {basedir}  &&  '
                              'python{highest_minor_python} -m tox {args}'))
@@ -274,7 +245,7 @@ def pypi():
 
         latest_pythons = _determine_latest_pythons()
         # e.g. highest_minor: '3.6'
-        highest_minor = _highest_minor(latest_pythons)
+        highest_minor = highest_minor(latest_pythons)
         python = flo('python{highest_minor}')
 
         print(cyan('\n## build package'))
