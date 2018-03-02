@@ -5,7 +5,7 @@ from os.path import dirname, join
 from fabric.api import execute, local, task
 from fabric.context_managers import warn_only, quiet
 try:
-    from fabsetup.fabutils import extract_minors_from_setup_py
+    from fabsetup.fabutils import extract_minors_from_setup_py, print_msg
     from fabsetup.fabutils import determine_latest_pythons, highest_minor
 except ImportError:
     print('fabsetup not installed, run:\n\n    pip2 install fabsetup')
@@ -257,9 +257,15 @@ def pypi():
 
 @task
 def uplogs():
-    '''Download latest version for `ctutlz/all_logs_list.json`'''
+    '''Download latest version for `ctutlz/all_logs_list.json`,
+    `ctutlz/log_list.json`, and `ctutlz/log_list_pubkey.pem`.
+    '''
     basedir = dirname(__file__)
-    filename = 'all_logs_list.json'
-    url = flo('https://www.certificate-transparency.org/known-logs/{filename}')
-    local(flo('wget {url} -O {basedir}/ctutlz/{filename}'))
-    local(flo('cd {basedir}  &&  git diff ctutlz/{filename}'))
+    for filename in [
+            'all_logs_list.json',
+            'log_list.json',
+            'log_list_pubkey.pem', ]:
+        print_msg(flo('\n## {filename}\n'))
+        url = flo('https://www.gstatic.com/ct/log_list/{filename}')
+        local(flo('wget {url} -O {basedir}/ctutlz/{filename}'))
+        local(flo('cd {basedir}  &&  git diff ctutlz/{filename}'))
