@@ -1,5 +1,7 @@
+import datetime
 import inspect
 import sys
+import tempfile
 from os.path import dirname, join
 
 from fabric.api import execute, local, task
@@ -257,15 +259,46 @@ def pypi():
 
 @task
 def uplogs():
-    '''Download latest version for `ctutlz/all_logs_list.json`,
-    `ctutlz/log_list.json`, and `ctutlz/log_list_pubkey.pem`.
+    '''Download latest version of `all_logs_list.json`, `log_list.json`
+    into dir `tests/data/test_ctlog`.
     '''
     basedir = dirname(__file__)
-    for filename in [
-            'all_logs_list.json',
-            'log_list.json',
-            'log_list_pubkey.pem', ]:
+    test_data_dir = flo('{basedir}/tests/data/test_ctlog')
+
+    tmp_dir = tempfile.mkdtemp(prefix='ctutlz_')
+
+    file_items = [
+        ('known-logs.html',
+         'http://www.certificate-transparency.org/known-logs'),
+        ('all_logs_list.json',
+         'https://www.gstatic.com/ct/log_list/all_logs_list.json'),
+        ('log_list.json',
+         'https://www.gstatic.com/ct/log_list/log_list.json'),
+    ]
+    for filename, url in file_items:
         print_msg(flo('\n## {filename}\n'))
-        url = flo('https://www.gstatic.com/ct/log_list/{filename}')
-        local(flo('wget {url} -O {basedir}/ctutlz/{filename}'))
-        local(flo('cd {basedir}  &&  git diff ctutlz/{filename}'))
+
+        basename, ending = filename.split('.')
+        latest = local(flo('cd {test_data_dir}  &&  '
+                           'ls {basename}_*.{ending} | sort | tail -n1'),
+                       capture=True)
+        print(latest)
+
+        tmp_file = flo('{tmp_dir}/{filename}')
+
+        local(flo('wget {url} -O {tmp_file}'))
+
+        with warn_only():
+            res = local(flo('diff -u {test_data_dir}/{latest}  {tmp_file}'),
+                        capture=True)
+        print(res)
+        files_differ = bool(res.return_code != 0)
+        if files_differ:
+            today = datetime.date.today().strftime('%F')
+            local(flo(
+                'cp {tmp_file} {test_data_dir}/{basename}_{today}.{ending}'))
+        else:
+            print('no changes')
+
+    print('')
+    local(flo('rm -rf {tmp_dir}'))
