@@ -174,10 +174,10 @@ def merge_log_lists(included_from_webpage,
                     other_from_webpage,
                     special_from_webpage,
 
-                    all_from_webpage,
+                    all_from_webpage,  # known-logs.html
 
-                    log_list_logs,
-                    all_logs,
+                    log_list_logs,     # log_list.json
+                    all_logs,          # all_logs_list.json
                     **_):
     '''Merge log lists, warn on log list errors and return merged logs.'''
     # log lists
@@ -269,6 +269,7 @@ def merge_log_lists(included_from_webpage,
         merge_overwrite_a_with_b(nn_special, all_rest)
 
     # currently only special purpose logs are listet on webpage known-logs.html
+    #
     # # warn for missing logs on webpage
     #
     # for log in ll_rest:
@@ -468,7 +469,8 @@ def ctloglist(print_json=None):
     except KeyError:
         pass
 
-    pending_from_webpage = Logs(webpage_dict.get('pending_inclusion_in_chrome', []))
+    pending_from_webpage = Logs(webpage_dict.get('pending_inclusion_in_chrome',
+                                                 []))
     try:
         webpage_dict.pop('pending_inclusion_in_chrome')
     except KeyError:
@@ -518,6 +520,10 @@ def ctloglist(print_json=None):
     for log_dict in log_list_dict['logs']:
         if 'disqualified_at' in log_dict.keys():
             log_dict['chrome_state'] = ChromeStates.DISQUALIFIED
+        elif 'final_sth' in log_dict.keys():
+            log_dict['chrome_state'] = ChromeStates.FROZEN
+        else:
+            log_dict['chrome_state'] = ChromeStates.INCLUDED
 
     log_list_logs = Logs(log_list_dict['logs'])
 
