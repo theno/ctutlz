@@ -247,8 +247,8 @@ def pypi():
 
         latest_pythons = _determine_latest_pythons()
         # e.g. highest_minor: '3.6'
-        highest_minor = highest_minor(latest_pythons)
-        python = flo('python{highest_minor}')
+        _highest_minor = highest_minor(latest_pythons)
+        python = flo('python{_highest_minor}')
 
         print(cyan('\n## build package'))
         _local_needs_pythons(flo('cd {basedir}  &&  {python}  setup.py  sdist'))
