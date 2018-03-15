@@ -124,6 +124,7 @@ TlsHandshakeResult = namedtuple(
     field_names=[
         'ee_cert_der',      # (bytes)
         'issuer_cert_der',  # (bytes)
+        'more_issuer_cert_der_candidates',  # [(bytes), ...]
         'ocsp_resp_der',    # (bytes)
         'tls_ext_18_tdf',   # (bytes)
         'err',              # (str)
@@ -131,6 +132,10 @@ TlsHandshakeResult = namedtuple(
     lazy_vals={
         'ee_cert': lambda self: EndEntityCert(self.ee_cert_der),
         'issuer_cert': lambda self: IssuerCert(self.issuer_cert_der),
+        'more_issuer_cert_candidates': lambda self: [
+            IssuerCert(cert_der)
+            for cert_der
+            in self.more_issuer_cert_der_candidates],
 
         'scts_by_cert': lambda self: scts_from_cert(self.ee_cert_der),
         'scts_by_ocsp': lambda self: scts_from_ocsp_resp(self.ocsp_resp_der),
@@ -234,6 +239,7 @@ def do_handshake(domain, scts_tls=True, scts_ocsp=True, timeout=5):
     sock.request_ocsp()
 
     issuer_cert_x509 = None
+    more_issuer_cert_candidates = []
     ee_cert_x509 = None
     ocsp_resp_der = None
     tls_ext_18_tdf = None
@@ -249,6 +255,8 @@ def do_handshake(domain, scts_tls=True, scts_ocsp=True, timeout=5):
         chain_x509s = sock.get_peer_cert_chain()
         if len(chain_x509s) > 1:
             issuer_cert_x509 = chain_x509s[1]
+        more_issuer_cert_x509_candidates = [ee_cert_x509] + chain_x509s
+        print(len(chain_x509s))
 
         ctx = sock.get_context()
         if scts_tls:
@@ -279,6 +287,14 @@ def do_handshake(domain, scts_tls=True, scts_ocsp=True, timeout=5):
             type=OpenSSL.crypto.FILETYPE_ASN1,
             cert=issuer_cert_x509)
 
+    more_issuer_cert_der_candidates = [
+        OpenSSL.crypto.dump_certificate(type=OpenSSL.crypto.FILETYPE_ASN1,
+                                        cert=cert_x509)
+        for cert_x509
+        in more_issuer_cert_x509_candidates
+    ]
+
     return TlsHandshakeResult(ee_cert_der, issuer_cert_der,
+                              more_issuer_cert_der_candidates,
                               ocsp_resp_der, tls_ext_18_tdf,
                               err)

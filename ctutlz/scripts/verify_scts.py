@@ -100,11 +100,13 @@ def verify_scts_by_cert(res, ctlogs):
     Return:
         [<ctutlz.sct.verification.SctVerificationResult>, ...]
     '''
-    return verify_scts(res.ee_cert,
-                       res.scts_by_cert,
-                       ctlogs,
-                       res.issuer_cert,
-                       create_signature_input_precert)
+    return verify_scts(
+        ee_cert=res.ee_cert,
+        scts=res.scts_by_cert,
+        logs=ctlogs,
+        issuer_cert=res.issuer_cert,
+        more_issuer_cert_candidates=res.more_issuer_cert_candidates,
+        sign_input_func=create_signature_input_precert)
 
 
 def verify_scts_by_tls(res, ctlogs):
@@ -116,11 +118,13 @@ def verify_scts_by_tls(res, ctlogs):
     Return:
         [<ctutlz.sct.verification.SctVerificationResult>, ...]
     '''
-    return verify_scts(res.ee_cert,
-                       res.scts_by_tls,
-                       ctlogs,
-                       res.issuer_cert,
-                       create_signature_input)
+    return verify_scts(
+        ee_cert=res.ee_cert,
+        scts=res.scts_by_tls,
+        logs=ctlogs,
+        issuer_cert=None,
+        more_issuer_cert_candidates=None,
+        sign_input_func=create_signature_input)
 
 
 def verify_scts_by_ocsp(res, ctlogs):
@@ -132,11 +136,13 @@ def verify_scts_by_ocsp(res, ctlogs):
     Return:
         [<ctutlz.sct.verification.SctVerificationResult>, ...]
     '''
-    return verify_scts(res.ee_cert,
-                       res.scts_by_ocsp,
-                       ctlogs,
-                       res.issuer_cert,
-                       create_signature_input)
+    return verify_scts(
+        ee_cert=res.ee_cert,
+        scts=res.scts_by_ocsp,
+        logs=ctlogs,
+        issuer_cert=None,
+        more_issuer_cert_candidates=None,
+        sign_input_func=create_signature_input)
 
 
 # for more convenient command output

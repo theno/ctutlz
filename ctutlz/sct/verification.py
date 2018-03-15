@@ -61,7 +61,7 @@ def verify_signature(signature_input, signature,
 
     Return:
         True, if signature could be verified
-        False
+        False, else
     '''
     cryptography_key = serialization.load_pem_public_key(pubkey_pem, backend)
     pkey = pkey_from_cryptography_key(cryptography_key)
@@ -78,7 +78,9 @@ def verify_signature(signature_input, signature,
     return True
 
 
-def verify_sct(ee_cert, sct, logs, issuer_cert, sign_input_func):
+def verify_sct(ee_cert, sct, logs,
+               issuer_cert, more_issuer_cert_candidates,
+               sign_input_func):
     log = find_log(sct, logs)
     if log:
         verified = verify_signature(
@@ -86,13 +88,41 @@ def verify_sct(ee_cert, sct, logs, issuer_cert, sign_input_func):
             signature=sct.signature,
             pubkey_pem=log.pubkey.encode('ascii')
         )
+
+        if not verified and more_issuer_cert_candidates is not None:
+            # Sometimes the certificate chain is disordered (this is only
+            # relevant in case of of sct-by-cert, because the signature input
+            # then also depends by the issuer key hash)
+
+            # Try to verify against all other certs of the chain (candidates).
+            for issuer_cert in more_issuer_cert_candidates:
+                verified = verify_signature(
+                    signature_input=sign_input_func(ee_cert, sct, issuer_cert),
+                    signature=sct.signature,
+                    pubkey_pem=log.pubkey.encode('ascii')
+                )
+                if verified:
+                    break
+
+        # # TODO DEVEL
+        # print('CREATE TEST DATA FOR test_verify_sct()')
+        # open('signature_input.bin', 'wb').write(sign_input_func(ee_cert,
+        #                                                         sct,
+        #                                                         issuer_cert))
+        # open('signature.der', 'wb').write(sct.signature)
+        # open('pubkey.pem', 'wb').write(log.pubkey.encode('ascii'))
+
         return SctVerificationResult(ee_cert, sct, log, verified)
     return SctVerificationResult(ee_cert, sct, log=None, verified=False)
 
 
-def verify_scts(ee_cert, scts, logs, issuer_cert, sign_input_func):
+def verify_scts(ee_cert, scts, logs,
+                issuer_cert, more_issuer_cert_candidates,
+                sign_input_func):
     if scts:
-        return [verify_sct(ee_cert, sct, logs, issuer_cert, sign_input_func)
+        return [verify_sct(ee_cert, sct, logs,
+                           issuer_cert, more_issuer_cert_candidates,
+                           sign_input_func)
                 for sct
                 in scts]
     return []
