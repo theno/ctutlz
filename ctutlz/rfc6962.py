@@ -560,7 +560,7 @@ GetEntriesResponseEntry = namedtuple_utlz(
         'leaf_input': lambda self: MerkleTreeLeaf(self.leaf_input_tdf),
 
         'is_x509_chain_entry': lambda self:
-            self.leaf_input.timestamped_entry.entry_type == 0,
+            self.leaf_input.timestamped_entry.entry_type.is_x509_entry,
         'is_precert_chain_entry': lambda self: not self.is_x509_chain_entry,
 
         # The base-64 encoded unsigned data pertaining to the log entry.  In the
