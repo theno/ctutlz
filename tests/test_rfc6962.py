@@ -1,4 +1,8 @@
+import os.path
+
 from ctutlz import rfc6962
+
+from utlz import load_json  # , write_json
 
 
 def test_parse_log_entry_type_0():
@@ -201,3 +205,66 @@ def test_SignedCertificateTimestamp_from_tdf():
                               b'\xa3\x0f~_\xb0r\xd8\x83\x00\xc4{\x89z\xa8\xfd'
                               b'\xcb')
     assert sct.tdf == tdf
+
+
+def test_TimestampedEntry_from_tdf():
+    thisdir = os.path.dirname(__file__)
+    with open(os.path.join(
+            thisdir, 'data', 'test_rfc6962',
+            'ct.cloudflare.com_logs_nimbus2018_get-entries-entry-0'
+            '_TimestampedEntry.tdf'), 'rb') as fh:
+        inp = fh.read()
+
+    entry = rfc6962.TimestampedEntry(inp)
+
+    # assert entry.timestamp == 'adsf'
+
+    assert entry.entry_type.val == 0
+    assert entry.entry_type.is_x509_entry is True
+
+    assert str(entry.signed_entry.pyasn1['tbsCertificate']['serialNumber']) == \
+        '131886156554692286064663550801907147138'
+
+
+def test_MerkleTreeLeaf_from_tdf():
+    thisdir = os.path.dirname(__file__)
+    with open(os.path.join(
+            thisdir, 'data', 'test_rfc6962',
+            'ct.cloudflare.com_logs_nimbus2018_get-entries-entry-0'
+            '_MerkleTreeLeaf.tdf'), 'rb') as fh:
+        inp = fh.read()
+
+    leaf = rfc6962.MerkleTreeLeaf(inp)
+
+    assert str(leaf.version) == 'v1'
+    assert leaf.version.val == 0
+
+    assert str(leaf.leaf_type) == 'timestamped_entry'
+    assert leaf.leaf_type.val == 0
+    assert leaf.leaf_type.is_timestamped_entry is True
+
+    # print(leaf.leaf_entry)
+
+#    with open(os.path.join(
+#            thisdir, 'data', 'test_rfc6962',
+#            'ct.cloudflare.com_logs_nimbus2018_get-entries-entry-0'
+#            '_TimestampedEntry.bin'), 'wb') as fh:
+#        fh.write(leaf.leaf_entry.tdf)
+
+
+def test_GetEntriesResponseEntry_from_json_dict():
+    thisdir = os.path.dirname(__file__)
+    data = load_json(os.path.join(
+        thisdir, 'data', 'test_rfc6962',
+        'ct.cloudflare.com_logs_nimbus2018_get-entries-entry-0.json'))
+    entry = rfc6962.GetEntriesResponseEntry(data)
+
+
+def test_GetEntriesResponse_from_json_dict():
+    thisdir = os.path.dirname(__file__)
+    data = load_json(os.path.join(
+        thisdir, 'data', 'test_rfc6962',
+        'ct.cloudflare.com_logs_nimbus2018_get-entries-0-1.json'))
+    ger = rfc6962.GetEntriesResponse(data)
+    # print(ger)
+    # print(ger.first_entry)

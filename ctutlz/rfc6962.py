@@ -106,7 +106,8 @@ ASN1Cert = namedtuple(
         '_parse_func': lambda _: _parse_asn1_cert,
 
         'der': lambda self: self._parse['der'],
-        'pyasn1': lambda self: der_decoder(self.der, rfc5280.Certificate()),
+        'pyasn1': lambda self: der_decoder(
+            self.der, asn1Spec=rfc5280.Certificate())[0],
     }
 )
 
@@ -286,8 +287,8 @@ TBSCertificate = namedtuple(
         '_parse_func': lambda _: _parse_tbs_certificate,
 
         'der': lambda self: bytes(self._parse['der']),
-        'pyasn1': lambda self: der_decoder(self.der,
-                                           asn1Spec=rfc5280.TBSCertificate()),
+        'pyasn1': lambda self: der_decoder(
+            self.der, asn1Spec=rfc5280.TBSCertificate())[0],
 
         'len': lambda self: len(self.der),
         'lens': lambda self: struct.unpack('!4B', struct.pack('!I', self.len)),
