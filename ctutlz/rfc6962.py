@@ -88,7 +88,7 @@ def _parse_asn1_cert(tdf):
         parser.read('len2', '!B')
         parser.read('len3', '!B')
 
-        der_len = struct.unpack('=I', struct.pack('!4B',
+        der_len = struct.unpack('!I', struct.pack('!4B',
                                                   0,
                                                   parser.res['len1'],
                                                   parser.res['len2'],
@@ -117,7 +117,7 @@ def _parse_asn1_cert_list(tdf):
         parser.read('len2', '!B')
         parser.read('len3', '!B')
 
-        der_list_len = struct.unpack('=I', struct.pack('!4B',
+        der_list_len = struct.unpack('!I', struct.pack('!4B',
                                                        0,
                                                        parser.res['len1'],
                                                        parser.res['len2'],
@@ -267,7 +267,7 @@ def _parse_tbs_certificate(tdf):
         parser.read('len1', '!B')
         parser.read('len2', '!B')
         parser.read('len3', '!B')
-        len_der = struct.unpack('=I', struct.pack('!4B',
+        len_der = struct.unpack('!I', struct.pack('!4B',
                                                   0,
                                                   parser.res['len1'],
                                                   parser.res['len2'],
@@ -476,14 +476,7 @@ def _parse_timestamped_entry(tdf):
         else:
             raise Exception(flo('Unknown entry_type number: {entry_type}'))
 
-        # TODO DEBUG ctlog_get_entries.py related (it looks like some log
-        #                                          answers are missing
-        #                                          the ct_extensions,
-        #                                         or an error in parse routines)
-        try:
-            parser.delegate('extensions', _parse_ct_extensions)
-        except struct.error:
-            pass
+        parser.delegate('extensions', _parse_ct_extensions)
 
         return parser.result()
 
