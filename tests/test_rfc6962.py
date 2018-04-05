@@ -243,9 +243,23 @@ def test_MerkleTreeLeaf_from_tdf():
     assert leaf.leaf_type.val == 0
     assert leaf.leaf_type.is_timestamped_entry is True
 
-    assert str(
-        leaf.leaf_entry.signed_entry.pyasn1['tbsCertificate']['serialNumber']
-    ) == '131886156554692286064663550801907147138'
+    serial = int(leaf.leaf_entry.signed_entry.
+        pyasn1['tbsCertificate']['serialNumber'])
+    assert str(serial) == '131886156554692286064663550801907147138'
+
+    serial_hex_str = '{0:x}'.format(serial).lower()
+    serial_hex_str_with_colons = ':'.join([
+        serial_hex_str[i:i+2] for i in range(0, len(serial_hex_str), 2)])
+    print(serial_hex_str_with_colons)
+    issuer = str(leaf.leaf_entry.signed_entry.
+        pyasn1['tbsCertificate']['issuer'])
+    print(issuer)
+
+    cert_pyasn1 = leaf.leaf_entry.signed_entry.pyasn1['tbsCertificate']
+    keys = cert_pyasn1.keys()
+    for key in keys:
+        print(str(key))
+    print(str(cert_pyasn1['issuer']))
 
 
 def test_X509ChainEntry_from_tdf():
@@ -285,14 +299,25 @@ def test_GetEntriesResponse_from_json_dict():
     response = rfc6962.GetEntriesResponse(data)
 
     assert str(
-        response.first_entry.leaf_input.\
-        leaf_entry.signed_entry.pyasn1['tbsCertificate']['serialNumber']
+        response.first_entry.leaf_input.leaf_entry.signed_entry.pyasn1[
+            'tbsCertificate']['serialNumber']
     ) == '131886156554692286064663550801907147138'
+
+    # with open('leaf-input-cert.der', 'wb') as fh:
+    #     fh.write(response.first_entry.leaf_input.leaf_entry.signed_entry.der)
+
     assert str(
         response.first_entry.extra_data.leaf_certificate.pyasn1[
             'tbsCertificate']['serialNumber']
     ) == '29994665029595910897972718685290776267'
+
+    # with open('extra-data-leaf-cert.der', 'wb') as fh:
+    #     fh.write(response.first_entry.extra_data.leaf_certificate.der)
+
     assert str(
         response.first_entry.extra_data.certificate_chain.certs[0].pyasn1[
             'tbsCertificate']['serialNumber']
     ) == '1'
+
+    # with open('extra-data-chain-cert.der', 'wb') as fh:
+    #     fh.write(response.first_entry.extra_data.certificate_chain.certs[0].der)
