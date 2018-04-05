@@ -63,10 +63,10 @@ async def grabctlog_coroutine(session, ctlog_uri, basedir):
 
     stop = tree_size
     step = 10000
-#    for start in range(stop - (step+3) - 100, stop, step):  # TODO DEVEL
-    for start in [0]:
-        step = 2
-    # for start in range(0, stop, step):
+    # for start in range(stop - (step+3) - 100, stop, step):  # TODO DEVEL
+    # for start in [0]:
+    #    step = 2
+    for start in range(0, stop, step):
         end = start + step - 1  # eg. end = 9999
         if end >= tree_size:
             end = tree_size - 1
