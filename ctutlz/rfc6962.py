@@ -93,6 +93,7 @@ def _parse_asn1_cert(tdf):
                                                   parser.res['len1'],
                                                   parser.res['len2'],
                                                   parser.res['len3']))[0]
+
         parser.res['der_len'] = der_len
         parser.read('der', flo('!{der_len}s'))
 
@@ -114,24 +115,15 @@ ASN1Cert = namedtuple(
 
 def _parse_asn1_cert_list(tdf):
     with TdfBytesParser(tdf) as parser:
-        parser.read('len1', '!B')
-        parser.read('len2', '!B')
-        parser.read('len3', '!B')
 
-        der_list_len = struct.unpack('!I', struct.pack('!4B',
-                                                       0,
-                                                       parser.res['len1'],
-                                                       parser.res['len2'],
-                                                       parser.res['len3']))[0]
-        der_end_offset = parser.offset + der_list_len
+        cert_dicts = []
 
-        list_of_parse_asn1_cert = []
-        while parser.offset < der_end_offset:
-            parse_asn1_cert = parser.delegate(_parse_asn1_cert)
-            list_of_parse_asn1_cert.append(parse_asn1_cert)
+        while parser.offset < len(tdf):
+            parser.delegate('_dict', _parse_asn1_cert)
+            cert_dicts.append(parser.res['_dict'])
 
-        parser.res['der_list_len'] = der_list_len
-        parser.res['list_of_parse_asn1_cert'] = list_of_parse_asn1_cert
+        del parser.res['_dict']
+        parser.res['list_of_parse_asn1_cert'] = cert_dicts
 
         return parser.result()
 
@@ -153,8 +145,28 @@ ASN1CertList = namedtuple(
 
 def _parse_x509_chain_entry(tdf):
     with TdfBytesParser(tdf) as parser:
+
+        parser.read('len1', '!B')
+        parser.read('len2', '!B')
+        parser.read('len3', '!B')
+
+        struct_len = struct.unpack('!I', struct.pack('!4B',
+                                                     0,
+                                                     parser.res['len1'],
+                                                     parser.res['len2'],
+                                                     parser.res['len3']))[0]
+
         parser.delegate('leaf_certificate', _parse_asn1_cert),
-        parser.delegate('certificate_chain', _parse_asn1_cert_list),
+
+        chain_len = struct_len + 3 - parser.offset
+        start = parser.offset
+        end = parser.offset + chain_len
+        chain_bytes = tdf[start:end]
+
+        res_dict, offset = _parse_asn1_cert_list(chain_bytes)
+        parser.res['certificate_chain'] = res_dict
+        parser.offset += offset
+
         return parser.result()
 
 
@@ -174,8 +186,28 @@ X509ChainEntry = namedtuple(
 
 def _parse_precert_chain_entry(tdf):
     with TdfBytesParser(tdf) as parser:
+
+        parser.read('len1', '!B')
+        parser.read('len2', '!B')
+        parser.read('len3', '!B')
+
+        struct_len = struct.unpack('!I', struct.pack('!4B',
+                                                     0,
+                                                     parser.res['len1'],
+                                                     parser.res['len2'],
+                                                     parser.res['len3']))[0]
+
         parser.delegate('pre_certificate', _parse_asn1_cert),
-        parser.delegate('precert_chain', _parse_asn1_cert_list),
+
+        chain_len = struct_len + 3 - parser.offset
+        start = parser.offset
+        end = parser.offset + chain_len
+        chain_bytes = tdf[start:end]
+
+        res_dict, offset = _parse_asn1_cert_list(chain_bytes)
+        parser.res['precert_chain'] = res_dict
+        parser.offset += offset
+
         return parser.result()
 
 

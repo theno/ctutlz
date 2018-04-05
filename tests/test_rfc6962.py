@@ -243,13 +243,27 @@ def test_MerkleTreeLeaf_from_tdf():
     assert leaf.leaf_type.val == 0
     assert leaf.leaf_type.is_timestamped_entry is True
 
-    # print(leaf.leaf_entry)
+    assert str(
+        leaf.leaf_entry.signed_entry.pyasn1['tbsCertificate']['serialNumber']
+    ) == '131886156554692286064663550801907147138'
 
-#    with open(os.path.join(
-#            thisdir, 'data', 'test_rfc6962',
-#            'ct.cloudflare.com_logs_nimbus2018_get-entries-entry-0'
-#            '_TimestampedEntry.bin'), 'wb') as fh:
-#        fh.write(leaf.leaf_entry.tdf)
+
+def test_X509ChainEntry_from_tdf():
+    thisdir = os.path.dirname(__file__)
+    with open(os.path.join(
+            thisdir, 'data', 'test_rfc6962',
+            'ct.cloudflare.com_logs_nimbus2018_get-entries-entry-0'
+            '_X509ChainEntry.tdf'), 'rb') as fh:
+        tdf = fh.read()
+
+    entry = rfc6962.X509ChainEntry(tdf)
+
+    assert str(
+        entry.leaf_certificate.pyasn1['tbsCertificate']['serialNumber']
+    ) == '29994665029595910897972718685290776267'
+
+    assert str(entry.certificate_chain.certs[0].pyasn1[
+        'tbsCertificate']['serialNumber']) == '1'
 
 
 def test_GetEntriesResponseEntry_from_json_dict():
@@ -257,7 +271,10 @@ def test_GetEntriesResponseEntry_from_json_dict():
     data = load_json(os.path.join(
         thisdir, 'data', 'test_rfc6962',
         'ct.cloudflare.com_logs_nimbus2018_get-entries-entry-0.json'))
+
     entry = rfc6962.GetEntriesResponseEntry(data)
+
+    assert entry.is_x509_chain_entry is True
 
 
 def test_GetEntriesResponse_from_json_dict():
@@ -265,6 +282,17 @@ def test_GetEntriesResponse_from_json_dict():
     data = load_json(os.path.join(
         thisdir, 'data', 'test_rfc6962',
         'ct.cloudflare.com_logs_nimbus2018_get-entries-0-1.json'))
-    ger = rfc6962.GetEntriesResponse(data)
-    # print(ger)
-    # print(ger.first_entry)
+    response = rfc6962.GetEntriesResponse(data)
+
+    assert str(
+        response.first_entry.leaf_input.\
+        leaf_entry.signed_entry.pyasn1['tbsCertificate']['serialNumber']
+    ) == '131886156554692286064663550801907147138'
+    assert str(
+        response.first_entry.extra_data.leaf_certificate.pyasn1[
+            'tbsCertificate']['serialNumber']
+    ) == '29994665029595910897972718685290776267'
+    assert str(
+        response.first_entry.extra_data.certificate_chain.certs[0].pyasn1[
+            'tbsCertificate']['serialNumber']
+    ) == '1'
