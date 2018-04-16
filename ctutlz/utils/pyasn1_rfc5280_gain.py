@@ -50,9 +50,11 @@ RelativeDistinguishedName = namedtuple(
 
 Name = namedtuple(
     typename='Name',
-    field_names = ['pyasn1'],
+    field_names=['pyasn1'],
     lazy_vals={
-        'str': lambda self: ','.join([str(RelativeDistinguishedName(rdn)) for rdn in self.pyasn1['rdnSequence']]),
+        'str': lambda self: ','.join([str(RelativeDistinguishedName(rdn))
+                                      for rdn
+                                      in self.pyasn1['rdnSequence']]),
 
         '__str__': lambda self: lambda: self.str,  # __str__ returns a callable
     }
