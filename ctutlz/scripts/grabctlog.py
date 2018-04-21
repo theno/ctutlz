@@ -74,8 +74,10 @@ def show_completion_states(uris, basedir):
             logger.info(flo(
                 'complete: {uri}  [{tree_size:,}]'))
         else:
+            percent = num_incomplete / tree_size * 100
             logger.info(flo(
-                'incomplete: {uri}  {num_incomplete:,} [{tree_size:,}]'))
+                'incomplete: {uri}  {num_incomplete:,} [{tree_size:,}]  '
+                '{percent:.2f}%'))
 
 
 def main():
