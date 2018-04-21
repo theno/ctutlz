@@ -74,11 +74,9 @@ def show_completion_states(uris, basedir):
 
         if complete:
             logger.info(flo(
-                # 'complete: {uri}  [{tree_size:,}]'))  # TODO DEBUG
-                'complete: {uri}  [{tree_size:,}] {num_complete}'))
+                'complete: {uri}  [{tree_size:,}]'))
         else:
-            # percent_incomplete = num_incomplete / tree_size * 100
-            percent_complete = num_complete / tree_size * 100
+            percent_complete = num_complete / tree_size * 100  # noqa: W0612
             logger.info(flo(
                 'incomplete: {uri}  {num_complete:,} [{tree_size:,}]  '
                 '{percent_complete:.2f} %'))
