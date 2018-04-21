@@ -35,9 +35,14 @@ RelativeDistinguishedName = namedtuple(
             # streetAddress
             'STREET' if self.type == '2.5.4.9'  else  # noqa: E272
             # domainComponent
+            # http://oid-info.com/get/0.9.2342.19200300.100.1.25
             'DC'     if self.type == '0.9.2342.19200300.100.1.25' else  # noqa: E272
             # userId
+            # http://oid-info.com/get/0.9.2342.19200300.100.1.1
             'UID'    if self.type == '0.9.2342.19200300.100.1.1' else  # noqa: E272
+            # emailAddress
+            # http://oid-info.com/get/1.2.840.113549.1.9.1
+            'emailAddress' if self.type == '1.2.840.113549.1.9.1' else
 
             (logger.error(flo('unknown type {self.type}')), self.type)[-1],
 
