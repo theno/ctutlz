@@ -9,6 +9,9 @@ from utlz import flo
 from ctutlz.utils.logger import logger
 
 
+STEP_SIZE = 1024
+
+
 async def save_response(filename, response):
     with open(filename, mode='wb') as f_handle:
         # while True:
@@ -50,19 +53,25 @@ async def get_entries(session, ctlog_dir, ctlog_url, start, end):
     await download(session, filename, url, params=params, skip_if_exists=True)
 
 
-async def grabctlog_coroutine(session, ctlog_uri, basedir):
-    ctlog_url = 'https://{}'.format(ctlog_uri)
-
+def ctlog_dir_for(basedir, ctlog_uri):
     # eg. ctlog_dirname = 'ct1.digicert-ct.com_log'
     ctlog_dirname = ctlog_uri.rstrip('/').replace('/', '_')
     ctlog_dir = os.path.join(basedir, ctlog_dirname)
+    return ctlog_dir
+
+
+async def grabctlog_coroutine(session, ctlog_uri, basedir):
+    ctlog_url = 'https://{}'.format(ctlog_uri)
+
+    ctlog_dir = ctlog_dir_for(basedir, ctlog_uri)
+
     os.makedirs(ctlog_dir, exist_ok=True)
 
     tree_size = await get_sth(session, ctlog_dir, ctlog_url)
     logger.info(flo('{ctlog_url}: {tree_size}'))
 
     stop = tree_size
-    step = 10000
+    step = STEP_SIZE
     # for start in range(stop - (step+3) - 100, stop, step):  # TODO DEVEL
     # for start in [0]:
     #    step = 2

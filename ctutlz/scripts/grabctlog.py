@@ -10,8 +10,7 @@ import utlz
 from utlz import flo
 
 from ctutlz.utils.logger import VERBOSE, init_logger, setup_logging, logger
-
-from ctutlz.grabctlog.ctlog_grabber import grab_ctlogs
+from ctutlz.grabctlog.ctlog_grabber import grab_ctlogs, ctlog_dir_for, STEP_SIZE
 
 
 def create_parser():
@@ -33,6 +32,12 @@ def create_parser():
                      const=logging.DEBUG,
                      help='show more for diagnostic purposes')
 
+    parser.add_argument('--show',
+                        action='store_true',
+                        default=False,
+                        help='show if grabbed data of ctlog given by url is '
+                             'complete (and do not grab entries)')
+
     parser.add_argument('--to',
                         default=os.getcwd(),
                         metavar='<dirname>',
@@ -40,6 +45,35 @@ def create_parser():
                              ' (default: current working dir)')
 
     return parser
+
+
+def show_completion_states(uris, basedir):
+    for uri in uris:
+        ctlog_dir = ctlog_dir_for(basedir, uri)
+        filename = os.path.join(ctlog_dir, 'get-sth.json')
+        data = utlz.load_json(filename)
+        tree_size = data['tree_size']
+
+        complete = True
+        num_incomplete = 0
+
+        stop = tree_size
+        step = STEP_SIZE
+
+        for start in range(0, stop, step):
+            end = start + step - 1  # eg. end = 9999
+            if end >= tree_size:
+                end = tree_size - 1
+
+            fname = flo('get-entries-{start}-{end}.json')
+            if not os.path.exists(os.path.join(ctlog_dir, fname)):
+                num_incomplete += 1
+                complete = False
+
+        if complete:
+            logger.info(flo('complete {uri}: {tree_size} entries'))
+        else:
+            logger.info(flo('{uri} incomplete: {num_incomplete} [{tree_size}]'))
 
 
 def main():
@@ -60,7 +94,10 @@ def main():
 
     logger.debug(pformat(locals()))
 
-    grab_ctlogs(uris, basedir)
+    if args.show:
+        show_completion_states(uris, basedir)
+    else:
+        grab_ctlogs(uris, basedir)
 
 
 if __name__ == '__main__':
