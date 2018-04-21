@@ -71,9 +71,11 @@ def show_completion_states(uris, basedir):
                 complete = False
 
         if complete:
-            logger.info(flo('complete {uri}: {tree_size} entries'))
+            logger.info(flo(
+                'complete: {uri}  [{tree_size:,}]'))
         else:
-            logger.info(flo('{uri} incomplete: {num_incomplete} [{tree_size}]'))
+            logger.info(flo(
+                'incomplete: {uri}  {num_incomplete:,} [{tree_size:,}]'))
 
 
 def main():
