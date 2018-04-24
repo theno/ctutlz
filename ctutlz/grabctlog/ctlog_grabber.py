@@ -20,8 +20,9 @@ def check_get_entries_response(filename):
     Return: True or False
     '''
     basename = os.path.basename(filename)
-    start, end = map(lambda arg: int(arg),
-                     basename.lstrip('get-entries-').rstrip('.json').split('-'))
+    start, end = basename.lstrip('get-entries-').rstrip('.json').split('-')
+    start = int(start)
+    end = int(end)
 
     get_entries_data = utlz.load_json(filename)
 
@@ -43,7 +44,6 @@ async def save_response(filename, response):
         #     f_handle.write(chunk)
         data = await response.read()
         f_handle.write(data)
-    check_get_entries_response(filename)
 
 
 async def download(session, filename, url, params=None, skip_if_exists=True):
@@ -59,6 +59,8 @@ async def download(session, filename, url, params=None, skip_if_exists=True):
             assert response.status == 200, flo('expected: 200, got: '
                                                '{response.status}')
             await save_response(filename, response)
+        if os.path.basename(filename).startswith('get-entries-'):
+            check_get_entries_response(filename)
 
 
 async def get_sth(session, ctlog_dir, ctlog_url):
