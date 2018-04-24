@@ -50,6 +50,8 @@ RelativeDistinguishedName = namedtuple(
 
             'postalCode' if self.type == '2.5.4.17' else
 
+            'houseIdentifier' if self.type == '2.5.4.51' else
+
             'organizationIdentifier' if self.type == '2.5.4.97' else
 
             (logger.error(flo('unknown type {self.type}')), self.type)[-1],
