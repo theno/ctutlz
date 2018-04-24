@@ -9,7 +9,7 @@ from utlz import flo
 from ctutlz.utils.logger import logger
 
 
-STEP_SIZE = 1024
+STEP_SIZE = 256
 
 
 def check_get_entries_response(filename):
@@ -25,12 +25,16 @@ def check_get_entries_response(filename):
     end = int(end)
 
     get_entries_data = utlz.load_json(filename)
-
     entries = get_entries_data['entries']
-    assert len(entries) == end - start + 1, 'get-entries-response too small ' \
-        'expected size: %s, response_size: %s' % (end - start + 1, len(entries))
 
-    # TODO delete
+    if not (len(entries) == end - start + 1):
+        logger.warn(
+            '%s get-entries-response too small '
+            'expected size: %s, response_size: %s' % (filename,
+                                                      end - start + 1,
+                                                      len(entries)))
+        os.remove(filename)
+        return False
 
     return True
 
