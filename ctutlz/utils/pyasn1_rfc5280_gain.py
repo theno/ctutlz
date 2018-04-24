@@ -44,6 +44,14 @@ RelativeDistinguishedName = namedtuple(
             # http://oid-info.com/get/1.2.840.113549.1.9.1
             'emailAddress' if self.type == '1.2.840.113549.1.9.1' else
 
+            # emailAddress
+            # http://oid-info.com/get/2.5.4.5
+            'serialNumber' if self.type == '2.5.4.5' else
+
+            'postalCode' if self.type == '2.5.4.17' else
+
+            'organizationIdentifier' if self.type == '2.5.4.97' else
+
             (logger.error(flo('unknown type {self.type}')), self.type)[-1],
 
         'str': lambda self: flo('{self.type_str}={self.value}'),
