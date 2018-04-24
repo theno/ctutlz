@@ -11,6 +11,7 @@ from utlz import flo
 
 from ctutlz.utils.logger import VERBOSE, init_logger, setup_logging, logger
 from ctutlz.grabctlog.ctlog_grabber import grab_ctlogs, ctlog_dir_for, STEP_SIZE
+from ctutlz.grabctlog.ctlog_grabber import check_get_entries_response
 
 
 def create_parser():
@@ -37,6 +38,11 @@ def create_parser():
                         default=False,
                         help='show if grabbed data of ctlog given by url is '
                              'complete (and do not grab entries)')
+    parser.add_argument('--check',
+                        action='store_true',
+                        default=False,
+                        help='check if grabbed data is complete and remove '
+                             'incomplete get-entries response files')
 
     parser.add_argument('--to',
                         default=os.getcwd(),
@@ -47,8 +53,7 @@ def create_parser():
     return parser
 
 
-def show_completion_states(uris, basedir):
-    for uri in uris:
+def show_completion_state(uri, basedir):
         ctlog_dir = ctlog_dir_for(basedir, uri)
         filename = os.path.join(ctlog_dir, 'get-sth.json')
         data = utlz.load_json(filename)
@@ -82,6 +87,21 @@ def show_completion_states(uris, basedir):
                 '{percent_complete:.2f} %'))
 
 
+def show_completion_states(uris, basedir):
+    for uri in uris:
+        show_completion_state(uri, basedir)
+
+
+def check_get_entries_responses(uris, basedir):
+    for uri in uris:
+        show_completion_state(uri, basedir)
+        ctlog_dir = ctlog_dir_for(basedir, uri)
+
+        for fname in os.listdir(ctlog_dir):
+            if fname.startswith('get-entries-'):
+                check_get_entries_response(os.path.join(ctlog_dir, fname))
+
+
 def main():
     init_logger()
     parser = create_parser()
@@ -102,6 +122,8 @@ def main():
 
     if args.show:
         show_completion_states(uris, basedir)
+    elif args.check:
+        check_get_entries_responses(uris, basedir)
     else:
         grab_ctlogs(uris, basedir)
 

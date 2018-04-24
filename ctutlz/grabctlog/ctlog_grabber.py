@@ -12,6 +12,28 @@ from ctutlz.utils.logger import logger
 STEP_SIZE = 1024
 
 
+def check_get_entries_response(filename):
+    '''
+    Args:
+        filename(str): e.g. get-entries-0-1023.json
+
+    Return: True or False
+    '''
+    basename = os.path.basename(filename)
+    start, end = map(lambda arg: int(arg),
+                     basename.lstrip('get-entries-').rstrip('.json').split('-'))
+
+    get_entries_data = utlz.load_json(filename)
+
+    entries = get_entries_data['entries']
+    assert len(entries) == end - start + 1, 'get-entries-response too small ' \
+        'expected size: %s, response_size: %s' % (end - start + 1, len(entries))
+
+    # TODO delete
+
+    return True
+
+
 async def save_response(filename, response):
     with open(filename, mode='wb') as f_handle:
         # while True:
@@ -21,6 +43,7 @@ async def save_response(filename, response):
         #     f_handle.write(chunk)
         data = await response.read()
         f_handle.write(data)
+    check_get_entries_response(filename)
 
 
 async def download(session, filename, url, params=None, skip_if_exists=True):
