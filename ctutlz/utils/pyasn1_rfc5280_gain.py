@@ -50,6 +50,10 @@ RelativeDistinguishedName = namedtuple(
 
             'postalCode' if self.type == '2.5.4.17' else
 
+            # uniqueIdentifier
+            # http://oid-info.com/get/2.5.4.45
+            'uniqueIdentifier' if self.type == '2.5.4.45' else
+
             'houseIdentifier' if self.type == '2.5.4.51' else
 
             'organizationIdentifier' if self.type == '2.5.4.97' else
