@@ -44,6 +44,10 @@ RelativeDistinguishedName = namedtuple(
             # http://oid-info.com/get/1.2.840.113549.1.9.1
             'emailAddress' if self.type == '1.2.840.113549.1.9.1' else
 
+            # rfc822Mailbox
+            # http://oid-info.com/get/0.9.2342.19200300.100.1.3
+            'rfc822Mailbox' if self.type == '0.9.2342.19200300.100.1.3' else
+
             # emailAddress
             # http://oid-info.com/get/2.5.4.5
             'serialNumber' if self.type == '2.5.4.5' else

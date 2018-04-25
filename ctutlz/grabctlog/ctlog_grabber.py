@@ -10,6 +10,7 @@ from ctutlz.utils.logger import logger
 
 
 STEP_SIZE = 256
+# STEP_SIZE = 1024
 
 
 def check_get_entries_response(filename):
