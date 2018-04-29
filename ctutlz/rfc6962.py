@@ -186,20 +186,17 @@ X509ChainEntry = namedtuple(
 
 def _parse_precert_chain_entry(tdf):
     with TdfBytesParser(tdf) as parser:
+        parser.delegate('pre_certificate', _parse_asn1_cert),
 
         parser.read('len1', '!B')
         parser.read('len2', '!B')
         parser.read('len3', '!B')
 
-        struct_len = struct.unpack('!I', struct.pack('!4B',
-                                                     0,
-                                                     parser.res['len1'],
-                                                     parser.res['len2'],
-                                                     parser.res['len3']))[0]
-
-        parser.delegate('pre_certificate', _parse_asn1_cert),
-
-        chain_len = struct_len + 3 - parser.offset
+        chain_len = struct.unpack('!I', struct.pack('!4B',
+                                                    0,
+                                                    parser.res['len1'],
+                                                    parser.res['len2'],
+                                                    parser.res['len3']))[0]
         start = parser.offset
         end = parser.offset + chain_len
         chain_bytes = tdf[start:end]
@@ -530,8 +527,10 @@ TimestampedEntry = namedtuple(
             None,
         'extensions': lambda self: CtExtensions(self._parse.get('extensions')),
 
-        'precert_entry': lambda self: self._parse.get('precert_entry', None),
-        'x509_entry': lambda self: self._parse.get('x509_entry', None),
+        'precert_entry': lambda self:
+            PreCert(self._parse.get('precert_entry', None)),
+        'x509_entry': lambda self:
+            ASN1Cert(self._parse.get('x509_entry', None)),
     }
 )
 

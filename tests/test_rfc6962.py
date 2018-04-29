@@ -293,13 +293,23 @@ def test_GetEntriesResponseEntry_from_json_dict():
 
 def test_GetEntriesResponse_from_json_dict():
     thisdir = os.path.dirname(__file__)
+
+    # nimbus2018 -> x509 entry
+
     data = load_json(os.path.join(
         thisdir, 'data', 'test_rfc6962',
         'ct.cloudflare.com_logs_nimbus2018', 'get-entries-0-1.json'))
     response = rfc6962.GetEntriesResponse(data)
 
+    assert response.first_entry.is_x509_chain_entry
+    assert not response.first_entry.is_precert_chain_entry
+
     assert str(
         response.first_entry.leaf_input.leaf_entry.signed_entry.pyasn1[
+            'tbsCertificate']['serialNumber']
+    ) == '131886156554692286064663550801907147138'
+    assert str(
+        response.first_entry.leaf_input.leaf_entry.x509_entry.pyasn1[
             'tbsCertificate']['serialNumber']
     ) == '131886156554692286064663550801907147138'
 
@@ -319,5 +329,36 @@ def test_GetEntriesResponse_from_json_dict():
             'tbsCertificate']['serialNumber']
     ) == '1'
 
-    # with open('extra-data-chain-cert.der', 'wb') as fh:
-    #     fh.write(response.first_entry.extra_data.certificate_chain.certs[0].der)
+    # skydiver -> precert entry
+
+    data = load_json(os.path.join(
+        thisdir, 'data', 'test_rfc6962',
+        'ct.googleapis.com_skydiver', 'get-entries-9830400-9830400.json'))
+    response = rfc6962.GetEntriesResponse(data)
+
+    assert response.first_entry.is_precert_chain_entry
+    assert not response.first_entry.is_x509_chain_entry
+
+    assert str(
+        response.first_entry.leaf_input.leaf_entry.signed_entry.
+        tbs_certificate.pyasn1['serialNumber']
+    ) == '20044682497643690449074198346399064211'
+    assert str(
+        response.first_entry.leaf_input.leaf_entry.precert_entry.
+        tbs_certificate.pyasn1['serialNumber']
+    ) == '20044682497643690449074198346399064211'
+
+    assert str(
+        response.first_entry.extra_data.pre_certificate.pyasn1[
+            'tbsCertificate']['serialNumber']
+    ) == '20044682497643690449074198346399064211'
+
+    assert str(
+        response.first_entry.extra_data.precertificate_chain.certs[0].pyasn1[
+            'tbsCertificate']['serialNumber']
+    ) == '18448224870038921493073873828295040723'
+
+    assert str(
+        response.first_entry.extra_data.precertificate_chain.certs[1].pyasn1[
+            'tbsCertificate']['serialNumber']
+    ) == '4293743540046975378534879503202253541'
