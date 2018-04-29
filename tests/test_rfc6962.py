@@ -211,7 +211,7 @@ def test_TimestampedEntry_from_tdf():
     thisdir = os.path.dirname(__file__)
     with open(os.path.join(
             thisdir, 'data', 'test_rfc6962',
-            'ct.cloudflare.com_logs_nimbus2018_get-entries-entry-0'
+            'ct.cloudflare.com_logs_nimbus2018', 'get-entries-entry-0'
             '_TimestampedEntry.tdf'), 'rb') as fh:
         inp = fh.read()
 
@@ -230,7 +230,7 @@ def test_MerkleTreeLeaf_from_tdf():
     thisdir = os.path.dirname(__file__)
     with open(os.path.join(
             thisdir, 'data', 'test_rfc6962',
-            'ct.cloudflare.com_logs_nimbus2018_get-entries-entry-0'
+            'ct.cloudflare.com_logs_nimbus2018', 'get-entries-entry-0'
             '_MerkleTreeLeaf.tdf'), 'rb') as fh:
         inp = fh.read()
 
@@ -266,7 +266,7 @@ def test_X509ChainEntry_from_tdf():
     thisdir = os.path.dirname(__file__)
     with open(os.path.join(
             thisdir, 'data', 'test_rfc6962',
-            'ct.cloudflare.com_logs_nimbus2018_get-entries-entry-0'
+            'ct.cloudflare.com_logs_nimbus2018', 'get-entries-entry-0'
             '_X509ChainEntry.tdf'), 'rb') as fh:
         tdf = fh.read()
 
@@ -284,7 +284,7 @@ def test_GetEntriesResponseEntry_from_json_dict():
     thisdir = os.path.dirname(__file__)
     data = load_json(os.path.join(
         thisdir, 'data', 'test_rfc6962',
-        'ct.cloudflare.com_logs_nimbus2018_get-entries-entry-0.json'))
+        'ct.cloudflare.com_logs_nimbus2018', 'get-entries-entry-0.json'))
 
     entry = rfc6962.GetEntriesResponseEntry(data)
 
@@ -295,7 +295,7 @@ def test_GetEntriesResponse_from_json_dict():
     thisdir = os.path.dirname(__file__)
     data = load_json(os.path.join(
         thisdir, 'data', 'test_rfc6962',
-        'ct.cloudflare.com_logs_nimbus2018_get-entries-0-1.json'))
+        'ct.cloudflare.com_logs_nimbus2018', 'get-entries-0-1.json'))
     response = rfc6962.GetEntriesResponse(data)
 
     assert str(
