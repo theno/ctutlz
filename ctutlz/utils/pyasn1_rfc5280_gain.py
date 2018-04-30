@@ -72,10 +72,22 @@ RelativeDistinguishedName = namedtuple(
 )
 
 
+def extract_cn_from_dn(dn):
+    for rdn in dn.pyasn1['rdnSequence']:
+        rdn = RelativeDistinguishedName(rdn)
+        if rdn.type_str == 'CN':
+            return rdn.value
+    return None
+
+
 Name = namedtuple(
     typename='Name',
-    field_names=['pyasn1'],
+    field_names=[
+        'pyasn1'  # <pyasn1_modules.rfc5280.Name>
+    ],
     lazy_vals={
+        'cn': lambda self: extract_cn_from_dn(self),
+
         'str': lambda self: ','.join([str(RelativeDistinguishedName(rdn))
                                       for rdn
                                       in self.pyasn1['rdnSequence']]),
