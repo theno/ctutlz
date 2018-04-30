@@ -40,21 +40,22 @@ RelativeDistinguishedName = namedtuple(
             # userId
             # http://oid-info.com/get/0.9.2342.19200300.100.1.1
             'UID'    if self.type == '0.9.2342.19200300.100.1.1' else  # noqa: E272
-            # emailAddress
             # http://oid-info.com/get/1.2.840.113549.1.9.1
             'emailAddress' if self.type == '1.2.840.113549.1.9.1' else
 
-            # rfc822Mailbox
+            # oid "specialities" for webserver certificates
+
             # http://oid-info.com/get/0.9.2342.19200300.100.1.3
             'rfc822Mailbox' if self.type == '0.9.2342.19200300.100.1.3' else
 
-            # emailAddress
+            # http://oid-info.com/get/2.5.4.4
+            'surname' if self.type == '2.5.4.4' else
+
             # http://oid-info.com/get/2.5.4.5
             'serialNumber' if self.type == '2.5.4.5' else
 
             'postalCode' if self.type == '2.5.4.17' else
 
-            # uniqueIdentifier
             # http://oid-info.com/get/2.5.4.45
             'uniqueIdentifier' if self.type == '2.5.4.45' else
 
