@@ -112,7 +112,9 @@ def main():
     # assure uris have the same format as the "url" values in the
     # json log lists
     # eg. uris = ['ct.googleapis.com/testtube/', 'ct.googleapis.com/skydiver/']
-    uris = ['{}/'.format(url.lstrip('https://').rstrip('/'))
+    # TODO bug: removes the 's' from 'symantec' -> 'ymantec'
+    # uris = ['{}/'.format(url.lstrip('https://').rstrip('/'))
+    uris = ['{}/'.format(url.rstrip('/'))
             for url
             in args.url]
 
