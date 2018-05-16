@@ -239,7 +239,7 @@ def do_handshake(domain, scts_tls=True, scts_ocsp=True, timeout=5):
     sock.request_ocsp()
 
     issuer_cert_x509 = None
-    more_issuer_cert_candidates = []
+    more_issuer_cert_x509_candidates = []
     ee_cert_x509 = None
     ocsp_resp_der = None
     tls_ext_18_tdf = None
