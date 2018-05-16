@@ -236,6 +236,7 @@ def do_handshake(domain, scts_tls=True, scts_ocsp=True, timeout=5):
     '''
     ctx = create_context(scts_tls, scts_ocsp, timeout)
     sock = create_socket(ctx)
+    sock.set_tlsext_host_name(domain.encode())
     sock.request_ocsp()
 
     issuer_cert_x509 = None
