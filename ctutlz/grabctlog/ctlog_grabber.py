@@ -2,7 +2,6 @@ import aiohttp
 import asyncio
 import os
 import os.path
-import traceback
 
 import utlz
 from utlz import flo
@@ -29,8 +28,8 @@ def check_get_entries_response(filename):
     try:
         get_entries_data = utlz.load_json(filename)
     except Exception:
-        logger.error('Cannot load %s' % filename)
-        logger.error(traceback.format_exc())
+        logger.error('Cannot load %s; delete it' % filename)
+        os.remove(filename)
         return False
 
     entries = get_entries_data['entries']
