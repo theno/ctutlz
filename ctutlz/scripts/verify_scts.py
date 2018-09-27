@@ -86,7 +86,7 @@ def create_parser():
                            'https://www.certificate-transparency.org/'
                            'known-logs/all_logs_list.json '
                            '-- use built-in log list really_all_logs.json '
-                           'from 2017-08-11 if --latest-logs or --log-list '
+                           'from 2018-09-27 if --latest-logs or --log-list '
                            'are not set')
     return parser
 

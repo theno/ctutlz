@@ -453,7 +453,11 @@ def ctloglist(print_json=None):
 
     all_from_webpage = Logs([log_dict
                              for log_list
-                             in [webpage_dict[key] for key in webpage_dict]
+                             in [webpage_dict[key]
+                                 for key
+                                 in webpage_dict
+                                 # omit test logs from webpage
+                                 if key != 'test_logs']
                              for log_dict
                              in log_list])
 

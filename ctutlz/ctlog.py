@@ -57,6 +57,9 @@ Log = namedtuple(
         'active=None',        # log accepts new entries
         # True, False, or None
         'alive=None',         # log answers
+
+        'expiry_range=None',  # log accepts certificates with distinct
+                              # expiration date only
     ],
     lazy_vals={
         'key_der': lambda self: decode_from_b64(self.key),  # type: bytes
@@ -405,8 +408,8 @@ def _logs_dict_from_html(html):
         # title of the log block,  eg. title = 'included in chrome'
         title = name.strip().lower().replace(' ', '_')
 
-        # FIXME: simplify. Currently only special-purpose-logs are listed on
-        #        known-log.html
+        # FIXME: simplify. Currently only special-purpose-logs and test-logs
+        #        are listed on known-log.html
         chrome_state = None
         if title.startswith('included'):
             chrome_state = ChromeStates.INCLUDED
@@ -424,16 +427,21 @@ def _logs_dict_from_html(html):
             chrome_state = None
         elif title.startswith('special_purpose_logs'):
             chrome_state = None
+        elif title.startswith('test_logs'):
+            chrome_state = None
         else:
-            raise Exception('unknown chrome_state for log-text_block')
+            raise Exception(
+                'unknown chrome_state for log-text_block: {0}'.format(
+                    title))
 
         logs_dict[title] = []
         for log_text in rest.strip().lstrip('#### ').split('\n\n#### '):
             if log_text.strip() != '':
-                log_dict = _log_dict_from_log_text(log_text)
-                log_dict['chrome_state'] = chrome_state
+                if not log_text.strip().startswith('These logs are intended'):
+                    log_dict = _log_dict_from_log_text(log_text)
+                    log_dict['chrome_state'] = chrome_state
 
-                logs_dict[title].append(log_dict)
+                    logs_dict[title].append(log_dict)
 
     return logs_dict
 
