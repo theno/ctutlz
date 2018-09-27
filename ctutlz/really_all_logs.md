@@ -7,18 +7,17 @@ Merged log lists:
 * [log_list.json](https://www.gstatic.com/ct/log_list/log_list.json)
 * [all_logs_list.json](https://www.gstatic.com/ct/log_list/all_logs_list.json)
 
-Version (Date): 2018-03-03
+Version (Date): 2018-09-28
 
-Datetime: 2018-03-03 11:21:38.032806
+Datetime: 2018-09-28 00:42:24.387883
 
 
 ## special purpose logs (webpage, all_logs.json)
 
-3 logs
+2 logs
 
 * [ct.googleapis.com/submariner/](#ct.googleapis.comsubmariner)
 * [ct.googleapis.com/daedalus/](#ct.googleapis.comdaedalus)
-* [ct.googleapis.com/testtube/](#ct.googleapis.comtesttube)
 
 ### ct.googleapis.com/submariner/
 
@@ -28,7 +27,7 @@ Datetime: 2018-03-03 11:21:38.032806
 * __maximum merge delay__: `86400`
 * __operated by__: `Google`
 * __contact__: `google-ct-logs@googlegroups.com`
-* __notes__: `This log is not trusted by Chrome. It only logs certificates that chain to roots that are on track for inclusion in browser roots or were trusted at some previous point. See the announcement blog post.`
+* __notes__: `This log is not trusted by Chrome. It only logs certificates that chain to roots that are on track for inclusion in browser roots or were trusted at some`
 * __scts accepted by chrome__: None
 * __id b64__: `qJnYeAySkKr0YvMYgMz71SRR6XDQ+/WR73Ww2ZtkVoE=`
 * __pubkey__:
@@ -58,28 +57,9 @@ sz7VcCTRbR0ttrfzizbcI02VYxK75IaNzOnR7qFAot8LowYKMMqNrKQpVg==
 -----END PUBLIC KEY-----
 ```
 
-### ct.googleapis.com/testtube/
-
-* __description__: `Google 'Testtube' log`
-* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEw8i8S7qiGEs9NXv0ZJFh6uuOmR2Q7dPprzk9XNNGkUXjzqx2SDvRfiwKYwBljfWujozHESVPQyydGaHhkaSz/g==`
-* __url__: `ct.googleapis.com/testtube/`
-* __maximum merge delay__: `86400`
-* __operated by__: `Google`
-* __contact__: `google-ct-logs@googlegroups.com`
-* __notes__: `This log is intended for testing purposes only and will only log certificates that chain to a root explicitly added to it. To add a test root to Testtube, please email google-ct-logs@googlegroups.com A test root for Testtube should: * have a certificate "Subject" field that: * includes the word "Test" (to reduce the chances of real certificates being mixed up with test certificates. * identifies the organization that the test root is for (to allow easy classification of test traffic). * not allow real certificates to chain to it, either because: * it is a self-signed root CA certificate identified as a test certificate (as above). * it is an intermediate CA certificate that chains to a root certificate that is also identified as a test certificate. * be a CA certificate, by: * having CA:TRUE in the Basic Constraints extension. * include the 'Certificate Sign' bit in the Key Usage extension. For historical reasons Testtube includes some test roots that do not comply`
-* __scts accepted by chrome__: None
-* __id b64__: `sMyD5aX5fWuvfAnMKEkEhyrH6IsTLGNQt8b9JuFsbHc=`
-* __pubkey__:
-```
------BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEw8i8S7qiGEs9NXv0ZJFh6uuOmR2Q
-7dPprzk9XNNGkUXjzqx2SDvRfiwKYwBljfWujozHESVPQyydGaHhkaSz/g==
------END PUBLIC KEY-----
-```
-
 ## UNLISTED ON WEBPAGE (log_list.json or all_logs.json)
 
-55 logs
+70 logs
 
 * [ct.googleapis.com/logs/argon2018/](#ct.googleapis.comlogsargon2018)
 * [ct.googleapis.com/logs/argon2019/](#ct.googleapis.comlogsargon2019)
@@ -96,6 +76,11 @@ MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEw8i8S7qiGEs9NXv0ZJFh6uuOmR2Q
 * [ct.cloudflare.com/logs/nimbus2021/](#ct.cloudflare.comlogsnimbus2021)
 * [ct1.digicert-ct.com/log/](#ct1.digicert-ct.comlog)
 * [ct2.digicert-ct.com/log/](#ct2.digicert-ct.comlog)
+* [yeti2018.ct.digicert.com/log/](#yeti2018.ct.digicert.comlog)
+* [yeti2019.ct.digicert.com/log/](#yeti2019.ct.digicert.comlog)
+* [yeti2020.ct.digicert.com/log/](#yeti2020.ct.digicert.comlog)
+* [yeti2021.ct.digicert.com/log/](#yeti2021.ct.digicert.comlog)
+* [yeti2022.ct.digicert.com/log/](#yeti2022.ct.digicert.comlog)
 * [ct.ws.symantec.com/](#ct.ws.symantec.com)
 * [vega.ws.symantec.com/](#vega.ws.symantec.com)
 * [sirius.ws.symantec.com/](#sirius.ws.symantec.com)
@@ -109,12 +94,20 @@ MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEw8i8S7qiGEs9NXv0ZJFh6uuOmR2Q
 * [sabre.ct.comodo.com/](#sabre.ct.comodo.com)
 * [mammoth.ct.comodo.com/](#mammoth.ct.comodo.com)
 * [ct.googleapis.com/logs/argon2017/](#ct.googleapis.comlogsargon2017)
+* [ct.googleapis.com/logs/argon2022/](#ct.googleapis.comlogsargon2022)
+* [ct.googleapis.com/logs/xenon2018/](#ct.googleapis.comlogsxenon2018)
+* [ct.googleapis.com/logs/xenon2019/](#ct.googleapis.comlogsxenon2019)
+* [ct.googleapis.com/logs/xenon2020/](#ct.googleapis.comlogsxenon2020)
+* [ct.googleapis.com/logs/xenon2021/](#ct.googleapis.comlogsxenon2021)
+* [ct.googleapis.com/logs/xenon2022/](#ct.googleapis.comlogsxenon2022)
+* [ct.googleapis.com/testtube/](#ct.googleapis.comtesttube)
+* [ct.googleapis.com/logs/crucible/](#ct.googleapis.comlogscrucible)
+* [ct.googleapis.com/logs/solera2018/](#ct.googleapis.comlogssolera2018)
+* [ct.googleapis.com/logs/solera2019/](#ct.googleapis.comlogssolera2019)
+* [ct.googleapis.com/logs/solera2020/](#ct.googleapis.comlogssolera2020)
+* [ct.googleapis.com/logs/solera2021/](#ct.googleapis.comlogssolera2021)
+* [ct.googleapis.com/logs/solera2022/](#ct.googleapis.comlogssolera2022)
 * [ct.cloudflare.com/logs/nimbus2017/](#ct.cloudflare.comlogsnimbus2017)
-* [yeti2018.ct.digicert.com/log/](#yeti2018.ct.digicert.comlog)
-* [yeti2019.ct.digicert.com/log/](#yeti2019.ct.digicert.comlog)
-* [yeti2020.ct.digicert.com/log/](#yeti2020.ct.digicert.comlog)
-* [yeti2021.ct.digicert.com/log/](#yeti2021.ct.digicert.comlog)
-* [yeti2022.ct.digicert.com/log/](#yeti2022.ct.digicert.comlog)
 * [nessie2018.ct.digicert.com/log/](#nessie2018.ct.digicert.comlog)
 * [nessie2019.ct.digicert.com/log/](#nessie2019.ct.digicert.comlog)
 * [nessie2020.ct.digicert.com/log/](#nessie2020.ct.digicert.comlog)
@@ -126,6 +119,8 @@ MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEw8i8S7qiGEs9NXv0ZJFh6uuOmR2Q
 * [ctlog2.wosign.com/](#ctlog2.wosign.com)
 * [ct.gdca.com.cn/](#ct.gdca.com.cn)
 * [ctlog.gdca.com.cn/](#ctlog.gdca.com.cn)
+* [log.gdca.com.cn/](#log.gdca.com.cn)
+* [log2.gdca.com.cn/](#log2.gdca.com.cn)
 * [dodo.ct.comodo.com/](#dodo.ct.comodo.com)
 * [www.certificatetransparency.cn/ct/](#www.certificatetransparency.cnct)
 * [flimsy.ct.nordu.net:8080/](#flimsy.ct.nordu.net:8080)
@@ -145,7 +140,8 @@ MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEw8i8S7qiGEs9NXv0ZJFh6uuOmR2Q
 * __maximum merge delay__: `86400`
 * __operated by__: `Google`
 * __dns api endpoint__: `argon2018.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `pFASaQVaFVReYhGrN7wQP2KuVXakXksXFEU+GyIQaiU=`
 * __pubkey__:
 ```
@@ -163,7 +159,8 @@ Rp37MtRxTmACJV5ZPtfUA7htQ2hofuigZQs+bnFZkje+qejxoyvk2Q1VaA==
 * __maximum merge delay__: `86400`
 * __operated by__: `Google`
 * __dns api endpoint__: `argon2019.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `Y/Lbzeg7zCzPC3KEJ1drM6SNYXePvXWmOLHHaFRL2I0=`
 * __pubkey__:
 ```
@@ -181,7 +178,8 @@ cSxakmBoJcBKGqGwYS0bhxSpuvABM1kdBTDpQhXnVdcq+LSiukXJRpGHVg==
 * __maximum merge delay__: `86400`
 * __operated by__: `Google`
 * __dns api endpoint__: `argon2020.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `sh4FzIuizYogTodm+Su5iiUgZ2va+nDnsklTLe+LkF4=`
 * __pubkey__:
 ```
@@ -199,7 +197,8 @@ c1zA4PQ+TGRY+3ZjUTIYY9Wyu+3q/147JG4vNVKLtDWarZwVqGkg6lAYzA==
 * __maximum merge delay__: `86400`
 * __operated by__: `Google`
 * __dns api endpoint__: `argon2021.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `9lyUL9F3MCIUVBgIMJRWjuNNExkzv98MLyALzE7xZOM=`
 * __pubkey__:
 ```
@@ -218,7 +217,8 @@ w/tbr5xkoQlmhB18aKfsxD+MnILgGNl0FOm0eYGilFVi85wLRIOhK8lxKw==
 * __operated by__: `Google`
 * __final sth__: `{'tree_size': 46466472, 'timestamp': 1480512258330, 'sha256_root_hash': 'LcGcZRsm+LGYmrlyC5LXhV1T6OD8iH5dNlb0sEJl9bA=', 'tree_head_signature': 'BAMASDBGAiEA/M0Nvt77aNe+9eYbKsv6rRpTzFTKa5CGqb56ea4hnt8CIQCJDE7pL6xgAewMd5i3G1lrBWgFooT2kd3+zliEz5Rw8w=='}`
 * __dns api endpoint__: `aviator.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `frozen`
+* __scts accepted by chrome__: True
 * __id b64__: `aPaY+B9kgr46jO65KB1M/HFRXWeT1ETRCmesu09P+8Q=`
 * __pubkey__:
 ```
@@ -236,7 +236,8 @@ YP8bQFAHDG1xhtolSY1l4QgNRzRrvSe8liE+NPWHdjGxfx3JhTsN9x8/6Q==
 * __maximum merge delay__: `86400`
 * __operated by__: `Google`
 * __dns api endpoint__: `icarus.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `KTxRllTIOWW6qlD8WAfUt2+/WHopctykwwz05UVH9Hg=`
 * __pubkey__:
 ```
@@ -254,7 +255,8 @@ aESxZryCfk9QbG9co/CqPvTsgPDbCpp6oFtyAHwlDhnvr7JijXRD9Cb2FA==
 * __maximum merge delay__: `86400`
 * __operated by__: `Google`
 * __dns api endpoint__: `pilot.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `pLkJkLQYWBSHuxOizGdwCjw1mAT5G9+443fNDsgN3BA=`
 * __pubkey__:
 ```
@@ -272,7 +274,8 @@ DM0YDOhBRuiBARsV4UvxG2LdNgoIGLrtCzWE0J5APC2em4JlvR8EEEFMoA==
 * __maximum merge delay__: `86400`
 * __operated by__: `Google`
 * __dns api endpoint__: `rocketeer.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `7ku9t3XOYLrhQmkfq+GeZqMPfl+wctiDAMR7iXqo/cs=`
 * __pubkey__:
 ```
@@ -290,7 +293,8 @@ aLCOkHjpoHPqTyghLpzA9BYbqvnV16mAw04vUjyYASVGJCUoI3ctBcJAeg==
 * __maximum merge delay__: `86400`
 * __operated by__: `Google`
 * __dns api endpoint__: `skydiver.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `u9nfvB+KcbWTlCOXqpJ7RzhXlQqrUugakJZkNo4e0YU=`
 * __pubkey__:
 ```
@@ -308,7 +312,8 @@ zb4UR7ZxVoV6mrc9iZB7xjI6+NrOiwH+P/xxkRmOFG6Jel20q37hTh58rA==
 * __maximum merge delay__: `86400`
 * __operated by__: `Cloudflare`
 * __dns api endpoint__: `cloudflare-nimbus2018.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `23Sv7ssp7LH+yj5xbSzluaq7NveEcYPHXZ1PN7Yfv2Q=`
 * __pubkey__:
 ```
@@ -326,7 +331,8 @@ h1z3DDa6IuxY5DyPsk6brlvrUNXZzoIg0DcvFiAn2kd6xmu4Obk5XA/nRg==
 * __maximum merge delay__: `86400`
 * __operated by__: `Cloudflare`
 * __dns api endpoint__: `cloudflare-nimbus2019.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `dH7agzGtMxCRIZzOJU9CcMK//V5CIAjGNzV55hB7zFY=`
 * __pubkey__:
 ```
@@ -344,7 +350,8 @@ MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkZHz1v5r8a9LmXSMegYZAg4UW+Ug
 * __maximum merge delay__: `86400`
 * __operated by__: `Cloudflare`
 * __dns api endpoint__: `cloudflare-nimbus2020.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `Xqdz+d9WwOe1Nkh90EngMnqRmgyEoRIShBh1loFxRVg=`
 * __pubkey__:
 ```
@@ -362,7 +369,8 @@ Pwjzb1RwrM0lhWDlxAYPP6/gyMCXNkOn/7KFsjL7rwk78tHMpY8rXn8AYg==
 * __maximum merge delay__: `86400`
 * __operated by__: `Cloudflare`
 * __dns api endpoint__: `cloudflare-nimbus2021.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `RJRlLrDuzq/EQAfYqP4owNrmgr7YyzG1P9MzlrW2gag=`
 * __pubkey__:
 ```
@@ -380,7 +388,8 @@ MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAExpon7ipsqehIeU1bmpog9TFo4Pk8
 * __maximum merge delay__: `86400`
 * __operated by__: `DigiCert`
 * __dns api endpoint__: `digicert.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `VhQGmi/XwuzT9eG9RLI+x0Z2ubyZEVzA75SYVdaJ0N0=`
 * __pubkey__:
 ```
@@ -398,13 +407,109 @@ RkC5OLAjgqhkTH+/uzSfSl8ois8ZxAD2NgaTZe1M9akhYlrYkes4JECs6A==
 * __maximum merge delay__: `86400`
 * __operated by__: `DigiCert`
 * __dns api endpoint__: `digicert2.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `h3W/51l8+IxDmV+9827/Vo1HVjb/SrVgwbTq/16ggw8=`
 * __pubkey__:
 ```
 -----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEzF05L2a4TH/BLgOhNKPoioYCrkoR
 xvcmajeb8Dj4XQmNY+gxa4Zmz3mzJTwe33i0qMVp+rfwgnliQ/bM/oFmhA==
+-----END PUBLIC KEY-----
+```
+
+### yeti2018.ct.digicert.com/log/
+
+* __description__: `DigiCert Yeti2018 Log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAESYlKFDLLFmA9JScaiaNnqlU8oWDytxIYMfswHy9Esg0aiX+WnP/yj4O0ViEHtLwbmOQeSWBGkIu9YK9CLeer+g==`
+* __url__: `yeti2018.ct.digicert.com/log/`
+* __maximum merge delay__: `86400`
+* __operated by__: `DigiCert`
+* __dns api endpoint__: `digicert-yeti2018.ct.googleapis.com`
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
+* __id b64__: `wRZK4Kdy0tQ5LcgKwQdw1PDEm96ZGkhAwfoHUWT2M2A=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAESYlKFDLLFmA9JScaiaNnqlU8oWDy
+txIYMfswHy9Esg0aiX+WnP/yj4O0ViEHtLwbmOQeSWBGkIu9YK9CLeer+g==
+-----END PUBLIC KEY-----
+```
+
+### yeti2019.ct.digicert.com/log/
+
+* __description__: `DigiCert Yeti2019 Log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkZd/ow8X+FSVWAVSf8xzkFohcPph/x6pS1JHh7g1wnCZ5y/8Hk6jzJxs6t3YMAWz2CPd4VkCdxwKexGhcFxD9A==`
+* __url__: `yeti2019.ct.digicert.com/log/`
+* __maximum merge delay__: `86400`
+* __operated by__: `DigiCert`
+* __dns api endpoint__: `digicert-yeti2019.ct.googleapis.com`
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
+* __id b64__: `4mlLribo6UAJ6IYbtjuD1D7n/nSI+6SPKJMBnd3x2/4=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkZd/ow8X+FSVWAVSf8xzkFohcPph
+/x6pS1JHh7g1wnCZ5y/8Hk6jzJxs6t3YMAWz2CPd4VkCdxwKexGhcFxD9A==
+-----END PUBLIC KEY-----
+```
+
+### yeti2020.ct.digicert.com/log/
+
+* __description__: `DigiCert Yeti2020 Log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEURAG+Zo0ac3n37ifZKUhBFEV6jfcCzGIRz3tsq8Ca9BP/5XUHy6ZiqsPaAEbVM0uI3Tm9U24RVBHR9JxDElPmg==`
+* __url__: `yeti2020.ct.digicert.com/log/`
+* __maximum merge delay__: `86400`
+* __operated by__: `DigiCert`
+* __dns api endpoint__: `digicert-yeti2020.ct.googleapis.com`
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
+* __id b64__: `8JWkWfIA0YJAEC0vk4iOrUv+HUfjmeHQNKawqKqOsnM=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEURAG+Zo0ac3n37ifZKUhBFEV6jfc
+CzGIRz3tsq8Ca9BP/5XUHy6ZiqsPaAEbVM0uI3Tm9U24RVBHR9JxDElPmg==
+-----END PUBLIC KEY-----
+```
+
+### yeti2021.ct.digicert.com/log/
+
+* __description__: `DigiCert Yeti2021 Log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE6J4EbcpIAl1+AkSRsbhoY5oRTj3VoFfaf1DlQkfi7Rbe/HcjfVtrwN8jaC+tQDGjF+dqvKhWJAQ6Q6ev6q9Mew==`
+* __url__: `yeti2021.ct.digicert.com/log/`
+* __maximum merge delay__: `86400`
+* __operated by__: `DigiCert`
+* __dns api endpoint__: `digicert-yeti2021.ct.googleapis.com`
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
+* __id b64__: `XNxDkv7mq0VEsV6a1FbmEDf71fpH3KFzlLJe5vbHDso=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE6J4EbcpIAl1+AkSRsbhoY5oRTj3V
+oFfaf1DlQkfi7Rbe/HcjfVtrwN8jaC+tQDGjF+dqvKhWJAQ6Q6ev6q9Mew==
+-----END PUBLIC KEY-----
+```
+
+### yeti2022.ct.digicert.com/log/
+
+* __description__: `DigiCert Yeti2022 Log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEn/jYHd77W1G1+131td5mEbCdX/1v/KiYW5hPLcOROvv+xA8Nw2BDjB7y+RGyutD2vKXStp/5XIeiffzUfdYTJg==`
+* __url__: `yeti2022.ct.digicert.com/log/`
+* __maximum merge delay__: `86400`
+* __operated by__: `DigiCert`
+* __dns api endpoint__: `digicert-yeti2022.ct.googleapis.com`
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
+* __id b64__: `IkVFB1lVJFaWP6Ev8fdthuAjJmOtwEt/XcaDXG7iDwI=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEn/jYHd77W1G1+131td5mEbCdX/1v
+/KiYW5hPLcOROvv+xA8Nw2BDjB7y+RGyutD2vKXStp/5XIeiffzUfdYTJg==
 -----END PUBLIC KEY-----
 ```
 
@@ -416,7 +521,8 @@ xvcmajeb8Dj4XQmNY+gxa4Zmz3mzJTwe33i0qMVp+rfwgnliQ/bM/oFmhA==
 * __maximum merge delay__: `86400`
 * __operated by__: `DigiCert`
 * __dns api endpoint__: `symantec.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `3esdK3oNT6Ygi4GtgWhwfi6OnQHVXIiNPRHEzbbsvsw=`
 * __pubkey__:
 ```
@@ -434,7 +540,8 @@ MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEluqsHEYMG1XcDfy1lCdGV0JwOmkY
 * __maximum merge delay__: `86400`
 * __operated by__: `DigiCert`
 * __dns api endpoint__: `symantec-vega.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `vHjh38X2PGhGSTNNoQ+hXwl5aSAJwIG08/aRfz7ZuKU=`
 * __pubkey__:
 ```
@@ -452,7 +559,8 @@ WQc/Ai0ckP7IRzA78d0NuBEMXR2G3avTK0Zm+25ltzv9WWis36b4ztIYTQ==
 * __maximum merge delay__: `86400`
 * __operated by__: `DigiCert`
 * __dns api endpoint__: `symantec-sirius.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `FZcEiNe5l6Bb61JRKt7o0ui0oxZSZBIan6v71fha2T8=`
 * __pubkey__:
 ```
@@ -555,7 +663,8 @@ wQIDAQAB
 * __maximum merge delay__: `86400`
 * __operated by__: `Venafi`
 * __dns api endpoint__: `venafi2.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `AwGd8/2FppqOvR+sxtqbpz5Gl3T+d/V5/FoIuDKMHWs=`
 * __pubkey__:
 ```
@@ -572,8 +681,10 @@ fA43zro/bAna5ymW00VQb94etBzSg4j/KS/Oqf/fNN51D8DMGA2ULvw3AQ==
 * __url__: `ctserver.cnnic.cn/`
 * __maximum merge delay__: `86400`
 * __operated by__: `CNNIC`
+* __disqualified at__: `1537228800`
 * __dns api endpoint__: `cnnic.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `disqualified`
+* __scts accepted by chrome__: False
 * __id b64__: `pXesnO11SN2PAltnokEInfhuD0duwgPC7L7bGF8oJjg=`
 * __pubkey__:
 ```
@@ -616,7 +727,8 @@ TOaft0oaFIZDqUiwy1o/PErK38SCFFWa+PeOQFXc9NKv6nV0+05/YIYuUQ==
 * __maximum merge delay__: `86400`
 * __operated by__: `Comodo CA Limited`
 * __dns api endpoint__: `comodo-sabre.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `VYHUwhaQNgFK6gubVzxT8MDkOHhwJQgXL6OqHQcT0ww=`
 * __pubkey__:
 ```
@@ -634,7 +746,8 @@ VZY9CgiixXGz0akvKD6DEL8S0ERmFe9U4ZiA0M4kbT5nmuk3I85Sk4bagA==
 * __maximum merge delay__: `86400`
 * __operated by__: `Comodo CA Limited`
 * __dns api endpoint__: `comodo-mammoth.ct.googleapis.com`
-* __scts accepted by chrome__: None
+* __chrome state__: `included`
+* __scts accepted by chrome__: True
 * __id b64__: `b1N2rDHwMRnYmQCkURX/dxUcEdkCwQApBo2yCJo32RM=`
 * __pubkey__:
 ```
@@ -661,6 +774,227 @@ b4WurxXfaW7t26maKZfymXYe5jNGHif0vnDdWde6z/7Qco6wVw+dN4liow==
 -----END PUBLIC KEY-----
 ```
 
+### ct.googleapis.com/logs/argon2022/
+
+* __description__: `Google 'Argon2022' log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEeIPc6fGmuBg6AJkv/z7NFckmHvf/OqmjchZJ6wm2qN200keRDg352dWpi7CHnSV51BpQYAj1CQY5JuRAwrrDwg==`
+* __url__: `ct.googleapis.com/logs/argon2022/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Google`
+* __scts accepted by chrome__: None
+* __id b64__: `KXm+8J45OSHwVnOfY6V35b5XfZxgCvj5TV0mXCVdx4Q=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEeIPc6fGmuBg6AJkv/z7NFckmHvf/
+OqmjchZJ6wm2qN200keRDg352dWpi7CHnSV51BpQYAj1CQY5JuRAwrrDwg==
+-----END PUBLIC KEY-----
+```
+
+### ct.googleapis.com/logs/xenon2018/
+
+* __description__: `Google 'Xenon2018' log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE1syJvwQdrv0a8dM2VAnK/SmHJNw/+FxC+CncFcnXMX2jNH9Xs7Q56FiV3taG5G2CokMsizhpcm7xXzuR3IHmag==`
+* __url__: `ct.googleapis.com/logs/xenon2018/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Google`
+* __scts accepted by chrome__: None
+* __id b64__: `sQzVWabWeEaBH335pRUyc5rEjXA76gMj2l04dVvArU4=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE1syJvwQdrv0a8dM2VAnK/SmHJNw/
++FxC+CncFcnXMX2jNH9Xs7Q56FiV3taG5G2CokMsizhpcm7xXzuR3IHmag==
+-----END PUBLIC KEY-----
+```
+
+### ct.googleapis.com/logs/xenon2019/
+
+* __description__: `Google 'Xenon2019' log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE/XyDwqzXL9i2GTjMYkqaEyiRL0Dy9sHq/BTebFdshbvCaXXEh6mjUK0Yy+AsDcI4MpzF1l7Kded2MD5zi420gA==`
+* __url__: `ct.googleapis.com/logs/xenon2019/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Google`
+* __scts accepted by chrome__: None
+* __id b64__: `CEEUmABxUywWGQRgvPxH/cJlOvopLHKzf/hjrinMyfA=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE/XyDwqzXL9i2GTjMYkqaEyiRL0Dy
+9sHq/BTebFdshbvCaXXEh6mjUK0Yy+AsDcI4MpzF1l7Kded2MD5zi420gA==
+-----END PUBLIC KEY-----
+```
+
+### ct.googleapis.com/logs/xenon2020/
+
+* __description__: `Google 'Xenon2020' log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEZU75VqjyzSTgFZKAnWg1QeYfFFIRZTMK7q3kWWZsmHhQdrBYnHRZ3OA4kUeUx0JN+xX+dSgt1ruqUhhl7jOvmw==`
+* __url__: `ct.googleapis.com/logs/xenon2020/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Google`
+* __scts accepted by chrome__: None
+* __id b64__: `B7dcG+V9aP/xsMYdIxXHuuZXfFeUt2ruvGE6GmnTohw=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEZU75VqjyzSTgFZKAnWg1QeYfFFIR
+ZTMK7q3kWWZsmHhQdrBYnHRZ3OA4kUeUx0JN+xX+dSgt1ruqUhhl7jOvmw==
+-----END PUBLIC KEY-----
+```
+
+### ct.googleapis.com/logs/xenon2021/
+
+* __description__: `Google 'Xenon2021' log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAER+1MInu8Q39BwDZ5Rp9TwXhwm3ktvgJzpk/r7dDgGk7ZacMm3ljfcoIvP1E72T8jvyLT1bvdapylajZcTH6W5g==`
+* __url__: `ct.googleapis.com/logs/xenon2021/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Google`
+* __scts accepted by chrome__: None
+* __id b64__: `fT7y+I//iFVoJMLAyp5SiXkrxQ54CX8uapdomX4i8Nc=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAER+1MInu8Q39BwDZ5Rp9TwXhwm3kt
+vgJzpk/r7dDgGk7ZacMm3ljfcoIvP1E72T8jvyLT1bvdapylajZcTH6W5g==
+-----END PUBLIC KEY-----
+```
+
+### ct.googleapis.com/logs/xenon2022/
+
+* __description__: `Google 'Xenon2022' log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+WS9FSxAYlCVEzg8xyGwOrmPonoV14nWjjETAIdZvLvukPzIWBMKv6tDNlQjpIHNrUcUt1igRPpqoKDXw2MeKw==`
+* __url__: `ct.googleapis.com/logs/xenon2022/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Google`
+* __scts accepted by chrome__: None
+* __id b64__: `RqVV63X6kSAwtaKJafTzfREsQXS+/Um4havy/HD+bUc=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE+WS9FSxAYlCVEzg8xyGwOrmPonoV
+14nWjjETAIdZvLvukPzIWBMKv6tDNlQjpIHNrUcUt1igRPpqoKDXw2MeKw==
+-----END PUBLIC KEY-----
+```
+
+### ct.googleapis.com/testtube/
+
+* __description__: `Google 'Testtube' log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEw8i8S7qiGEs9NXv0ZJFh6uuOmR2Q7dPprzk9XNNGkUXjzqx2SDvRfiwKYwBljfWujozHESVPQyydGaHhkaSz/g==`
+* __url__: `ct.googleapis.com/testtube/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Google`
+* __scts accepted by chrome__: None
+* __id b64__: `sMyD5aX5fWuvfAnMKEkEhyrH6IsTLGNQt8b9JuFsbHc=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEw8i8S7qiGEs9NXv0ZJFh6uuOmR2Q
+7dPprzk9XNNGkUXjzqx2SDvRfiwKYwBljfWujozHESVPQyydGaHhkaSz/g==
+-----END PUBLIC KEY-----
+```
+
+### ct.googleapis.com/logs/crucible/
+
+* __description__: `Google 'Crucible' log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEKATl2B3SAbxyzGOfNRB+AytNTGvdF/FFY6HzWb+/HPE4lJ37vx2nEm99KYUy9SoNzF5VyTwCQG5nL/c5Q77yQQ==`
+* __url__: `ct.googleapis.com/logs/crucible/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Google`
+* __scts accepted by chrome__: None
+* __id b64__: `w78Dp+HKiEHGB7rj/0Jw/KXsRbGG675OLPP8d4Yw9fY=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEKATl2B3SAbxyzGOfNRB+AytNTGvd
+F/FFY6HzWb+/HPE4lJ37vx2nEm99KYUy9SoNzF5VyTwCQG5nL/c5Q77yQQ==
+-----END PUBLIC KEY-----
+```
+
+### ct.googleapis.com/logs/solera2018/
+
+* __description__: `Google 'Solera2018' log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEEuFqn5cy1nACARlWIUjeJaRDKl0mcf9gvFZXpPhHsyykizXvULF5GZNGfucWIyUccBRfmYJZTTrXqw0mVts7hA==`
+* __url__: `ct.googleapis.com/logs/solera2018/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Google`
+* __scts accepted by chrome__: None
+* __id b64__: `UutLIl7IlpdIUGdfI+Q7wdAh4yFM5S7NX6h8IDzfygM=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEEuFqn5cy1nACARlWIUjeJaRDKl0m
+cf9gvFZXpPhHsyykizXvULF5GZNGfucWIyUccBRfmYJZTTrXqw0mVts7hA==
+-----END PUBLIC KEY-----
+```
+
+### ct.googleapis.com/logs/solera2019/
+
+* __description__: `Google 'Solera2019' log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJUwGinXUWVNaBiK2Vl/rdyMkxKaWJHR8dj9yD5AlZEtEbfvAMQQ8o7DQyXVm7TX+eAA9wL2Vtt6DpoMEL0q/rw==`
+* __url__: `ct.googleapis.com/logs/solera2019/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Google`
+* __scts accepted by chrome__: None
+* __id b64__: `C3YOmouaaC+ImFsV6UdQGlZEa7qIMHhcOEKZQ4ZFDAA=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJUwGinXUWVNaBiK2Vl/rdyMkxKaW
+JHR8dj9yD5AlZEtEbfvAMQQ8o7DQyXVm7TX+eAA9wL2Vtt6DpoMEL0q/rw==
+-----END PUBLIC KEY-----
+```
+
+### ct.googleapis.com/logs/solera2020/
+
+* __description__: `Google 'Solera2020' log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEiKfWtuoWCPMEzSKySjMjXpo38WOdZr6Yq0WYa2JQOv1uVMxkqHywf9Gz1kGeRLq/Rz3tVVvXgqb4jQ1UqKVKnw==`
+* __url__: `ct.googleapis.com/logs/solera2020/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Google`
+* __scts accepted by chrome__: None
+* __id b64__: `H8cs5aG3mfQAw1m/+WyjkTVI6GRCIGEJUum6F3T3usc=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEiKfWtuoWCPMEzSKySjMjXpo38WOd
+Zr6Yq0WYa2JQOv1uVMxkqHywf9Gz1kGeRLq/Rz3tVVvXgqb4jQ1UqKVKnw==
+-----END PUBLIC KEY-----
+```
+
+### ct.googleapis.com/logs/solera2021/
+
+* __description__: `Google 'Solera2021' log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE1glwxqXsw2VqlAbHSeWbTthMGNIuACVn8Jj/jrnY2iN2uVUrEEwLj5VUCb+WF2XY44+mfUVYY7R/d8TIZ4olnw==`
+* __url__: `ct.googleapis.com/logs/solera2021/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Google`
+* __scts accepted by chrome__: None
+* __id b64__: `o8mYRegKt84AFXs3Qt8CB90nKytgLs+Y7iwS25xa5+c=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE1glwxqXsw2VqlAbHSeWbTthMGNIu
+ACVn8Jj/jrnY2iN2uVUrEEwLj5VUCb+WF2XY44+mfUVYY7R/d8TIZ4olnw==
+-----END PUBLIC KEY-----
+```
+
+### ct.googleapis.com/logs/solera2022/
+
+* __description__: `Google 'Solera2022' log`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEFWj6UQDxzHWmgzQtQQ7REDC0nxnU9mpOmA0lv5trA0t7IRzSkh4DOznPe+nkxmaC8iS1capCtKjyYhUNRrvWqA==`
+* __url__: `ct.googleapis.com/logs/solera2022/`
+* __maximum merge delay__: `86400`
+* __operated by__: `Google`
+* __scts accepted by chrome__: None
+* __id b64__: `aXqvyhprU2+uISBQRt661+Dq6hPSQy5unY+zefK5qvM=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEFWj6UQDxzHWmgzQtQQ7REDC0nxnU
+9mpOmA0lv5trA0t7IRzSkh4DOznPe+nkxmaC8iS1capCtKjyYhUNRrvWqA==
+-----END PUBLIC KEY-----
+```
+
 ### ct.cloudflare.com/logs/nimbus2017/
 
 * __description__: `Cloudflare 'Nimbus2017' Log`
@@ -675,91 +1009,6 @@ b4WurxXfaW7t26maKZfymXYe5jNGHif0vnDdWde6z/7Qco6wVw+dN4liow==
 -----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE15ypB40iQe6ToFJB2vSA8CW86/rz
 PNJ+kdg/LNpRvcjuKnLj/xhW5DoiDyI8xtUws5toLqtWwkFf1mRXFLFarw==
------END PUBLIC KEY-----
-```
-
-### yeti2018.ct.digicert.com/log/
-
-* __description__: `DigiCert Yeti2018 Log`
-* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAESYlKFDLLFmA9JScaiaNnqlU8oWDytxIYMfswHy9Esg0aiX+WnP/yj4O0ViEHtLwbmOQeSWBGkIu9YK9CLeer+g==`
-* __url__: `yeti2018.ct.digicert.com/log/`
-* __maximum merge delay__: `86400`
-* __operated by__: `DigiCert`
-* __scts accepted by chrome__: None
-* __id b64__: `wRZK4Kdy0tQ5LcgKwQdw1PDEm96ZGkhAwfoHUWT2M2A=`
-* __pubkey__:
-```
------BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAESYlKFDLLFmA9JScaiaNnqlU8oWDy
-txIYMfswHy9Esg0aiX+WnP/yj4O0ViEHtLwbmOQeSWBGkIu9YK9CLeer+g==
------END PUBLIC KEY-----
-```
-
-### yeti2019.ct.digicert.com/log/
-
-* __description__: `DigiCert Yeti2019 Log`
-* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkZd/ow8X+FSVWAVSf8xzkFohcPph/x6pS1JHh7g1wnCZ5y/8Hk6jzJxs6t3YMAWz2CPd4VkCdxwKexGhcFxD9A==`
-* __url__: `yeti2019.ct.digicert.com/log/`
-* __maximum merge delay__: `86400`
-* __operated by__: `DigiCert`
-* __scts accepted by chrome__: None
-* __id b64__: `4mlLribo6UAJ6IYbtjuD1D7n/nSI+6SPKJMBnd3x2/4=`
-* __pubkey__:
-```
------BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkZd/ow8X+FSVWAVSf8xzkFohcPph
-/x6pS1JHh7g1wnCZ5y/8Hk6jzJxs6t3YMAWz2CPd4VkCdxwKexGhcFxD9A==
------END PUBLIC KEY-----
-```
-
-### yeti2020.ct.digicert.com/log/
-
-* __description__: `DigiCert Yeti2020 Log`
-* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEURAG+Zo0ac3n37ifZKUhBFEV6jfcCzGIRz3tsq8Ca9BP/5XUHy6ZiqsPaAEbVM0uI3Tm9U24RVBHR9JxDElPmg==`
-* __url__: `yeti2020.ct.digicert.com/log/`
-* __maximum merge delay__: `86400`
-* __operated by__: `DigiCert`
-* __scts accepted by chrome__: None
-* __id b64__: `8JWkWfIA0YJAEC0vk4iOrUv+HUfjmeHQNKawqKqOsnM=`
-* __pubkey__:
-```
------BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEURAG+Zo0ac3n37ifZKUhBFEV6jfc
-CzGIRz3tsq8Ca9BP/5XUHy6ZiqsPaAEbVM0uI3Tm9U24RVBHR9JxDElPmg==
------END PUBLIC KEY-----
-```
-
-### yeti2021.ct.digicert.com/log/
-
-* __description__: `DigiCert Yeti2021 Log`
-* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE6J4EbcpIAl1+AkSRsbhoY5oRTj3VoFfaf1DlQkfi7Rbe/HcjfVtrwN8jaC+tQDGjF+dqvKhWJAQ6Q6ev6q9Mew==`
-* __url__: `yeti2021.ct.digicert.com/log/`
-* __maximum merge delay__: `86400`
-* __operated by__: `DigiCert`
-* __scts accepted by chrome__: None
-* __id b64__: `XNxDkv7mq0VEsV6a1FbmEDf71fpH3KFzlLJe5vbHDso=`
-* __pubkey__:
-```
------BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE6J4EbcpIAl1+AkSRsbhoY5oRTj3V
-oFfaf1DlQkfi7Rbe/HcjfVtrwN8jaC+tQDGjF+dqvKhWJAQ6Q6ev6q9Mew==
------END PUBLIC KEY-----
-```
-
-### yeti2022.ct.digicert.com/log/
-
-* __description__: `DigiCert Yeti2022 Log`
-* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEn/jYHd77W1G1+131td5mEbCdX/1v/KiYW5hPLcOROvv+xA8Nw2BDjB7y+RGyutD2vKXStp/5XIeiffzUfdYTJg==`
-* __url__: `yeti2022.ct.digicert.com/log/`
-* __maximum merge delay__: `86400`
-* __operated by__: `DigiCert`
-* __scts accepted by chrome__: None
-* __id b64__: `IkVFB1lVJFaWP6Ev8fdthuAjJmOtwEt/XcaDXG7iDwI=`
-* __pubkey__:
-```
------BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEn/jYHd77W1G1+131td5mEbCdX/1v
-/KiYW5hPLcOROvv+xA8Nw2BDjB7y+RGyutD2vKXStp/5XIeiffzUfdYTJg==
 -----END PUBLIC KEY-----
 ```
 
@@ -947,6 +1196,40 @@ rO7Gn30CBexBqMdBnTJJrbA5vTqHPnzuaGxg0Ucqk67hQPQLyDU8HQ9l0w==
 -----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEW0rHAbd0VLpAnEN1lD+s77NxVrjT
 4nuuobE+U6qXM6GCu19dHAv6hQ289+Wg4CLwoInZCn9fJpTTJOOZLuQVjQ==
+-----END PUBLIC KEY-----
+```
+
+### log.gdca.com.cn/
+
+* __description__: `GDCA Log 1`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEzVH/qe+rgr/Mo+owQ00I6aegDSjHttgqQBmg+hBdTXXLgJT/+8LdSgjfY/8lOBtfivndJzQlTNQ9Le1cU6wXNQ==`
+* __url__: `log.gdca.com.cn/`
+* __maximum merge delay__: `86400`
+* __operated by__: `GDCA`
+* __scts accepted by chrome__: None
+* __id b64__: `cX6nQgl1voSicjVT8Xd8Jt1Rr04QIUQJTZAZtGL7Zmg=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEzVH/qe+rgr/Mo+owQ00I6aegDSjH
+ttgqQBmg+hBdTXXLgJT/+8LdSgjfY/8lOBtfivndJzQlTNQ9Le1cU6wXNQ==
+-----END PUBLIC KEY-----
+```
+
+### log2.gdca.com.cn/
+
+* __description__: `GDCA Log 2`
+* __key__: `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEx6zC8wCbMs3fpQWnSCeo2RvG827AEssGkMa+5RVIpRF0SDO4hFsn2Ph1l8marSCuwVLhv0JIN3arSzbUieX6HA==`
+* __url__: `log2.gdca.com.cn/`
+* __maximum merge delay__: `86400`
+* __operated by__: `GDCA`
+* __scts accepted by chrome__: None
+* __id b64__: `FDCNkMzQMBNQBcAcpSbYHoTodiTjm2JI4I9ySuo7tCo=`
+* __pubkey__:
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEx6zC8wCbMs3fpQWnSCeo2RvG827A
+EssGkMa+5RVIpRF0SDO4hFsn2Ph1l8marSCuwVLhv0JIN3arSzbUieX6HA==
 -----END PUBLIC KEY-----
 ```
 
