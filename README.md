@@ -197,7 +197,7 @@ required arguments:
 Import module in your python code, for example:
 
 ```python
-> python3.6
+> python3.7
 
 >>> from ctutlz.ctlog import download_log_list
 >>> from ctutlz.scripts.verify_scts import verify_scts_by_tls
@@ -291,13 +291,13 @@ Run unit tests against several pythons with tox (needs pythons defined
 in envlist of `tox.ini` to be installed with pyenv):
 
 ```bash
-python3.6 -m tox
+python3.7 -m tox
 
 # only against one python version:
-python3.6 -m tox -e py27
+python3.7 -m tox -e py27
 
 # rebuild virtual environments:
-python3.6 -m tox -r
+python3.7 -m tox -r
 ```
 
 Run unit tests with pytest (uses tox virtualenv, replace `py36` by e.g.
@@ -319,6 +319,6 @@ PYTHONPATH='.' .tox/py36/bin/python  ctutlz/scripts/verify_scts.py -h
 ### Update really_all_logs
 
 ```
-.tox/py36/bin/ctloglist > ctutlz/really_all_logs.md
-.tox/py36/bin/ctloglist --json > ctutlz/really_all_logs.json
+.tox/py37/bin/ctloglist > ctutlz/really_all_logs.md
+.tox/py37/bin/ctloglist --json > ctutlz/really_all_logs.json
 ```
