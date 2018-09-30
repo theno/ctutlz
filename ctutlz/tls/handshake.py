@@ -245,6 +245,7 @@ def do_handshake(domain, scts_tls=True, scts_ocsp=True, timeout=5):
     tls_ext_18_tdf = None
     err = ''
 
+    more_issuer_cert_x509_candidates = []
     try:
         sock.connect((domain, 443))
         sock.do_handshake()
