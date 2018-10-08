@@ -286,6 +286,84 @@ def test_logs_dict_from_html_str():
                               'operated_by': ['Google'],
                               'url': 'ct.googleapis.com/testtube/'}]}
         },
+        {
+            'filename': 'known-logs_2018-10-07.html',
+            'expected_logs_dict':
+            {'special_purpose_logs': [{'chrome_state': None,
+                                       'contact': 'google-ct-logs@googlegroups.com',
+                                       'description': None,
+                                       'id_b64_non_calculated': 'HQJLjrFJizRN/YfqPvwJlvdQbyNdHUlwYaR3PEOcJfs=',
+                                       'key': None,
+                                       'maximum_merge_delay': None,
+                                       'notes': 'This log is not trusted by Chrome. It '
+                                       'only logs certificates that have expired. '
+                                       'See the announcement post.',
+                                       'operated_by': ['Google'],
+                                       'url': 'ct.googleapis.com/daedalus/'},
+                                      {'chrome_state': None,
+                                       'contact': 'google-ct-logs@googlegroups.com',
+                                       'description': None,
+                                       'id_b64_non_calculated': 'qJnYeAySkKr0YvMYgMz71SRR6XDQ+/WR73Ww2ZtkVoE=',
+                                       'key': None,
+                                       'maximum_merge_delay': None,
+                                       'notes': 'This log is not trusted by Chrome. It '
+                                       'only logs certificates that chain to '
+                                       'roots that are on track for inclusion in '
+                                       'browser roots or were trusted at some',
+                                       'operated_by': ['Google'],
+                                       'url': 'ct.googleapis.com/submariner/'}],
+             'test_logs': [{'chrome_state': None,
+                            'contact': 'google-ct-logs@googlegroups.com',
+                            'description': None,
+                            'expiry_range': 'Jan 01 2018 00:00:00Z inclusive to Jan 01 '
+                            '2019 00:00:00Z',
+                            'id_b64_non_calculated': 'UutLIl7IlpdIUGdfI+Q7wdAh4yFM5S7NX6h8IDzfygM=',
+                            'key': None,
+                            'maximum_merge_delay': None,
+                            'operated_by': ['Google'],
+                            'url': 'ct.googleapis.com/logs/crucible/'},
+                           {'chrome_state': None,
+                            'description': None,
+                            'expiry_range': 'Jan 01 2019 00:00:00Z inclusive to Jan 01 '
+                            '2020 00:00:00Z',
+                            'id_b64_non_calculated': 'C3YOmouaaC+ImFsV6UdQGlZEa7qIMHhcOEKZQ4ZFDAA=',
+                            'key': None,
+                            'maximum_merge_delay': None,
+                            'url': 'ct.googleapis.com/logs/solera2019/'},
+                           {'chrome_state': None,
+                            'description': None,
+                            'expiry_range': 'Jan 01 2020 00:00:00Z inclusive to Jan 01 '
+                            '2021 00:00:00Z',
+                            'id_b64_non_calculated': 'H8cs5aG3mfQAw1m/+WyjkTVI6GRCIGEJUum6F3T3usc=',
+                            'key': None,
+                            'maximum_merge_delay': None,
+                            'url': 'ct.googleapis.com/logs/solera2020/'},
+                           {'chrome_state': None,
+                            'description': None,
+                            'expiry_range': 'Jan 01 2021 00:00:00Z inclusive to Jan 01 '
+                            '2022 00:00:00Z',
+                            'id_b64_non_calculated': 'o8mYRegKt84AFXs3Qt8CB90nKytgLs+Y7iwS25xa5+c=',
+                            'key': None,
+                            'maximum_merge_delay': None,
+                            'url': 'ct.googleapis.com/logs/solera2021/'},
+                           {'chrome_state': None,
+                            'contact': 'google-ct-logs@googlegroups.com',
+                            'description': None,
+                            'expiry_range': 'Jan 01 2022 00:00:00Z inclusive to Jan 01 '
+                            '2023 00:00:00Z',
+                            'id_b64_non_calculated': 'aXqvyhprU2+uISBQRt661+Dq6hPSQy5unY+zefK5qvM=',
+                            'key': None,
+                            'maximum_merge_delay': None,
+                            'operated_by': ['Google'],
+                            'url': 'ct.googleapis.com/logs/solera2022/'},
+                           {'chrome_state': None,
+                            'description': None,
+                            'id_b64_non_calculated': 'sMyD5aX5fWuvfAnMKEkEhyrH6IsTLGNQt8b9JuFsbHc=',
+                            'key': None,
+                            'maximum_merge_delay': None,
+                            'operated_by': ['Google'],
+                            'url': 'ct.googleapis.com/testtube/'}]}
+        },
     ]
     for item in test_data:
         with open(os.path.join(thisdir, 'data', 'test_ctlog',
