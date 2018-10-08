@@ -257,7 +257,6 @@ def do_handshake(domain, scts_tls=True, scts_ocsp=True, timeout=5):
         if len(chain_x509s) > 1:
             issuer_cert_x509 = chain_x509s[1]
         more_issuer_cert_x509_candidates = [ee_cert_x509] + chain_x509s
-        print(len(chain_x509s))
 
         ctx = sock.get_context()
         if scts_tls:
