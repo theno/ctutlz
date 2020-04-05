@@ -156,9 +156,7 @@ def create_context(scts_tls, scts_ocsp, timeout):
         '''Dummy callback.'''
         return 1  # True
 
-    ctx = OpenSSL.SSL.Context(OpenSSL.SSL.SSLv23_METHOD)
-    ctx.set_options(OpenSSL.SSL.OP_NO_SSLv2)
-    ctx.set_options(OpenSSL.SSL.OP_NO_SSLv3)
+    ctx = OpenSSL.SSL.Context(OpenSSL.SSL.TLSv1_2_METHOD)
 
     ctx.set_verify(OpenSSL.SSL.VERIFY_PEER, verify_callback)
     ca_filename = certifi.where()
@@ -222,10 +220,10 @@ def create_socket(ctx):
         ctx(OpenSSL.SSL.Context): OpenSSL context object
     '''
     raw_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    return OpenSSL.SSL.Connection(ctx, raw_sock)
+    return OpenSSL.SSL.Connection(context=ctx, socket=raw_sock)
 
 
-def do_handshake(domain, scts_tls=True, scts_ocsp=True, timeout=5):
+def do_handshake(domain, port=443, scts_tls=True, scts_ocsp=True, timeout=5):
     '''
     Args:
         domain: string with domain name,
@@ -237,16 +235,17 @@ def do_handshake(domain, scts_tls=True, scts_ocsp=True, timeout=5):
     ctx = create_context(scts_tls, scts_ocsp, timeout)
     sock = create_socket(ctx)
     sock.request_ocsp()
+    sock.set_tlsext_host_name(domain.encode())
 
     issuer_cert_x509 = None
-    more_issuer_cert_candidates = []
+    more_issuer_cert_x509_candidates = []
     ee_cert_x509 = None
     ocsp_resp_der = None
     tls_ext_18_tdf = None
     err = ''
 
     try:
-        sock.connect((domain, 443))
+        sock.connect((domain, port))
         sock.do_handshake()
 
         # type: OpenSSL.crypto.X509; ee: end entity

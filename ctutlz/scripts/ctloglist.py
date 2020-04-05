@@ -71,7 +71,7 @@ def warn_inconsistency(url, val_a, val_b):
     else:
         return
 
-    logger.warn(red(flo(
+    logger.warning(red(flo(
         'inconsistent data for log {url}: {val_a} != {val_b}')))
 
 
@@ -273,37 +273,37 @@ def merge_log_lists(included_from_webpage,
     # # warn for missing logs on webpage
     #
     # for log in ll_rest:
-    #     logger.warn(red(flo(
+    #     logger.warning(red(flo(
     #         'log in log_list.json not listet on webpage: {log.url}')))
     #
     # for log in all_rest:
-    #     logger.warn(red(flo(
+    #     logger.warning(red(flo(
     #         'log in all_logs.json not listed on webpage: {log.url}')))
 
     # warn for wrongly listed logs
 
     for log in ll_pending:
-        logger.warn(red(flo(
+        logger.warning(red(flo(
             'log pending for inclusion listed in log_list.json: {log.url}')))
 
     for log in ll_rejected:
-        logger.warn(red(flo(
+        logger.warning(red(flo(
             'rejeted log listet in log_list.json: {log.url}')))
 
     for log in ll_distrusted:
-        logger.warn(red(flo(
+        logger.warning(red(flo(
             'distrusted log listet in log_list.json: {log.url}')))
 
     for log in ll_other:
-        logger.warn(red(flo(
+        logger.warning(red(flo(
             'other purpose log listet in log_list.json: {log.url}')))
 
     for log in nn_included:
-        logger.warn(red(flo(
+        logger.warning(red(flo(
             'chrome included log not listet in log_list.json: {log.url}')))
 
     for log in nn_frozen:
-        logger.warn(red(flo(
+        logger.warning(red(flo(
             'chrome frozen log not listet in log_list.json: {log.url}')))
 
     ll_rest, all_rest = \
@@ -315,7 +315,7 @@ def merge_log_lists(included_from_webpage,
     _, webpage_rest, _ = merge_log_list_r(all_from_webpage, log_list_logs)
     _, webpage_rest, _ = merge_log_list_r(all_from_webpage, all_logs)
     for log in webpage_rest:
-        logger.warn(red(flo(
+        logger.warning(red(flo(
             'log not listet in log_list.json nor all_logs.json: {log.url}')))
 
     return [

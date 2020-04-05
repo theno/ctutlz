@@ -221,7 +221,7 @@ def show_verification(verification):
 def scrape_and_verify_scts(hostname, verification_tasks, ctlogs):
     logger.info(flo('# {hostname}\n'))
 
-    res = do_handshake(hostname,
+    res = do_handshake(hostname, 443,
                        scts_tls=(verify_scts_by_tls in verification_tasks),
                        scts_ocsp=(verify_scts_by_ocsp in verification_tasks))
     if res.ee_cert_der:
@@ -236,7 +236,7 @@ def scrape_and_verify_scts(hostname, verification_tasks, ctlogs):
             logger.info("* not issued by Let's Encrypt\n")
 
     if res.err:
-        logger.warn(res.err)
+        logger.warning(res.err)
     else:
         for verification_task in verification_tasks:
             logger.info(flo('## {verification_task.__name__}\n'))
