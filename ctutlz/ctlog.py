@@ -1,11 +1,6 @@
-from __future__ import unicode_literals  # for Python-2
 import json
 import re
-try:
-    # since python 3.6
-    import urllib.request as urllib_request
-except ImportError:
-    import urllib as urllib_request
+import urllib.request as urllib_request
 from os.path import abspath, expanduser, join, isfile, dirname
 
 import html2text
@@ -16,40 +11,55 @@ from ctutlz.utils.encoding import decode_from_b64, encode_to_b64
 from ctutlz.utils.encoding import digest_from_b64
 from ctutlz.utils.logger import logger
 
-
-# states 'compliant with chrome ct policy'
-ChromeStates = Enum(INCLUDED='included',
-                    FROZEN='frozen',
-
-                    PENDING='pending for inclusion',
-
-                    DISQUALIFIED='disqualified',
-                    REJECTED='rejected',
-                    DISTRUSTED='distrusted')
+# https://groups.google.com/forum/#!topic/certificate-transparency/zZwGExvQeiE
+# PENDING:
+#       The Log has requested inclusion in the Log list distributor’s trusted Log list,
+#       but has not yet been accepted.
+#       A PENDING Log does not count as ‘currently qualified’, and does not count as ‘once qualified’.
+# QUALIFIED:
+#       The Log has been accepted by the Log list distributor, and added to the CT checking code
+#       used by the Log list distributor.
+#       A QUALIFIED Log counts as ‘currently qualified’.
+# USABLE:
+#       SCTs from the Log can be relied upon from the perspective of the Log list distributor.
+#       A USABLE Log counts as ‘currently qualified’.
+# FROZEN (READONLY in JSON-schema):
+#       The Log is trusted by the Log list distributor, but is read-only, i.e. has stopped accepting
+#       certificate submissions.
+#       A FROZEN Log counts as ‘currently qualified’.
+# RETIRED:
+#       The Log was trusted by the Log list distributor up until a specific retirement timestamp.
+#       A RETIRED Log counts as ‘once qualified’ if the SCT in question was issued before the retirement timestamp.
+#       A RETIRED Log does not count as ‘currently qualified’.
+# REJECTED:
+#       The Log is not and will never be trusted by the Log list distributor.
+#       A REJECTED Log does not count as ‘currently qualified’, and does not count as ‘once qualified’.
+KnownCTStates = Enum(
+    PENDING='pending',
+    QUALIFIED='qualified',
+    USABLE='usable',
+    READONLY='readonly',    # frozen
+    RETIRED='retired',
+    REJECTED='rejected'
+)
 
 Log = namedtuple(
     typename='Log',
     field_names=[  # each of type: str
-        'description',
         'key',     # base-64 encoded, type: str
+        'log_id',
+        'mmd',   # v1: maximum_merge_delay
         'url',
-        'maximum_merge_delay',
-        'operated_by',
 
-        # optional infos from *.json
-        'final_sth=None',
-        'disqualified_at=None',
-        'dns_api_endpoint=None',
+        # optional ones:
+        'description=None',
+        'dns=None',
+        'temporal_interval=None',
+        'log_type=None',
+        'state=None',    # JSON-schema has: pending, qualified, usable, readonly, retired, rejected
 
-        # optional infos from webpage 'known logs'
-        'contact=None',
-        'chrome_bug=None',
-        'notes=None',
-        'id_b64_non_calculated=None',
-        'certificate_expiry_range=None',
+        'operated_by=None',
 
-        # ChromeStates attribute or None
-        'chrome_state=None',
 
         # TODO add real checks; interact with logs (-> ctlog.py):
 
@@ -60,8 +70,7 @@ Log = namedtuple(
     ],
     lazy_vals={
         'key_der': lambda self: decode_from_b64(self.key),  # type: bytes
-        'id_der': lambda self: digest_from_b64(self.key),   # type: bytes
-        'id_b64': lambda self: encode_to_b64(self.id_der),  # type: str
+        'log_id_der': lambda self: digest_from_b64(self.key),   # type: bytes
         'pubkey': lambda self: '\n'.join([                  # type: str
                                           '-----BEGIN PUBLIC KEY-----',
                                           text_with_newlines(text=self.key,
@@ -69,9 +78,10 @@ Log = namedtuple(
                                           '-----END PUBLIC KEY-----']),
         'scts_accepted_by_chrome':
             lambda self:
-                None if self.chrome_state is None else
-                True if self.chrome_state in [ChromeStates.INCLUDED,
-                                              ChromeStates.FROZEN] else
+                None if self.state is None else
+                True if next(iter(self.state)) in [KnownCTStates.USABLE,
+                                                   KnownCTStates.QUALIFIED,
+                                                   KnownCTStates.READONLY] else
                 False,
     }
 )
@@ -80,103 +90,94 @@ Log = namedtuple(
 # plurale tantum constructor
 def Logs(log_dicts):
     '''
-    Arg log_dicts example: [
+    Arg log_dicts example:
         {
-            'description': ...,
-            'key': ...,
-            'url': ...,
-            'maximum_merge_delay': ...,
-            'operated_by': ...,
-
-            'final_sth': ...,  # optional
-            'disqualified_at=None': ...,
-            'dns_api_endpoint=None': ...,
-
-            # optional
-            'started': ...,
-            'submitted_for_inclusion_in_chrome': ...,
-            'contact': ...,
-            'chrome_bug'. ...,
-            'notes': ...,
-            'id_b64_non_calculated': ...,
-
-            'chrome_state', CHROME_STATE.<enum>
-        },
-    ]
+            "logs": [
+                {
+                    "description": "Google 'Argon2017' log",
+                    "log_id": "+tTJfMSe4vishcXqXOoJ0CINu/TknGtQZi/4aPhrjCg=",
+                    "key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEVG18id3qnfC6X/RtYHo3TwIlvxz2b4WurxXfaW7t26maKZfymXYe5jNGHif0vnDdWde6z/7Qco6wVw+dN4liow==",
+                    "url": "https://ct.googleapis.com/logs/argon2017/",
+                    "mmd": 86400,
+                    "state": {
+                        "rejected": {
+                            "timestamp": "2018-02-27T00:00:00Z"
+                        }
+                    },
+                    "temporal_interval": {
+                        "start_inclusive": "2017-01-01T00:00:00Z",
+                        "end_exclusive": "2018-01-01T00:00:00Z"
+                    },
+                    "operated_by": {
+                        "name": "Google",
+                        "email": [
+                            "google-ct-logs@googlegroups.com"
+                        ],
+                    }
+                },
     '''
     for log in log_dicts:
-        log.pop('id_b64', None)
+        # Make sure the lazy vals don't exist
+        log.pop('log_id_der', None)
         log.pop('pubkey', None)
         log.pop('scts_accepted_by_chrome', None)
-    return [Log(**kwargs) for kwargs in log_dicts]
+    # Pythonic:
+    logs_out = [Log(**kwargs) for kwargs in log_dicts]
+    # Easy to debug:
+    if False:
+        logs_out = []
+        for kwargs in log_dicts:
+            log = Log(**kwargs)
+            logs_out.append(log)
+    return logs_out
 
 
 def set_operator_names(logs_dict):
-    '''For each log in logs_dict overwrite the operator numbers by operator
-    names.
-
-    logs_dict example: {
-      'logs: [
-        {
-          "description": "Google 'Aviator' log",
-          "key": "MFkwE..."
-          "url": "ct.googleapis.com/aviator/",
-          "maximum_merge_delay": 86400,
-          "operated_by": [0],
-          "final_sth": {
-            ...
-          },
-          "dns_api_endpoint": ...
-        },
-      ],
-      'operators': [
-        ...
-      ]
-    }
     '''
-    for log in logs_dict['logs']:
-        operator_ids = log['operated_by']
-        operator_names = [operator['name']
-                          for operator
-                          in logs_dict['operators']
-                          if operator['id'] in operator_ids]
-        log['operated_by'] = operator_names
+    Fold the logs listing by operator into list of logs.
+    Append operator information to each log
 
-
-def unset_operator_names(logs_dict):
-    '''For each log in logs_dict reset the operator names by operator numbers.
-
-    logs_dict example: {
-      'logs: [
+    Arg log_dicts example:
         {
-          "description": "Google 'Aviator' log",
-          "key": "MFkwE..."
-          "url": "ct.googleapis.com/aviator/",
-          "maximum_merge_delay": 86400,
-          "operated_by": ["Google"],
-          "final_sth": {
-            ...
-          },
-          "dns_api_endpoint": ...
-        },
-      ],
-      'operators': [
-        ...
-      ]
-    }
+            "operators": [
+                {
+                    "name": "Google",
+                    "email": [
+                        "google-ct-logs@googlegroups.com"
+                    ],
+                    "logs": [
+                        {
+                            "description": "Google 'Argon2017' log",
+                            "log_id": "+tTJfMSe4vishcXqXOoJ0CINu/TknGtQZi/4aPhrjCg=",
+                            "key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEVG18id3qnfC6X/RtYHo3TwIlvxz2b4WurxXfaW7t26maKZfymXYe5jNGHif0vnDdWde6z/7Qco6wVw+dN4liow==",
+                            "url": "https://ct.googleapis.com/logs/argon2017/",
+                            "mmd": 86400,
+                            "state": {
+                                "rejected": {
+                                    "timestamp": "2018-02-27T00:00:00Z"
+                                }
+                            },
+                            "temporal_interval": {
+                                "start_inclusive": "2017-01-01T00:00:00Z",
+                                "end_exclusive": "2018-01-01T00:00:00Z"
+                            }
+                        },
     '''
-    for log in logs_dict['logs']:
-        operator_names = log['operated_by']
-
-        operator_ids = [operator['id']
-                        for operator
-                        in logs_dict['operators']
-                        if operator['name'] in operator_names]
-        log['operated_by'] = operator_ids
+    logs_dict['logs'] = []
+    for operator in logs_dict['operators']:
+        operator_name = operator['name']
+        operator_email = operator['email']
+        for log in operator['logs']:
+            log['operated_by'] = {
+                'name': operator_name,
+                'email': operator_email
+            }
+            logs_dict['logs'].append(log)
+    del logs_dict['operators']
 
 
 '''logs included in chrome browser'''
-BASE_URL = 'https://www.gstatic.com/ct/log_list/'
+BASE_URL = 'https://www.gstatic.com/ct/log_list/v2/'
 URL_LOG_LIST = BASE_URL + 'log_list.json'
 URL_ALL_LOGS = BASE_URL + 'all_logs_list.json'
 
@@ -360,10 +361,7 @@ def _text_from_html(html):
 
 
 def _logs_dict_from_html(html):
-    try:
-        text = _text_from_html(html)  # Python-3
-    except UnicodeDecodeError:
-        text = _text_from_html(html.decode('utf-8'))  # Python-2
+    text = _text_from_html(html)  # Python-3
 
     # ged rid of ending section
     text = text.split('###  Known Logs')[-1]
@@ -408,6 +406,7 @@ def _logs_dict_from_html(html):
         # FIXME: simplify. Currently only special-purpose-logs are listed on
         #        known-log.html
         chrome_state = None
+        print("Title: '%s'" % title)
         if title.startswith('included'):
             chrome_state = ChromeStates.INCLUDED
         elif title.startswith('frozen'):
@@ -424,8 +423,10 @@ def _logs_dict_from_html(html):
             chrome_state = None
         elif title.startswith('special_purpose_logs'):
             chrome_state = None
+        elif title.startswith('test_logs'):
+            chrome_state = ChromeStates.TEST
         else:
-            raise Exception('unknown chrome_state for log-text_block')
+            raise Exception('unknown chrome_state "%s" for log-text_block' % title)
 
         logs_dict[title] = []
         for log_text in rest.strip().lstrip('#### ').split('\n\n#### '):

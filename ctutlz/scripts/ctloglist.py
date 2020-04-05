@@ -439,9 +439,9 @@ def ctloglist(print_json=None):
         logger.verbose("* webpage [known logs]"
                        '(https://www.certificate-transparency.org/known-logs)')
         logger.verbose('* [log_list.json]'
-                       '(https://www.gstatic.com/ct/log_list/log_list.json)')
+                       '(https://www.gstatic.com/ct/log_list/v2/log_list.json)')
         logger.verbose('* [all_logs_list.json]('
-                       'https://www.gstatic.com/ct/log_list/all_logs_list.json)'
+                       'https://www.gstatic.com/ct/log_list/v2/all_logs_list.json)'
                        '\n')
         logger.info(flo('Version (Date): {today}\n'))
         logger.verbose(flo('Datetime: {now}\n'))

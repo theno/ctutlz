@@ -83,8 +83,7 @@ def create_parser():
                       help='for SCT verification against known CT Logs '
                            "(compliant with Chrome's CT policy) "
                            'download latest version of '
-                           'https://www.certificate-transparency.org/'
-                           'known-logs/all_logs_list.json '
+                           'https://www.gstatic.com/ct/log_list/v2/all_logs_list.json '
                            '-- use built-in log list really_all_logs.json '
                            'from 2017-08-11 if --latest-logs or --log-list '
                            'are not set')
@@ -207,8 +206,8 @@ def show_verification(verification):
         logger.info('Log not found\n')
     else:
         logger.info(flo('Log found : {log.description}'))
-        logger.verbose('Operator  : ' + ', '.join(log.operated_by))
-        logger.info(flo('Chrome    : {log.chrome_state}'))
+        logger.verbose('Operator  : %s' % log.operated_by['name'])
+        logger.info('Chrome    : %s' % log.scts_accepted_by_chrome)
 
     if verification.verified:
         logger.info(flo('Result    : Verified OK'))
