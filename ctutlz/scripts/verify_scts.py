@@ -83,9 +83,10 @@ def create_parser():
                       help='for SCT verification against known CT Logs '
                            "(compliant with Chrome's CT policy) "
                            'download latest version of '
-                           'https://www.gstatic.com/ct/log_list/v2/all_logs_list.json '
+                           'https://www.gstatic.com/ '
+                           'ct/log_list/v2/all_logs_list.json '
                            '-- use built-in log list really_all_logs.json '
-                           'from 2017-08-11 if --latest-logs or --log-list '
+                           'from 2020-04-05 if --latest-logs or --log-list '
                            'are not set')
     return parser
 
@@ -255,9 +256,9 @@ def main():
     logger.debug(args)
 
     # set ctlogs, type: [<ctutlz.ctlog.Log>, ...]
-    logs_dict = args.fetch_ctlogs()
-    set_operator_names(logs_dict)
-    ctlogs = Logs(logs_dict['logs'])
+    all_dict = args.fetch_ctlogs() # call download_log_list() to populate the list
+    set_operator_names(all_dict)
+    ctlogs = Logs([all_dict])
     if args.log_list_filename:
         logs_dict = read_log_list(args.log_list_filename)
         set_operator_names(logs_dict)
