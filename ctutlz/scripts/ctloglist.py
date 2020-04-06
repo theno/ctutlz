@@ -13,7 +13,7 @@ import datetime
 import json
 import logging
 
-from utlz import first_paragraph, flo, red
+from utlz import first_paragraph, red
 
 from ctutlz.ctlog import download_log_list
 from ctutlz.ctlog import set_operator_names, print_schema
@@ -59,7 +59,7 @@ def create_parser():
 def warn_inconsistency(url, val_a, val_b):
 
     # suppress warning doubles (i know it's hacky)
-    key = flo('{url}' + ''.join(sorted(flo('{val_a}{val_b}'))))
+    key = url + ''.join(sorted('%s%s' % (val_a, val_b)))
     if not hasattr(warn_inconsistency, 'seen'):
         warn_inconsistency.seen = {}
     if not warn_inconsistency.seen.get(key, False):
@@ -67,8 +67,7 @@ def warn_inconsistency(url, val_a, val_b):
     else:
         return
 
-    logger.warning(red(flo(
-        'inconsistent data for log {url}: {val_a} != {val_b}')))
+    logger.warning(red('inconsistent data for log %s: %s != %s' % (url, val_a, val_b)))
 
 
 def data_structure_from_log(log):
@@ -92,7 +91,7 @@ def list_from_lists(log_lists):
 
 
 def show_log(log, order=3):
-    logger.verbose('#'*order + flo(' {log.url}\n'))
+    logger.verbose('#' * order + ' %s\n' % log.url)
 
     logdict = log._asdict()
 
@@ -104,14 +103,14 @@ def show_log(log, order=3):
         # avoid markdown syntax interpretation and improve readablity
         key = key.replace('_', ' ')
         if value is not None:
-            logger.verbose(flo('* __{key}__: `{value}`'))
+            logger.verbose('* __%s__: `%s`' % (key, value))
 
-    logger.verbose(flo('* __scts accepted by chrome__: '
-                       '{log.scts_accepted_by_chrome}'))
+    logger.verbose('* __scts accepted by chrome__: '
+                       '%s' % log.scts_accepted_by_chrome)
 
     if log.key is not None:
-        logger.verbose(flo('* __id b64__: `{log.log_id}`'))
-        logger.verbose(flo('* __pubkey__:\n```\n{log.pubkey}\n```'))
+        logger.verbose('* __id b64__: `%s`' % log.log_id)
+        logger.verbose('* __pubkey__:\n```\n%s\n```' % log.pubkey)
 
     logger.verbose('')
 
@@ -158,8 +157,8 @@ def ctloglist(print_json=None):
         logger.verbose('* [all_logs_list.json]('
                        'https://www.gstatic.com/ct/log_list/v2/all_logs_list.json)'
                        '\n')
-        logger.info(flo('Version (Date): {today}\n'))
-        logger.verbose(flo('Datetime: {now}\n'))
+        logger.info('Version (Date): %s\n' % today)
+        logger.verbose('Datetime: %s\n' % now)
         logger.info('')  # formatting: insert empty line
 
     # all_logs_list.json

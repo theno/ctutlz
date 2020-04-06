@@ -13,7 +13,7 @@ import argparse
 import logging
 import struct
 
-from utlz import flo, first_paragraph, text_with_newlines
+from utlz import first_paragraph, text_with_newlines
 
 from ctutlz.tls.handshake import do_handshake
 from ctutlz.ctlog import download_log_list, get_log_list, read_log_list
@@ -163,7 +163,7 @@ def show_signature_verbose(signature):
             bytes_to_read = 16
         else:
             bytes_to_read = len(signature) - sig_offset
-        sig_bytes = struct.unpack_from(flo('!{bytes_to_read}s'),
+        sig_bytes = struct.unpack_from('!%ds' % bytes_to_read,
                                        signature,
                                        sig_offset)[0]
         if sig_offset == 0:
@@ -185,15 +185,14 @@ def show_verification(verification):
                                 in struct.unpack("!16s16s", sct.log_id.tdf)]
     logger.info('```')
     logger.verbose('=' * 59)
-    logger.verbose(flo('Version   : {sct.version_hex}'))
-    logger.verbose(flo('LogID     : {sct_log_id1}'))
-    logger.verbose(flo('            {sct_log_id2}'))
-    logger.info(flo('LogID b64 : {sct.log_id_b64}'))
-    logger.verbose(flo('Timestamp : {sct.timestamp} ({sct.timestamp_hex})'))
-    logger.verbose(flo(
-        'Extensions: {sct.extensions_len} ({sct.extensions_len_hex})'))
-    logger.verbose(flo('Algorithms: {sct.signature_alg_hash_hex}/'
-                       '{sct.signature_algorithm_signature} (hash/sign)'))
+    logger.verbose('Version   : %s' % sct.version_hex)
+    logger.verbose('LogID     : %s' % sct_log_id1)
+    logger.verbose('            %s' % sct_log_id2)
+    logger.info('LogID b64 : %s' % sct.log_id_b64)
+    logger.verbose('Timestamp : %s (%s)' % (sct.timestamp, sct.timestamp_hex))
+    logger.verbose(
+        'Extensions: %d (%s)' % (sct.extensions_len, sct.extensions_len_hex))
+    logger.verbose('Algorithms: %s/%s (hash/sign)' % (sct.signature_alg_hash_hex, sct.signature_algorithm_signature))
 
     show_signature_verbose(sct.signature)
     prefix = 'Sign. b64 : '
@@ -206,20 +205,20 @@ def show_verification(verification):
     if log is None:
         logger.info('Log not found\n')
     else:
-        logger.info(flo('Log found : {log.description}'))
+        logger.info('Log found : %s' % log.description)
         logger.verbose('Operator  : %s' % log.operated_by['name'])
         logger.info('Chrome    : %s' % log.scts_accepted_by_chrome)
 
     if verification.verified:
-        logger.info(flo('Result    : Verified OK'))
+        logger.info('Result    : Verified OK')
     else:
-        logger.info(flo('Result    : Verification Failure'))
+        logger.info('Result    : Verification Failure')
 
     logger.info('```\n')
 
 
 def scrape_and_verify_scts(hostname, verification_tasks, ctlogs):
-    logger.info(flo('# {hostname}\n'))
+    logger.info('# %s\n' % hostname)
 
     res = do_handshake(hostname, 443,
                        scts_tls=(verify_scts_by_tls in verification_tasks),
@@ -239,7 +238,7 @@ def scrape_and_verify_scts(hostname, verification_tasks, ctlogs):
         logger.warning(res.err)
     else:
         for verification_task in verification_tasks:
-            logger.info(flo('## {verification_task.__name__}\n'))
+            logger.info('## %s\n' % verification_task.__name__)
             verifications = verification_task(res, ctlogs)
             if verifications:
                 for verification in verifications:
