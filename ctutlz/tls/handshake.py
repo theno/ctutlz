@@ -234,6 +234,7 @@ def do_handshake(domain, port=443, scts_tls=True, scts_ocsp=True, timeout=5):
     '''
     ctx = create_context(scts_tls, scts_ocsp, timeout)
     sock = create_socket(ctx)
+    sock.set_tlsext_host_name(domain.encode())
     sock.request_ocsp()
     sock.set_tlsext_host_name(domain.encode())
 
