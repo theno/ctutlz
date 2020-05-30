@@ -61,48 +61,61 @@ optional arguments:
                         filename of a log list in JSON format
   --latest-logs         for SCT verification against known CT Logs (compliant
                         with Chrome's CT policy) download latest version of
-                        https://www.certificate-transparency.org/known-
-                        logs/all_logs_list.json -- use built-in log list
-                        really_all_logs.json from 2017-08-11 if --latest-logs
-                        or --log-list are not set
+                        https://www.gstatic.com/
+                        ct/log_list/v2/all_logs_list.json -- use built-in log
+                        list really_all_logs.json from 2020-04-05 if --latest-
+                        logs or --log-list are not set
+
+
 ```
 
-Examples:
+#### Examples:
+##### Simple google.com verification
 
     > verify-scts google.com --short
 
     # google.com
 
+    * no EV cert
+    * not issued by Let's Encrypt
+
     ## SCTs by Certificate
 
-    no SCTs
+    ```
+    LogID b64 : sh4FzIuizYogTodm+Su5iiUgZ2va+nDnsklTLe+LkF4=
+    Sign. b64 : MEUCIDsJPECetlDd6KUBhpZFsOfhQYoI45i+T9Lod1wsY8gN
+                AiEA/ohyB+GuG+Z4MJNxH94xQUUpd2jpiDbG1r6FneDRpkE=
+    Log found : Google 'Argon2020' log
+    Chrome    : True
+    Result    : Verified OK
+    ```
+
+    ```
+    LogID b64 : Xqdz+d9WwOe1Nkh90EngMnqRmgyEoRIShBh1loFxRVg=
+    Sign. b64 : MEUCIQChTO0dZC+zFcuvt3RPvuvMZ7RohbeizyRy5OhMpC/N
+                kgIgTUhJTv5zdKBXDCgrgPoIYarBkYmTsirQDhALSEHHmZU=
+    Log found : Cloudflare 'Nimbus2020' Log
+    Chrome    : True
+    Result    : Verified OK
+    ```
 
     ## SCTs by TLS
 
-    ```
-    LogID b64 : pLkJkLQYWBSHuxOizGdwCjw1mAT5G9+443fNDsgN3BA=
-    Sign. b64 : MEUCIGUHno90gGUepkOAkIWf0js56ce7FVnq1sXRM+cW8xdzAiEAzTRcHqxnBTTBceBlniPpc8OmyxJQLK6nQY8VW3bUsZk=
-    Log found : Google 'Pilot' log
-    Result    : Verified OK
-    ```
-
-    ```
-    LogID b64 : 3esdK3oNT6Ygi4GtgWhwfi6OnQHVXIiNPRHEzbbsvsw=
-    Sign. b64 : MEYCIQDpSgD3XhIQfqmO0IpHIJma/lchgYbT5yLjlVUYDBOspAIhAOjiHIhceJn0zxrfaT36HMDyY55IntNJ0Ur394NJnU8B
-    Log found : Symantec log
-    Result    : Verified OK
-    ```
+    no SCTs
 
     ## SCTs by OCSP
 
     no SCTs
 
+##### Domains to try for different TLS-features
 
 ```bash
 > verify-scts  ritter.vg  sslanalyzer.comodoca.com  www.db.com
 #   has           ⇧                ⇧                  ⇧
 # scts by:   TLS-extension   OCSP-extension   certificate (precert)
 ```
+
+##### Output markdown into PDF
 
 ```bash
 # nice: convert the markdown formatted output into other formats with pandoc
