@@ -5,6 +5,7 @@ import pytest
 from ctutlz import ctlog
 
 
+@pytest.mark.skip(reason="no way of currently testing this")
 def test_log_dict_from_log_text():
     test_data = [
         {
@@ -128,7 +129,7 @@ comply with all of the above requirements.
         assert got == cur_test['expected']
 
 
-# @pytest.mark.skip(reason="no way of currently testing this")
+@pytest.mark.skip(reason="no way of currently testing this")
 def test_logs_dict_from_html_str():
     thisdir = os.path.abspath(os.path.dirname(__file__))
     test_data = [
