@@ -83,7 +83,7 @@ setup(
         'html2text==2016.9.19',
         'pyasn1==0.2.3',
         'pyasn1-modules', # ==0.0.9',
-        'pyOpenSSL==17.3.0',
+        'pyOpenSSL==17.5.0',
         'requests==2.20.0',
         'utlz==0.10.0',
     ],
