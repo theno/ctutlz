@@ -79,7 +79,7 @@ setup(
     package_data={'ctutlz': ['really_all_logs.json', 'log_list_schema.json'], },
     install_requires=[
         'cffi==1.11.5',
-        'cryptography==1.9',
+        'cryptography==3.3.2',
         'html2text==2016.9.19',
         'pyasn1==0.2.3',
         'pyasn1-modules', # ==0.0.9',
