@@ -15,11 +15,11 @@ idna-ssl==1.0.1
 multidict==4.2.0
 py==1.5.3
 pyasn1==0.2.3
-pyasn1-modules==0.1.5
+pyasn1-modules==0.0.9
 pycparser==2.18
 pyOpenSSL==17.3.0
 pytest==3.2.5
-requests==2.18.4
+requests==2.20.0
 six==1.11.0
 urllib3==1.22
 utlz==0.10.5

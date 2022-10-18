@@ -160,7 +160,7 @@ def set_operator_names(logs_dict):
 
 
 '''logs included in chrome browser'''
-BASE_URL = 'https://www.gstatic.com/ct/log_list/v2/'
+BASE_URL = 'https://www.gstatic.com/ct/log_list/v3/'
 URL_LOG_LIST = BASE_URL + 'log_list.json'
 URL_ALL_LOGS = BASE_URL + 'all_logs_list.json'
 

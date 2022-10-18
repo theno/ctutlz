@@ -237,6 +237,21 @@ Install the latest version of the pypi python package
 pip install ctutlz
 ```
 
+## Installation and Development 2022-10
+
+ctutlz is outdated and needs to be upgraded to use a current version of
+OpenSSL.
+
+Till then you can build and run ctutlz with podman and a Dockerfile
+using an old Ubuntu 16.04 and OpenSSL 1.0.2g:
+
+```bash
+podman build --tag ctutlz .
+podman run -it --rm --name ctutlz --volume ./:/ctutlz ctutlz:latest
+root@<container-id>:/ctutlz# pip3 install -e .
+root@<container-id>:/ctutlz# python3 ctutlz/scripts/verify_scts.py  google.com
+```
+
 ## Development
 
 Clone the source code [repository](https://github.com/theno/ctutlz):
