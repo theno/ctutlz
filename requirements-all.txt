@@ -7,7 +7,7 @@ attrs==17.4.0
 certifi==2018.1.18
 cffi==1.11.5
 chardet==3.0.4
-cryptography==1.9
+cryptography==39.0.1
 ctutlz==0.9.7
 html2text==2018.1.9
 idna==2.6
